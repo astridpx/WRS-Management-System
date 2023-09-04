@@ -55,8 +55,8 @@ export default function POSReceipt() {
         <Separator />
         <h2 className="text-center my-2 text-gray-500">Order Summary</h2>
         <Separator />
-        <div className="px-2 pb-4">
-          <div className="grid grid-cols-3 py-2 font-semibold">
+        <div className="px-2 pb-4 min-h-[10rem]">
+          <div className="grid grid-cols-3 py-2 font-semibold border-b">
             <h1>Item</h1>
             <h1 className="text-center">QTY</h1>
             <h1 className="text-end">Price</h1>

@@ -5,7 +5,7 @@ import { BiSearchAlt2, BiHistory, BiUserPlus } from "react-icons/bi";
 import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
 
 export function POSBTNHeader() {
-  const { toggleShowSelect } = POSBTNHeaderStore();
+  const { toggleShowSelect, toggleShowReturn } = POSBTNHeaderStore();
 
   return (
     <>
@@ -19,7 +19,10 @@ export function POSBTNHeader() {
           </span>
           Customer
         </Button>
-        <Button className="h-max w-40 p-2 flex gap-x-2 bg-yellow-500 hover:bg-yellow-500">
+        <Button
+          className="h-max w-40 p-2 flex gap-x-2 bg-yellow-500 hover:bg-yellow-500"
+          onClick={() => toggleShowReturn(true)}
+        >
           <span>
             <BiHistory size={20} />
           </span>

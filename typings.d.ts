@@ -75,7 +75,10 @@ export interface IUserEditState {
 }
 
 // POS PAGE
-export interface IPOSPageStore {
+export interface IPOSBtnStore {
   showSelectCustomer: boolean;
+  showReturnGallon: boolean;
+  selectedCustomer: any;
   toggleShowSelect: (state: boolean) => void;
+  toggleShowReturn: (state: boolean) => void;
 }

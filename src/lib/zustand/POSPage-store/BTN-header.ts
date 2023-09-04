@@ -1,10 +1,14 @@
 import { create } from "zustand";
-import { IPOSPageStore } from "../../../../typings";
+import { IPOSBtnStore } from "../../../../typings";
 
-const POSBTNHeaderStore = create<IPOSPageStore>((set) => ({
+const POSBTNHeaderStore = create<IPOSBtnStore>((set) => ({
   showSelectCustomer: false,
+  showReturnGallon: false,
+
+  selectedCustomer: false, //? This is the state of the selected customer
 
   toggleShowSelect: (state) => set({ showSelectCustomer: state }),
+  toggleShowReturn: (state) => set({ showReturnGallon: state }),
 }));
 
 export default POSBTNHeaderStore;

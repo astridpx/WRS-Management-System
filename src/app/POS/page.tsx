@@ -1,28 +1,20 @@
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { Separator } from "@/components/ui/separator";
-import { FaUsers } from "react-icons/fa";
-import { LiaGreaterThanSolid, LiaLessThanSolid } from "react-icons/lia";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Slim from "@/assets/items_img/slim_gallon.png";
 import Rounded from "@/assets/items_img/rounded_gallon.png";
-import POSItems from "./POS-Table-Items";
+import POSItems from "./_components/POS-Table-Items";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import POSReceipt from "./POS-Receipt";
-import POSSearchUserModal from "./POS-Search-User-Modal";
-import { POSBTNHeader } from "./POS-BTN-Header";
+import POSReceipt from "./_components/POS-Receipt";
+import POSSearchUserModal from "./_components/POS-Modal-Search-User";
+import { POSBTNHeader } from "./_components/POS-BTN-Header";
+import { POSSelectCustomerBTN } from "./_components/POS-Select-Customer-BTN";
+import POSModalReturnGallon from "./_components/POS-Modal-Return-Gallon";
 
 export default function POS_Page() {
   return (
     <>
       <POSSearchUserModal />
+      <POSModalReturnGallon />
 
       <PageWrapper>
         <section className="relative border p-2">
@@ -34,37 +26,9 @@ export default function POS_Page() {
             <div className="flex gap-x-4">
               {/* LEFT BOX */}
               <div className="border-2 w-[65%] h-max">
-                <header className="py-6 px-2  flex gap-x-4">
-                  <div className="flex-grow bg-red-300 flex items-center justify-center">
-                    <button className="h-max w-max  text-2xl font-semibold flex  justify-between items-center gap-x-4">
-                      <span>
-                        <LiaLessThanSolid size={28} />
-                      </span>
-                      <span>
-                        <FaUsers size={28} />
-                      </span>
-                      Select Customers
-                      <span>
-                        <LiaGreaterThanSolid size={28} />
-                      </span>
-                    </button>
-                  </div>
+                {/* leftboc head */}
+                <POSSelectCustomerBTN />
 
-                  <div className="w-40">
-                    <Select name="role" defaultValue="deliver">
-                      <SelectTrigger className="text-center ">
-                        <SelectValue placeholder="Select Services" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="deliver">Deliver</SelectItem>
-                          <SelectItem value="employee">Employee</SelectItem>
-                          <SelectItem value="manager">Manager</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </header>
                 <Separator />
 
                 {/* TABS HERE */}
