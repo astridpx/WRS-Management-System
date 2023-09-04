@@ -73,3 +73,9 @@ export interface IUserEditState {
   setShowEditModal: (state: boolean) => void;
   setEditUserId: (state: any) => void;
 }
+
+// POS PAGE
+export interface IPOSPageStore {
+  showSelectCustomer: boolean;
+  toggleShowSelect: (state: boolean) => void;
+}

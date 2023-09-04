@@ -95,7 +95,7 @@ export default function POSReceipt() {
           <Separator />
           <div className="flex justify-between px-2">
             <h1 className="font-semibold text-xl">SUB TOTAL</h1>
-            <h1 className="text-xl">P 0.00</h1>
+            <h1 className="text-xl">₱ 0.00</h1>
           </div>
           <Separator />
           <div className="flex justify-center pb-4">
