@@ -24,8 +24,8 @@ export const sidebarItems: ISidebar[] = [
       {
         id: 103,
         icon: FiUser,
-        name: "User",
-        path: "/Users",
+        name: "Customer",
+        path: "/Customer",
       },
       {
         id: 104,

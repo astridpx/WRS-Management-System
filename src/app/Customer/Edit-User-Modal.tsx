@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import editUserStore from "@/lib/zustand/UserPage-store/Edit-User-Data-Store";
+import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { UpdateUser } from "./APIs/api";
 
 export default function EditUserModal() {

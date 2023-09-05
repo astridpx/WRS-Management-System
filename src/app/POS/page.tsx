@@ -9,12 +9,14 @@ import POSSearchUserModal from "./_components/POS-Modal-Search-User";
 import { POSBTNHeader } from "./_components/POS-BTN-Header";
 import { POSSelectCustomerBTN } from "./_components/POS-Select-Customer-BTN";
 import POSModalReturnGallon from "./_components/POS-Modal-Return-Gallon";
+import AddNewCustomerModal from "@/components/Add-Customer/Add-Customer-Modal";
 
 export default function POS_Page() {
   return (
     <>
       <POSSearchUserModal />
       <POSModalReturnGallon />
+      <AddNewCustomerModal />
 
       <PageWrapper>
         <section className="relative border p-2">

@@ -4,7 +4,7 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import editUserStore from "@/lib/zustand/UserPage-store/Edit-User-Data-Store";
+import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { useMutation, useQueryClient } from "react-query";
 import { DeleteUser } from "./APIs/api";
 

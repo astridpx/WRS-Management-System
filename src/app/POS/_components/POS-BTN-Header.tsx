@@ -3,9 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { BiSearchAlt2, BiHistory, BiUserPlus } from "react-icons/bi";
 import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
+import addCustomerModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
 
 export function POSBTNHeader() {
   const { toggleShowSelect, toggleShowReturn } = POSBTNHeaderStore();
+  const { toggleShowCustomerForm } = addCustomerModalStore();
 
   return (
     <>
@@ -28,7 +30,10 @@ export function POSBTNHeader() {
           </span>
           Return Gallon
         </Button>
-        <Button className="h-max w-40 p-2 flex gap-x-2 bg-green-500 hover:bg-green-500">
+        <Button
+          className="h-max w-40 p-2 flex gap-x-2 bg-green-500 hover:bg-green-500"
+          onClick={() => toggleShowCustomerForm(true)}
+        >
           <span>
             <BiUserPlus size={20} />
           </span>

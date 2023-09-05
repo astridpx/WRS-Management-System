@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { IUserFormState } from "../../../../typings";
 
 const addUserModalStore = create<IUserFormState>((set) => ({
-  showAddUserForm: false,
+  showAddCustomerForm: false,
 
-  toggleShowUserForm: (state) => set({ showAddUserForm: state }),
+  toggleShowCustomerForm: (state) => set({ showAddCustomerForm: state }),
 }));
 
 export default addUserModalStore;

@@ -4,8 +4,8 @@ import { userColumns } from "./users-column";
 import { DataTable } from "../../components/react-table/main-table";
 import UserfakeData from "@/utils/table-data/MOCK_USERS_DATA .json";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
-import AddNewUserModal from "./Add-New-User";
-import addUserModalStore from "@/lib/zustand/UserPage-store/AddNew-Modal-store";
+import AddNewCustomerModal from "@/components/Add-Customer/Add-Customer-Modal";
+import addUserModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "react-query";
 import { getUser } from "./APIs/api";
@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 
 export default function UsersPage() {
   const { theme } = useTheme();
-  const { toggleShowUserForm, showAddUserForm } = addUserModalStore();
+  const { toggleShowCustomerForm } = addUserModalStore();
   const {
     isLoading,
     isError,
@@ -29,14 +29,14 @@ export default function UsersPage() {
 
   return (
     <>
-      <AddNewUserModal />
+      <AddNewCustomerModal />
       <EditUserModal />
 
       <PageWrapper>
         <div className="relative ">
           <div className="flex justify-end ">
             <Button
-              onClick={() => toggleShowUserForm(!showAddUserForm)}
+              onClick={() => toggleShowCustomerForm(true)}
               className="dark:border dark:border-blue-400 dark:bg-transparent dark:text-blue-400"
             >
               Add New

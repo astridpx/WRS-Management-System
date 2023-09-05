@@ -6,7 +6,6 @@ import Slim from "@/assets/items_img/slim_gallon.png";
 import { IoClose } from "react-icons/io5";
 import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
 
-
 export default function POSModalReturnGallon() {
   const { showReturnGallon, toggleShowReturn } = POSBTNHeaderStore();
 
@@ -15,19 +14,19 @@ export default function POSModalReturnGallon() {
     <>
       <section
         className={`${
-            showReturnGallon ? "block" : "hidden"
+          showReturnGallon ? "block" : "hidden"
         } h-screen w-full overflow-y-auto bg-black/75 bg-opacity-95 absolute z-20  `}
       >
         <div className="h-max w-full flex items-center justify-center  py-4 ">
-          <main className="relative  max-w-4xl w-[100%] p-4 bg-white ">
+          <main className="relative  max-w-4xl w-[100%] p-4 bg-white dark:bg-dark_bg border border-gray-900/10 shadow-md rounded ">
             <div className="flex justify-between ">
-              <h1 className="mb-4 relative ml-4 before:absolute before:-left-3 before:h-full before:w-2 before:bg-red-400">
+              <h1 className="mb-4 font-semibold text-gray-900 relative ml-4 before:absolute before:-left-3 before:h-full before:w-2 before:bg-red-400">
                 Return Gallon
               </h1>
               <IoClose
                 size={22}
                 className="place-self-start align-top cursor-pointer text-gray-500"
-                onClick={()=>toggleShowReturn(false)}
+                onClick={() => toggleShowReturn(false)}
               />
             </div>
 
@@ -49,17 +48,17 @@ export default function POSModalReturnGallon() {
                 <input
                   type="number"
                   min={0}
-                  className=" text-sm text-center outline-none border border-black  py-1 w-16 "
+                  className=" text-sm text-center outline-none border border-gray-500  py-1 w-16 "
                 />
                 <input
                   type="number"
                   min={0}
-                  className=" text-sm text-center outline-none border border-black py-1 w-16 "
+                  className=" text-sm text-center outline-none border border-gray-500 py-1 w-16 "
                 />
                 <input
                   type="number"
                   min={0}
-                  className=" text-sm text-center outline-none border border-black py-1 w-16 "
+                  className=" text-sm text-center outline-none border border-gray-500 py-1 w-16 "
                 />
               </div>
               <div className="grid grid-cols-6 items-center py-2 gap-x-1 place-content-center place-items-center">
@@ -71,17 +70,17 @@ export default function POSModalReturnGallon() {
                 <input
                   type="number"
                   min={0}
-                  className=" text-sm text-center outline-none border border-black  py-1 w-16 "
+                  className=" text-sm text-center outline-none border border-gray-500  py-1 w-16 "
                 />
                 <input
                   type="number"
                   min={0}
-                  className=" text-sm text-center outline-none border border-black py-1 w-16 "
+                  className=" text-sm text-center outline-none border border-gray-500 py-1 w-16 "
                 />
                 <input
                   type="number"
                   min={0}
-                  className=" text-sm text-center outline-none border border-black py-1 w-16 "
+                  className=" text-sm text-center outline-none border border-gray-500 py-1 w-16 "
                 />
               </div>
             </div>

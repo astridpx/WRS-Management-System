@@ -54,8 +54,8 @@ export interface IProducts {
 }
 
 export interface IUserFormState {
-  showAddUserForm: boolean;
-  toggleShowUserForm: (state: boolean) => void;
+  showAddCustomerForm: boolean;
+  toggleShowCustomerForm: (state: boolean) => void;
 }
 export interface IUserEdit {
   first_name: string;
