@@ -82,3 +82,7 @@ export interface IPOSBtnStore {
   toggleShowSelect: (state: boolean) => void;
   toggleShowReturn: (state: boolean) => void;
 }
+export interface IPOSPaymentModal {
+  paymentModal: boolean;
+  togglePaymentModal: (state: boolean) => void;
+}

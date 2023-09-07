@@ -15,9 +15,11 @@ import { Separator } from "@/components/ui/separator";
 import Slim from "@/assets/items_img/slim_gallon.png";
 import Rounded from "@/assets/items_img/rounded_gallon.png";
 import Image from "next/image";
+import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
 
 export default function POSReceipt() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const { togglePaymentModal } = POSPaymentModal();
 
   return (
     <>
@@ -99,7 +101,9 @@ export default function POSReceipt() {
           </div>
           <Separator />
           <div className="flex justify-center pb-4">
-            <Button className="">Confirm Payment</Button>
+            <Button className="" onClick={() => togglePaymentModal(true)}>
+              Confirm Payment
+            </Button>
           </div>
         </div>
       </footer>

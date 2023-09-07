@@ -20,7 +20,7 @@ export default function POSModalReturnGallon() {
         <div className="h-max w-full flex items-center justify-center  py-4 ">
           <main className="relative  max-w-4xl w-[100%] p-4 bg-white dark:bg-dark_bg border border-gray-900/10 shadow-md rounded ">
             <div className="flex justify-between ">
-              <h1 className="mb-4 font-semibold text-gray-900 relative ml-4 before:absolute before:-left-3 before:h-full before:w-2 before:bg-red-400">
+              <h1 className="mb-4 font-semibold text-gray-900  ml-4 relative before:absolute before:-left-3 before:h-full before:w-2 before:bg-red-400">
                 Return Gallon
               </h1>
               <IoClose
