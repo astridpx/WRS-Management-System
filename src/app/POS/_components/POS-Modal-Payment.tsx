@@ -12,11 +12,15 @@ export const PaymentModal = () => {
   const [discount, setDiscount] = useState<number>(0);
   const [cash, setCash] = useState<number>(0);
   const [credit, setCredit] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
-    const cred = cash > payment ? 0 : cash - payment;
+    const cred = cash > total ? 0 : cash - total;
     setCredit(cred);
-  }, [cash, payment]);
+
+    const total_due = payment - discount;
+    setTotal(total_due);
+  }, [cash, payment, discount, total]);
 
   return (
     <>
@@ -71,7 +75,7 @@ export const PaymentModal = () => {
                 <section className="py-2 bg-gray-200 space-y-2 mb-4">
                   <div className="flex justify-between px-4">
                     <h1>Total Due</h1>
-                    <h1>₱{(payment - discount).toFixed(2)}</h1>
+                    <h1>₱{total.toFixed(2)}</h1>
                   </div>
 
                   <div className="flex justify-between items-center px-4">
@@ -96,7 +100,7 @@ export const PaymentModal = () => {
                   <div className="flex justify-between items-center px-4">
                     <h1>Changed</h1>
                     <h1 className="w-[50%] py-2 bg-green-100 text-center">
-                      P {(cash < payment ? 0 : cash - payment).toFixed(2)}
+                      P {(cash < total ? 0 : cash - total).toFixed(2)}
                     </h1>
                   </div>
                   <div className="flex justify-between items-center px-4">
