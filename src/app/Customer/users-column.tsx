@@ -15,13 +15,10 @@ export const userColumns: ColumnDef<IUser>[] = [
   //   accessorKey: "_id",
   // },
   {
-    header: "First Name",
-    accessorKey: "first_name",
+    header: "Full Name",
+    accessorKey: "fullname",
   },
-  {
-    header: "Last Name",
-    accessorKey: "last_name",
-  },
+
   {
     header: "Email",
     accessorKey: "email",

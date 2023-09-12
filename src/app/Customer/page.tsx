@@ -14,7 +14,6 @@ import EditUserModal from "./Edit-User-Modal";
 import { useTheme } from "next-themes";
 
 export default function UsersPage() {
-  const { theme } = useTheme();
   const { toggleShowCustomerForm } = addUserModalStore();
   const {
     isLoading,
@@ -25,6 +24,13 @@ export default function UsersPage() {
   }: any = useQuery({
     queryKey: ["users"],
     queryFn: getUser,
+  });
+  const newUser = users?.data?.map((user: any) => {
+    const User = {
+      fullname: `${user.first_name} ${user.last_name}`,
+      ...user,
+    };
+    return User;
   });
 
   return (
@@ -48,7 +54,7 @@ export default function UsersPage() {
               <p className="text-gray-400 ">Loading...</p>
             </div>
           ) : (
-            <DataTable columns={userColumns} data={users?.data} />
+            <DataTable columns={userColumns} data={newUser} />
           )}
         </div>
       </PageWrapper>
