@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { IProducts } from "../../../typings";
+import { ProductDataTableRowActions } from "./Data-Table-Row-Action";
 
 export const productColumns: ColumnDef<IProducts>[] = [
   {
@@ -9,19 +10,24 @@ export const productColumns: ColumnDef<IProducts>[] = [
     accessorKey: "id",
   },
   {
-    header: "Code",
+    header: "Item",
     accessorKey: "prod_code",
   },
   {
-    header: "Product",
+    header: "Type",
     accessorKey: "prod_name",
   },
   {
-    header: "Stock",
+    header: "Price",
     accessorKey: "stock",
   },
   {
-    header: "Import",
+    header: "Buy",
     accessorKey: "prod_import",
+  },
+  {
+    id: "action",
+
+    cell: ({ row }) => <ProductDataTableRowActions row={row} />,
   },
 ];
