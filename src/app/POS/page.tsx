@@ -1,3 +1,5 @@
+"use client";
+
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { Separator } from "@/components/ui/separator";
 import Slim from "@/assets/items_img/slim_gallon.png";
@@ -14,6 +16,7 @@ import { PaymentModal } from "./_components/POS-Modal-Payment";
 import { StaticImageData } from "next/image";
 import { ItemsGallon } from "@/utils/Products-data/items";
 import { ItemsBottle } from "@/utils/Products-data/items";
+import { use } from "react";
 
 interface PosItemProps {
   id?: string;
@@ -29,8 +32,10 @@ const GetItems = async () => {
   return Data;
 };
 
-export default async function POS_Page() {
-  const items = await GetItems();
+const ItemsGet = GetItems();
+
+export default function POS_Page() {
+  const items = use(ItemsGet);
 
   return (
     <>
@@ -79,6 +84,7 @@ export default async function POS_Page() {
                           <>
                             <POSItems
                               key={item.id}
+                              id={item.id}
                               type={item.type}
                               price={item.price}
                               img={item.img}

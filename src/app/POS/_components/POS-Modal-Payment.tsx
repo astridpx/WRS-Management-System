@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,15 @@ import { Button } from "@/components/ui/button";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
 
 export const PaymentModal = () => {
-  const { paymentModal, togglePaymentModal } = POSPaymentModal();
+  const { paymentModal, togglePaymentModal, payment } = POSPaymentModal();
+  const [discount, setDiscount] = useState<number>(0);
+  const [cash, setCash] = useState<number>(0);
+  const [credit, setCredit] = useState<number>(0);
+
+  useEffect(() => {
+    const cred = cash > payment ? 0 : cash - payment;
+    setCredit(cred);
+  }, [cash, payment]);
 
   return (
     <>
@@ -35,16 +43,26 @@ export const PaymentModal = () => {
                 <section className="py-2 bg-gray-200 space-y-2 mb-4">
                   <div className="flex justify-between px-4">
                     <h1>Sub Total</h1>
-                    <h1>P 100.00</h1>
+                    <h1>₱{payment.toFixed(2)}</h1>
                   </div>
 
                   <div className="flex justify-between items-center px-4">
-                    <h1>Sub Total</h1>
+                    <h1>Discount</h1>
                     <Input
                       type="number"
                       placeholder=""
                       min={0}
                       defaultValue={0}
+                      onChange={(e) => {
+                        const newValue = parseFloat(e.target.value);
+                        if (isNaN(newValue)) {
+                          setDiscount(0);
+                        } else if (parseFloat(e.target.value) > payment) {
+                          setDiscount(0);
+                        } else {
+                          setDiscount(parseFloat(e.target.value));
+                        }
+                      }}
                       className="w-[50%] py-1 text-center"
                     />
                   </div>
@@ -53,7 +71,7 @@ export const PaymentModal = () => {
                 <section className="py-2 bg-gray-200 space-y-2 mb-4">
                   <div className="flex justify-between px-4">
                     <h1>Total Due</h1>
-                    <h1>P 100.00</h1>
+                    <h1>₱{(payment - discount).toFixed(2)}</h1>
                   </div>
 
                   <div className="flex justify-between items-center px-4">
@@ -63,6 +81,14 @@ export const PaymentModal = () => {
                       placeholder=""
                       min={0}
                       defaultValue={0}
+                      onChange={(e) => {
+                        const newValue = parseFloat(e.target.value);
+                        if (isNaN(newValue)) {
+                          setCash(0);
+                        } else {
+                          setCash(parseFloat(e.target.value));
+                        }
+                      }}
                       className="w-[50%] py-1 text-center"
                     />
                   </div>
@@ -70,7 +96,13 @@ export const PaymentModal = () => {
                   <div className="flex justify-between items-center px-4">
                     <h1>Changed</h1>
                     <h1 className="w-[50%] py-2 bg-green-100 text-center">
-                      P 100.00
+                      P {(cash < payment ? 0 : cash - payment).toFixed(2)}
+                    </h1>
+                  </div>
+                  <div className="flex justify-between items-center px-4">
+                    <h1>Credit</h1>
+                    <h1 className="w-[50%] py-2 bg-red-100 text-center">
+                      P {credit.toFixed(2)}
                     </h1>
                   </div>
                 </section>

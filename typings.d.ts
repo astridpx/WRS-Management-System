@@ -81,8 +81,21 @@ export interface IPOSBtnStore {
   selectedCustomer: any;
   toggleShowSelect: (state: boolean) => void;
   toggleShowReturn: (state: boolean) => void;
+  2;
+}
+
+export interface Orders {
+  id: string | null;
+  img: StaticImport | null;
+  type: string | null;
+  qty: number;
+  price: number;
 }
 export interface IPOSPaymentModal {
   paymentModal: boolean;
+  payment: number;
+  order: Orders[];
   togglePaymentModal: (state: boolean) => void;
+  setPayment: (state: number) => void;
+  setOrder: (id: string | undefined, value: any) => void;
 }

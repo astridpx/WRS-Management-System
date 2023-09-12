@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -16,10 +16,11 @@ import Slim from "@/assets/items_img/slim_gallon.png";
 import Rounded from "@/assets/items_img/rounded_gallon.png";
 import Image from "next/image";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
+import { Orders } from "../../../../typings";
 
 export default function POSReceipt() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const { togglePaymentModal } = POSPaymentModal();
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const { togglePaymentModal, order, payment } = POSPaymentModal();
 
   return (
     <>
@@ -64,30 +65,39 @@ export default function POSReceipt() {
             <h1 className="text-end">Price</h1>
           </div>
 
-          <div className="grid grid-cols-3 py-2 ">
-            <div className="text-sm flex items-center gap-x-2">
-              <Image src={Slim} alt="Slim " height={25} className="" />
-              <p>Slim</p>
-            </div>
-            <h2 className="text-center">6</h2>
-            <h2 className="text-end">120.00</h2>
-          </div>
-          <div className="grid grid-cols-3 py-2 ">
-            <div className="text-sm flex items-center gap-x-2">
-              <Image src={Rounded} alt="Slim " height={25} className="" />
-              <p>Slim</p>
-            </div>
-            <h2 className="text-center">6</h2>
-            <h2 className="text-end">120.00</h2>
-          </div>
+          {order.map((orders: Orders) => {
+            return (
+              <>
+                <div key={orders.id} className="grid grid-cols-3 py-2 ">
+                  <div className="text-sm flex items-center gap-x-2">
+                    {orders.img && (
+                      <Image
+                        src={orders.img}
+                        alt="Slim "
+                        height={25}
+                        className=""
+                      />
+                    )}
+                    <p>{orders.type}</p>
+                  </div>
+                  <h2 className="text-center">{orders.qty}</h2>
+                  <h2 className="text-end">{orders.price?.toFixed(2)}</h2>
+                </div>
+              </>
+            );
+          })}
         </div>
 
         {/* bottom amount */}
         <Separator />
         <div className="grid grid-cols-3 p-2">
           <h1>Total</h1>
-          <h1 className="text-center">12</h1>
-          <h1 className="text-end">240.00</h1>
+          <h1 className="text-center">
+            {order.reduce((accumulator, currentOrder) => {
+              return accumulator + currentOrder?.qty;
+            }, 0)}
+          </h1>
+          <h1 className="text-end">{payment.toFixed(2)}</h1>
         </div>
       </div>
 
@@ -97,7 +107,7 @@ export default function POSReceipt() {
           <Separator />
           <div className="flex justify-between px-2">
             <h1 className="font-semibold text-xl">SUB TOTAL</h1>
-            <h1 className="text-xl">₱ 0.00</h1>
+            <h1 className="text-xl">₱{payment.toFixed(2)}</h1>
           </div>
           <Separator />
           <div className="flex justify-center pb-4">

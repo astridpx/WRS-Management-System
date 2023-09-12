@@ -12,7 +12,7 @@ export function DataTableGallonColumn<TData>({
 }: DataTableRowActionsProps<TData>) {
   return (
     <>
-      <div className="bg-green-200 min-w-[25rem]">
+      <div className="min-w-[25rem]">
         <header className="grid grid-cols-4 font-semibold text-center bg-gray-200">
           <h4 className="col-span-2 ">Item</h4>
           <h4>Client</h4>
