@@ -1,10 +1,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { IProducts } from "../../../typings";
+import { IItems } from "../../../typings";
 import { ProductDataTableRowActions } from "./Data-Table-Row-Action";
 
-export const productColumns: ColumnDef<IProducts>[] = [
+export const productColumns: ColumnDef<IItems>[] = [
   {
     header: "Id",
     accessorKey: "id",

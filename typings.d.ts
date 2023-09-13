@@ -1,3 +1,4 @@
+import ItemsPage from "@/app/Items/page";
 import { IconType } from "react-icons";
 
 export interface ILogin {
@@ -45,14 +46,6 @@ export interface INewUser {
   password: string;
 }
 
-export interface IProducts {
-  id: number;
-  prod_name: string;
-  stock: any;
-  prod_import: string;
-  prod_code: string;
-}
-
 export interface IUserFormState {
   showAddCustomerForm: boolean;
   toggleShowCustomerForm: (state: boolean) => void;
@@ -81,7 +74,6 @@ export interface IPOSBtnStore {
   selectedCustomer: any;
   toggleShowSelect: (state: boolean) => void;
   toggleShowReturn: (state: boolean) => void;
-  2;
 }
 
 export interface Orders {
@@ -98,4 +90,20 @@ export interface IPOSPaymentModal {
   togglePaymentModal: (state: boolean) => void;
   setPayment: (state: number) => void;
   setOrder: (id: string | undefined, value: any) => void;
+}
+
+// ItemsPage
+export interface IItemspageModalStore {
+  addItemModal: boolean;
+  editItemModal: boolean;
+  toggleAddItemModal: (state: boolean) => void;
+  toggleEditItemModal: (state: boolean) => void;
+}
+
+export interface IItems {
+  id: number;
+  prod_name: string;
+  stock: any;
+  prod_import: string;
+  prod_code: string;
 }

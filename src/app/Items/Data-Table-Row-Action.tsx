@@ -4,7 +4,6 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { useMutation, useQueryClient } from "react-query";
 import { DeleteUser } from "../Customer/APIs/api";
 
@@ -35,6 +34,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
+import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
@@ -46,8 +46,7 @@ export function ProductDataTableRowActions<TData>({
   const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
-  const { setEditData, setShowEditModal, showEditUserModal, setEditUserId } =
-    editUserStore();
+  const { toggleEditItemModal } = ItemsPageModalStore();
 
   const deleteUserMutation = useMutation({
     mutationFn: () => DeleteUser(userId),
@@ -108,11 +107,12 @@ export function ProductDataTableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-          // onClick={async () => {
-          //   setEditData(row?.original);
-          //   setEditUserId(row?.original?._id);
-          //   setShowEditModal(!showEditUserModal);
-          // }}
+            onClick={() => {
+              // setEditData(row?.original);
+              // setEditUserId(row?.original?._id);
+
+              toggleEditItemModal(true);
+            }}
           >
             Edit
           </DropdownMenuItem>

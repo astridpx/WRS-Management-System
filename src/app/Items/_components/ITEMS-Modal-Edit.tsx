@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import { useState, useRef } from "react";
 import Image from "next/image";
 import NoImage from "@/assets/noImage.png";
 import { Input } from "@/components/ui/input";
@@ -12,20 +14,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 
-export const PRODModalAddItem = () => {
-  const sho = true;
+export const ItemsModalEdit = () => {
+  const { editItemModal, toggleEditItemModal } = ItemsPageModalStore();
+
+  const InputRef = useRef<HTMLInputElement | null>(null);
+
   return (
     <>
       <section
         className={`${
-          sho ? "block" : "hidden"
+          editItemModal ? "block" : "hidden"
         } h-screen w-full overflow-y-auto bg-black/75 bg-opacity-95 absolute z-20  `}
       >
         <div className="h-max w-full  flex items-center justify-center py-4   ">
           <main className="relative  max-w-4xl w-[100%] p-4 bg-white dark:bg-dark_bg border border-gray-900/10 shadow-md rounded">
             <h2 className="text-base font-semibold leading-7 text-gray-900 ml-3 relative before:absolute before:-left-3 before:h-full before:w-2 before:bg-red-400">
-              Add Item
+              Edit Item Detail
             </h2>
             <div className="flex gap-x-4">
               <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -97,7 +103,7 @@ export const PRODModalAddItem = () => {
                     htmlFor="reorder"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Reorder Notif
+                    Reorder Level
                   </label>
                   <div className="mt-2">
                     <Input type="number" name="reorder" min={0} required />
@@ -115,22 +121,29 @@ export const PRODModalAddItem = () => {
                     className="w-full h-full"
                   />
                 </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  ref={InputRef}
+                  className="hidden"
+                />
                 <Button
                   // variant="outline"
-                  type="button"
+                  onClick={() => InputRef?.current?.click()}
                   // className="bg-red-500 hover:bg-red-600"
                 >
                   Upload
                 </Button>
               </div>
             </div>
+
             {/* BUTTON FOOTER */}
             <div className=" flex justify-end space-x-4 mt-8 ">
               <Button
                 variant="outline"
                 type="button"
                 // className="bg-red-500 hover:bg-red-600"
-                // onClick={() => toggleShowCustomerForm(false)}
+                onClick={() => toggleEditItemModal(false)}
               >
                 Cancel
               </Button>

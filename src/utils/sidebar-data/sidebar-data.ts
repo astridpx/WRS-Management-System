@@ -2,6 +2,8 @@ import { RxDashboard } from "react-icons/rx";
 import { FiUser, FiTruck } from "react-icons/fi";
 import { SlCreditCard } from "react-icons/sl";
 import { LiaStoreAltSolid } from "react-icons/lia";
+import { LuClipboardList } from "react-icons/lu";
+import { BiBarChart } from "react-icons/bi";
 import { ISidebar } from "../../../typings";
 
 export const sidebarItems: ISidebar[] = [
@@ -29,26 +31,26 @@ export const sidebarItems: ISidebar[] = [
       },
       {
         id: 104,
-        icon: LiaStoreAltSolid,
-        name: "Products",
-        path: "/Products",
+        icon: LuClipboardList,
+        name: "Items",
+        path: "/Items",
       },
       {
         id: 105,
-        icon: SlCreditCard,
-        name: "Orders",
-        path: "/",
+        icon: FiTruck,
+        name: "Delivery",
+        path: "/Delivery",
       },
       {
         id: 106,
-        icon: FiTruck,
-        name: "Delivery",
-        path: "/",
+        icon: LiaStoreAltSolid,
+        name: "Monitoring",
+        path: "/Monitoring",
       },
       {
         id: 107,
-        icon: SlCreditCard,
-        name: "Orders",
+        icon: BiBarChart,
+        name: "Sales / Expenses",
         path: "/",
       },
       {
