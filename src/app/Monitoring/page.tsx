@@ -3,8 +3,11 @@
 import { use } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { DataTable } from "@/components/react-table/main-table";
+import { DataTableFilterDate } from "@/components/react-table/Main-Table-Date-Filter";
 import { monitoringHistoryColumns } from "./Monitoring-History-Column";
+import { LastGallonReturnColumns } from "./Last-Gallon-Return";
 import fakeCustomer from "@/utils/table-data/MOCK_DATA_CUSTOMER_SEARCH.json";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 async function getData() {
   const Data = await fakeCustomer.map((d: any) => {
@@ -30,9 +33,26 @@ const MonitoringPage = async () => {
     <>
       <PageWrapper>
         <div className="relative ">
-          <div className="flex justify-end "></div>
-
-          <DataTable columns={monitoringHistoryColumns} data={monitoringData} />
+          <Tabs defaultValue="last_return" className="">
+            <TabsList className="grid  grid-cols-3 w-[30rem]">
+              <TabsTrigger value="last_return">Last Return</TabsTrigger>
+              <TabsTrigger value="history">History</TabsTrigger>
+              <TabsTrigger value="credit">Credit</TabsTrigger>
+            </TabsList>
+            <TabsContent value="last_return">
+              <DataTable
+                columns={LastGallonReturnColumns}
+                data={monitoringData}
+              />
+            </TabsContent>
+            <TabsContent value="history">
+              <DataTableFilterDate
+                columns={monitoringHistoryColumns}
+                data={monitoringData}
+              />
+            </TabsContent>
+            <TabsContent value="credit"></TabsContent>
+          </Tabs>
         </div>
       </PageWrapper>
     </>
