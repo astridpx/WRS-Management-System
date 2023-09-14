@@ -17,6 +17,7 @@ import Rounded from "@/assets/items_img/rounded_gallon.png";
 import Image from "next/image";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
 import { Orders } from "../../../../typings";
+import { DatePicker } from "@/components/Date-Picker/Date-Picker";
 
 export default function POSReceipt() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -29,31 +30,12 @@ export default function POSReceipt() {
         <div className="flex justify-between items-center px-2">
           <h4 className="font-semibold">Date</h4>
           {/* DATE PICKER */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                className={cn(
-                  "justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <AiOutlineCalendar className="mr-2 h-4 w-4" />
-                {date && format(date, "LLL dd, y")}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("2022-01-01")
-                }
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+          <DatePicker
+            calendar_width={"w-max"}
+            variant={"ghost"}
+            setDate={setDate}
+            date={date}
+          />
         </div>
         <Separator />
         <h2 className="text-center my-2 text-gray-500">Order Summary</h2>
