@@ -28,6 +28,9 @@ export interface ISidebarState {
 }
 
 // ? REACT TABLE INTERFACE PROPS
+export interface DataTableRowProps<TData> {
+  row: Row<TData & any>;
+}
 export type IUser = {
   _id?: string;
   first_name: string;
