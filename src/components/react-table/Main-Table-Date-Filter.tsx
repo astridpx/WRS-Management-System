@@ -43,7 +43,9 @@ export function DataTableFilterDate<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  // ? USING REACT TABLEHOOK
+  const [dateFrom, setDateFrom] = useState<Date | undefined>();
+  const [dateTo, setDateTo] = useState<Date | undefined>(new Date());
+
   const [tableFilter, setTableFilter] = useState<string>("");
   const table = useReactTable({
     data,
@@ -73,11 +75,15 @@ export function DataTableFilterDate<TData, TValue>({
               variant={"outline"}
               calendar_width={"w-[13rem]"}
               calendar_text={"Pick a date from"}
+              date={dateFrom}
+              setDate={setDateFrom}
             />
             <DatePicker
               variant={"outline"}
               calendar_width={"w-[13rem]"}
               calendar_text={"Pick a date to"}
+              date={dateTo}
+              setDate={setDateTo}
             />
           </div>
         </div>
@@ -101,7 +107,7 @@ export function DataTableFilterDate<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="text-slate-400 dark:text-dark_text">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
