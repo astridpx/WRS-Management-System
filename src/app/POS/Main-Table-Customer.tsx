@@ -87,7 +87,7 @@ export function POSDataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody >
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
