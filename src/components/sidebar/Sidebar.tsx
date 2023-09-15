@@ -8,9 +8,12 @@ import Image from "next/image";
 import Logo from "@/assets/Water-Drop.svg";
 import WaterDrop from "@/assets/morning-breeze-water-drop.png";
 import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
+import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
   const { isExpand } = useSidebarStore();
+  const currentRoute = usePathname();
+
   return (
     <>
       <aside
@@ -57,7 +60,9 @@ export default function Sidebar() {
                         <Link
                           key={list.id}
                           href={list.path}
-                          className="flex items-center px-3 py-3 cursor-pointer rounded hover:bg-blue-200"
+                          className={`${
+                            currentRoute === list.path ? "bg-blue-200 " : false
+                          } relative flex items-center px-3 py-3 cursor-pointer rounded-xl hover:bg-blue-200 `}
                         >
                           {React.createElement(list.icon, {
                             size: 22,
