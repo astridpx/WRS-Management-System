@@ -15,6 +15,7 @@ import {
 
 interface ICalendar {
   variant?: any;
+  isValid?: string | false;
   calendar_width?: string;
   calendar_text?: string;
   date?: Date;
@@ -27,6 +28,7 @@ export function DatePicker({
   date,
   setDate,
   variant,
+  isValid,
 }: ICalendar) {
   //   const [date, setDate] = React.useState<Date| undefined>(dateValue);
 
@@ -38,7 +40,7 @@ export function DatePicker({
           className={cn(
             `${
               calendar_width ? calendar_width : "w-[280px]"
-            } justify-start text-left font-normal`,
+            } justify-start text-left font-normal ${isValid} `,
             !date && "text-muted-foreground"
           )}
         >

@@ -68,6 +68,7 @@ export function DataTableFilterDate<TData, TValue>({
             value={tableFilter}
             onChange={(e) => setTableFilter(e.target.value)}
             className="h-8 w-[150px] lg:w-[250px]"
+            onClick={() => console.warn(dateFrom?.getFullYear())}
           />
 
           <div className="flex items-center gap-x-4">
@@ -77,6 +78,13 @@ export function DataTableFilterDate<TData, TValue>({
               calendar_text={"Pick a date from"}
               date={dateFrom}
               setDate={setDateFrom}
+              isValid={
+                dateFrom !== undefined && dateTo !== undefined
+                  ? dateFrom > dateTo
+                    ? "border-2 border-red-400"
+                    : false
+                  : false
+              }
             />
             <DatePicker
               variant={"outline"}
