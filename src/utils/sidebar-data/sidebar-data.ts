@@ -50,8 +50,8 @@ export const sidebarItems: ISidebar[] = [
       {
         id: 107,
         icon: BiBarChart,
-        name: "Sales / Expenses",
-        path: "/",
+        name: "Stocks / Expenses",
+        path: "/Stocks&Expenses",
       },
       {
         id: 108,
