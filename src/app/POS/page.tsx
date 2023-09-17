@@ -67,7 +67,7 @@ export default function POS_Page() {
                   </TabsList>
 
                   <div className="bg-slate-100 w-full">
-                    <header className="h-8 grid grid-cols-8 gap-x-1 place-content-center text-center font-semibold bg-sky-500">
+                    <header className="h-8 grid grid-cols-8 gap-x-1 place-content-center text-center font-semibold bg-sky-300">
                       <h4 className="text-sm ">#</h4>
                       <h4 className="text-sm col-span-2">ITEM</h4>
                       <h4 className="text-sm">PRICE</h4>
