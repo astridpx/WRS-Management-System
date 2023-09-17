@@ -92,6 +92,7 @@ export interface IPOSPaymentModal {
   order: Orders[];
   togglePaymentModal: (state: boolean) => void;
   setPayment: (state: number) => void;
+  clearOrder: () => void;
   setOrder: (id: string | undefined, value: any) => void;
 }
 

@@ -8,6 +8,7 @@ export const POSPaymentModal = create<IPOSPaymentModal>((set) => ({
 
   togglePaymentModal: (state) => set({ paymentModal: state }),
   setPayment: (state) => set({ payment: state }),
+  clearOrder: () => set((state) => ({ ...state, order: [] })),
   setOrder: (id, value) => {
     set((state) => {
       // Find the index of the object with the matching 'id'

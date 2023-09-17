@@ -17,6 +17,7 @@ import { StaticImageData } from "next/image";
 import { ItemsGallon } from "@/utils/Products-data/items";
 import { ItemsBottle } from "@/utils/Products-data/items";
 import { use } from "react";
+import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
 
 interface PosItemProps {
   id?: string;
@@ -31,11 +32,21 @@ const GetItems = async () => {
   });
   return Data;
 };
+const GetItemsBottle = async () => {
+  const Data: PosItemProps[] = await ItemsBottle.map((data) => {
+    return data;
+  });
+  return Data;
+};
 
 const ItemsGet = GetItems();
+const ItemsGetBottle = GetItemsBottle();
 
 export default function POS_Page() {
+  const { clearOrder } = POSPaymentModal();
+
   const items = use(ItemsGet);
+  const items2 = use(ItemsGetBottle);
 
   return (
     <>
@@ -60,7 +71,11 @@ export default function POS_Page() {
                 <Separator />
 
                 {/* TABS HERE */}
-                <Tabs defaultValue="gallon" className="pt-2 ">
+                <Tabs
+                  defaultValue="gallon"
+                  className="pt-2 "
+                  onValueChange={() => clearOrder()}
+                >
                   <TabsList className="flex justify-start">
                     <TabsTrigger value="gallon">Gallon</TabsTrigger>
                     <TabsTrigger value="bottle">Bottle</TabsTrigger>
@@ -96,11 +111,12 @@ export default function POS_Page() {
 
                     {/* BOTTLE TAB */}
                     <TabsContent value="bottle">
-                      {ItemsBottle.map((item: PosItemProps) => {
+                      {items2.map((item: PosItemProps) => {
                         return (
                           <>
                             <POSItems
                               key={item.id}
+                              id={item.id}
                               type={item.type}
                               price={item.price}
                               img={item.img}
