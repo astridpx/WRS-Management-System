@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { DataTable } from "@/components/react-table/main-table";
 import { DataTableFilterDate } from "@/components/react-table/Main-Table-Date-Filter";
@@ -11,6 +11,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { StocksModalAddExpenses } from "./_components/Stocks-Modal-Add-Expenses";
 import { ExpensesModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Expenses-Modal";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 async function getData() {
   const Data = await fakeCustomer.map((d: any) => {
@@ -31,6 +40,7 @@ const DataGet = getData();
 const StockAndExpensesPage = () => {
   const monitoringData = use(DataGet);
   const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
+  const [tabs, setTabs] = useState<string>("daily");
 
   return (
     <>
@@ -50,25 +60,52 @@ const StockAndExpensesPage = () => {
             </TabsContent>
 
             <TabsContent value="expenses">
-              <div className="w-full py-4 mb-2 flex justify-between items-center">
-                <div className="font-semibold px-2 text-slate-600 flex items-center gap-x-12">
-                  <div className="flex items-center gap-x-2">
+              <div className="w-full py-4 mb-2 grid grid-cols-3 items-center">
+                <div className="col-span-2 font-semibold px-2  flex items-center gap-x-12">
+                  <div className="flex items-center gap-x-2 bg-emerald-100 text-[#15bd50] px-2 py-1 rounded-3xl">
                     <h1>Today&apos;s Expenses:</h1>
                     <h1>P 29,000</h1>
                   </div>
-                  <div className="flex items-center gap-x-2">
+                  <div className="flex items-center gap-x-2 px-2 py-1 bg-sky-100 text-[#21ACEB] rounded-3xl">
                     <h1>Monthly Expenses:</h1>
                     <h1>P 29,000</h1>
                   </div>
                 </div>
-                <Button
-                  className="dark:border dark:border-blue-400 dark:bg-transparent dark:text-blue-400"
-                  onClick={() => toggleAddExpensesModal(true)}
-                >
-                  Add Expenses
-                </Button>
+
+                <div className="flex place-content-end gap-x-8 w-full">
+                  <Select
+                    defaultValue="daily"
+                    onValueChange={(e) => setTabs(e)}
+                  >
+                    <SelectTrigger className="text-center bg-white w-[9rem] rounded-lg">
+                      <SelectValue placeholder="Choose View" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  <Button
+                    className="dark:border dark:border-blue-400 dark:bg-transparent dark:text-blue-400"
+                    onClick={() => toggleAddExpensesModal(true)}
+                  >
+                    Add Expenses
+                  </Button>
+                </div>
               </div>
-              <DataTable columns={StockColumns} data={monitoringData} />
+              {/* Table On Expenses tab */}
+
+              <Tabs defaultValue="daily" value={tabs}>
+                <TabsContent value="daily">
+                  <DataTable columns={StockColumns} data={monitoringData} />
+                </TabsContent>
+                <TabsContent value="monthly">
+                  <DataTable columns={StockColumns} data={monitoringData} />
+                </TabsContent>
+              </Tabs>
             </TabsContent>
           </Tabs>
         </div>

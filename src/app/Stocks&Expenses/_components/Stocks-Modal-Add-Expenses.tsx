@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -14,10 +14,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/Date-Picker/Date-Picker";
 import { ExpensesModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Expenses-Modal";
+import Gas from "@/assets/items_img/GAS.png";
+import NoImage from "@/assets/noImage.png";
+import Employee from "@/assets/items_img/employee.png";
+import Seal from "@/assets/items_img/seal.png";
+import Filter from "@/assets/items_img/filter.png";
+
+interface IImages {
+  other: StaticImageData;
+  gas: StaticImageData;
+  employee: StaticImageData;
+  seal: StaticImageData;
+  filter: StaticImageData;
+}
+
+const Images: IImages = {
+  other: NoImage,
+  gas: Gas,
+  employee: Employee,
+  seal: Seal,
+  filter: Filter,
+};
+
+const SealVariant = [
+  "[Small] SLIM - Cap Seal",
+  "[Large] SLIM - Cap Seal",
+  "[Small] ROUND - Cap Seal",
+  "[Large] ROUND - Cap Seal",
+  "Faucet Seal",
+  "Umbrella Seal",
+  "Pet Bottle Seal",
+];
 
 export const StocksModalAddExpenses = () => {
   const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
+  const [item, setItem] = useState<keyof IImages>("other");
+  const [disable, setDisable] = useState<boolean>(true);
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
     <>
@@ -34,7 +69,13 @@ export const StocksModalAddExpenses = () => {
 
             <div className="w-full  mt-4 flex gap-x-8">
               <div className="w-full space-y-8">
-                <Select required>
+                <Select
+                  required
+                  onValueChange={(e) => {
+                    setItem(e as keyof IImages);
+                    setDisable(e === "other" ? false : true);
+                  }}
+                >
                   <SelectTrigger className="text-center bg-white">
                     <SelectValue placeholder="Select type of expenses" />
                   </SelectTrigger>
@@ -42,7 +83,7 @@ export const StocksModalAddExpenses = () => {
                     <SelectGroup>
                       <SelectLabel>Choose Expenses</SelectLabel>
                       <SelectItem value="gas">Gas</SelectItem>
-                      <SelectItem value="salary">Employee Salary</SelectItem>
+                      <SelectItem value="employee">Employee Salary</SelectItem>
                       <SelectItem value="seal">Seal</SelectItem>
                       <SelectItem value="filter">Filter</SelectItem>
                       <SelectItem value="other">Others</SelectItem>
@@ -54,13 +95,14 @@ export const StocksModalAddExpenses = () => {
                   <Label htmlFor="other_expenses">Expenses Name</Label>
                   <Input
                     name="other_expenses"
+                    disabled={disable}
                     type="text"
                     placeholder="Enter expenses"
                   />
                 </div>
 
-                <div className="flex w-full gap-x-4">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-2 w-full gap-x-4">
+                  <div className="space-y-2 ">
                     <Label htmlFor="amount">Total Value</Label>
                     <Input
                       name="amount"
@@ -68,17 +110,29 @@ export const StocksModalAddExpenses = () => {
                       placeholder="Enter value"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="other_expenses">Date</Label>
-                    <Input
-                      name="other_expenses"
-                      type="text"
-                      placeholder="Enter expenses"
+                  <div className="space-y-2 grid w-full ">
+                    <Label className="w-full mb-2">Date</Label>
+                    <DatePicker
+                      calendar_width={"w-full"}
+                      variant={"outline"}
+                      setDate={setDate}
+                      date={date}
                     />
                   </div>
                 </div>
               </div>
-              <div className="w-[30rem] bg-green-300">Image Here</div>
+              <div className="w-[30rem]  h-[18rem] ">
+                <h1 className="text-center mb-2 font-semibold">Preview</h1>
+                <figure className="w-[80%]  h-[75%] rounded-lg shadow-xl mx-auto overflow-hidden flex items-center justify-center cursor-pointer bg-slate-200">
+                  <Image
+                    src={Images[item]}
+                    alt="image"
+                    height={150}
+                    width={150}
+                    className="w-full h-full"
+                  />
+                </figure>
+              </div>
             </div>
 
             {/* BUTTON FOOTER */}
