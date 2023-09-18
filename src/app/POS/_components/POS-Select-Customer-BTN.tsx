@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaUsers } from "react-icons/fa";
 import { GrUser } from "react-icons/gr";
 import { LiaGreaterThanSolid, LiaLessThanSolid } from "react-icons/lia";
@@ -16,9 +16,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
+import { Input } from "@/components/ui/input";
 
 export const POSSelectCustomerBTN = () => {
   const { toggleShowSelect, selectedCustomer } = POSBTNHeaderStore();
+
+  const getTime = () => {
+    const currentTime = new Date();
+    return currentTime.toLocaleTimeString("PST");
+  };
 
   return (
     <>
@@ -72,7 +78,7 @@ export const POSSelectCustomerBTN = () => {
         </div>
 
         {/* SERVICES TYPE */}
-        <div className="w-40">
+        <div className="w-40 space-y-2">
           <Select name="role" defaultValue="deliver">
             <SelectTrigger className="text-center ">
               <SelectValue placeholder="Select Services" />
@@ -85,6 +91,7 @@ export const POSSelectCustomerBTN = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
+          <Input type="time" onClick={() => alert(getTime())} />
         </div>
       </div>
     </>
