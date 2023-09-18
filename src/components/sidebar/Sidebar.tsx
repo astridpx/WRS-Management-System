@@ -61,7 +61,9 @@ export default function Sidebar() {
                           key={list.id}
                           href={list.path}
                           className={`${
-                            currentRoute === list.path ? "bg-blue-200 " : false
+                            currentRoute === list.path
+                              ? "dark:bg-[#1E293B] bg-blue-200 dark:hover:bg-blue-200 "
+                              : false
                           } relative flex items-center px-3 py-3 cursor-pointer rounded-xl hover:bg-blue-200 `}
                         >
                           {React.createElement(list.icon, {
