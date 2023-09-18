@@ -18,6 +18,7 @@ import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 
 export const ItemsModalAdd = () => {
   const { addItemModal, toggleAddItemModal } = ItemsPageModalStore();
+  const [pos, setPos] = useState<boolean>(true);
 
   const InputRef = useRef<HTMLInputElement | null>(null);
 
@@ -35,7 +36,7 @@ export const ItemsModalAdd = () => {
             </h2>
             <div className="flex gap-x-4">
               <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-3">
+                <div className="sm:col-span-6">
                   <label
                     htmlFor="item_name"
                     className="block text-sm font-medium leading-6 text-gray-900"
@@ -52,49 +53,61 @@ export const ItemsModalAdd = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-3">
+                {/* SECOND FIELD GROUP */}
+                <div className="sm:col-span-2 sm:col-start-1">
                   <label
-                    htmlFor="type"
+                    htmlFor="category"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Type
+                    Category
                   </label>
                   <div className="mt-2">
-                    <Select name="type" defaultValue="deliver">
+                    <Select name="category" required>
                       <SelectTrigger className="text-center ">
-                        <SelectValue placeholder="Select Services" />
+                        <SelectValue
+                          placeholder="Select Category"
+                          className="placeholder:text-sm placeholder:text-slate-400"
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
+                          <SelectLabel>Choose Category</SelectLabel>
                           <SelectItem value="container">Container</SelectItem>
                           <SelectItem value="bottle">Bottle</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
 
-                <div className="sm:col-span-2 sm:col-start-1">
-                  <label
-                    htmlFor="price"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Price
-                  </label>
-                  <div className="mt-2">
-                    <Input type="number" name="price" min={0} required />
-                  </div>
-                </div>
-
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="buy"
+                    htmlFor="pos_item"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
                     Buy Price
                   </label>
                   <div className="mt-2">
-                    <Input type="number" name="buy" min={0} required />
+                    <Select
+                      name="pos_item"
+                      required
+                      defaultValue="no"
+                      onValueChange={(e) => setPos(e === "yes" ? false : true)}
+                    >
+                      <SelectTrigger className="text-center ">
+                        <SelectValue
+                          placeholder="Is this sellable"
+                          className="placeholder:text-sm placeholder:text-slate-400"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -106,7 +119,52 @@ export const ItemsModalAdd = () => {
                     Reorder Level
                   </label>
                   <div className="mt-2">
-                    <Input type="number" name="reorder" min={0} required />
+                    <Input
+                      type="number"
+                      name="reorder"
+                      min={0}
+                      required
+                      placeholder="Enter level"
+                    />
+                  </div>
+                </div>
+
+                {/* 3RD FIELD GROUP */}
+                <div className="sm:col-span-3 sm:col-start-1">
+                  <label
+                    htmlFor="price"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Price
+                  </label>
+                  <div className="mt-2">
+                    <Input
+                      type="number"
+                      name="price"
+                      min={0}
+                      required={pos}
+                      disabled={pos}
+                      placeholder="Enter price"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label
+                    htmlFor="buy"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Buy Price
+                  </label>
+                  <div className="mt-2">
+                    <Input
+                      type="number"
+                      name="buy"
+                      min={0}
+                      required={pos}
+                      disabled={pos}
+                      placeholder="Enter buy price"
+                    />
                   </div>
                 </div>
               </div>
@@ -130,7 +188,6 @@ export const ItemsModalAdd = () => {
                 <Button
                   // variant="outline"
                   onClick={() => InputRef?.current?.click()}
-                  // className="bg-red-500 hover:bg-red-600"
                 >
                   Upload
                 </Button>
@@ -142,17 +199,11 @@ export const ItemsModalAdd = () => {
               <Button
                 variant="outline"
                 type="button"
-                // className="bg-red-500 hover:bg-red-600"
                 onClick={() => toggleAddItemModal(false)}
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                // className="bg-blue-500 hover:bg-blue-600"
-              >
-                Save
-              </Button>
+              <Button type="submit">Save</Button>
             </div>
           </main>
         </div>
