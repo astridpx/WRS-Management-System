@@ -5,6 +5,8 @@ import { LiaStoreAltSolid } from "react-icons/lia";
 import { LuClipboardList } from "react-icons/lu";
 import { BiBarChart } from "react-icons/bi";
 import { ISidebar } from "../../../typings";
+import { MdOutlineManageAccounts } from "react-icons/md";
+import { AiOutlineSetting } from "react-icons/ai";
 
 export const sidebarItems: ISidebar[] = [
   {
@@ -25,82 +27,60 @@ export const sidebarItems: ISidebar[] = [
       },
       {
         id: 103,
-        icon: FiUser,
-        name: "Customer",
-        path: "/Customer",
-      },
-      {
-        id: 104,
-        icon: LuClipboardList,
-        name: "Items",
-        path: "/Items",
-      },
-      {
-        id: 105,
         icon: FiTruck,
         name: "Delivery",
         path: "/Delivery",
-      },
-      {
-        id: 106,
-        icon: LiaStoreAltSolid,
-        name: "Monitoring",
-        path: "/Monitoring",
-      },
-      {
-        id: 107,
-        icon: BiBarChart,
-        name: "Stocks / Expenses",
-        path: "/Stocks&Expenses",
-      },
-      {
-        id: 108,
-        icon: FiTruck,
-        name: "Delivery",
-        path: "/",
       },
     ],
   },
 
   {
     key: 2,
-    title: "OTHERS",
+    title: "MANAGE",
     items: [
       {
-        id: 109,
-        icon: RxDashboard,
-        name: "Dashboard",
-        path: "/",
-      },
-      {
-        id: 110,
-        icon: RxDashboard,
-        name: "Dashboard",
-        path: "/",
-      },
-      {
         id: 111,
-        icon: RxDashboard,
-        name: "Dashboard",
-        path: "/",
+        icon: FiUser,
+        name: "Customer",
+        path: "/Customer",
       },
       {
         id: 112,
-        icon: RxDashboard,
-        name: "Dashboard",
-        path: "/",
+        icon: LuClipboardList,
+        name: "Items",
+        path: "/Items",
       },
+
       {
         id: 113,
-        icon: RxDashboard,
-        name: "Dashboard",
-        path: "/",
+        icon: LiaStoreAltSolid,
+        name: "Monitoring",
+        path: "/Monitoring",
       },
       {
         id: 114,
-        icon: RxDashboard,
-        name: "Dashboard LAST ",
-        path: "/",
+        icon: BiBarChart,
+        name: "Stocks / Expenses",
+        path: "/Stocks&Expenses",
+      },
+    ],
+  },
+
+  {
+    key: 3,
+    title: "OTHERS",
+    items: [
+      {
+        id: 120,
+        icon: MdOutlineManageAccounts,
+        name: "Accounts",
+        path: "/Accounts",
+      },
+      {
+        id: 121,
+        icon: AiOutlineSetting,
+        name: "Settings",
+        path: "/Settings",
       },
     ],
   },
