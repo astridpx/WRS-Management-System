@@ -6,6 +6,8 @@ import AuthProvider from "@/lib/next-auth/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import ReactQueryProvider from "@/lib/react-query/ReactQueryProvider";
 import ThemeProviderWrapper from "@/lib/next-theme/ThemeProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -32,6 +34,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             {children}
             {/* <Toaster /> */}
+            <ToastContainer />
             <Toaster position="bottom-right" reverseOrder={false} />
           </ReactQueryProvider>
         </body>
