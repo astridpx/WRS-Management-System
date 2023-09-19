@@ -2,7 +2,7 @@ import React from "react";
 import { MdLocationPin, MdContactEmergency } from "react-icons/md";
 import { BiSolidUser } from "react-icons/bi";
 import { Row } from "@tanstack/react-table";
-import { DataTableRowProps } from "../../../typings";
+import { DataTableRowProps } from "../../../../typings";
 
 export function DataTableNameColumn<TData>({ row }: DataTableRowProps<TData>) {
   return (

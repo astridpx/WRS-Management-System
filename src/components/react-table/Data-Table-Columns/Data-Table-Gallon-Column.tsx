@@ -1,4 +1,5 @@
 import Slim from "@/assets/items_img/slim_gallon.png";
+import Round from "@/assets/items_img/rounded_gallon.png";
 import Image from "next/image";
 import { Row } from "@tanstack/react-table";
 
@@ -21,6 +22,15 @@ export function DataTableGallonColumn<TData>({
         <div className="grid grid-cols-4 text-center">
           <div className=" flex items-center gap-4 col-span-2 ">
             <Image src={Slim} alt="Slim" height={25} className="" />
+
+            <p>SLim Gallon</p>
+          </div>
+          <h4>4</h4>
+          <h4>7</h4>
+        </div>
+        <div className="grid grid-cols-4 text-center">
+          <div className=" flex items-center gap-4 col-span-2 ">
+            <Image src={Round} alt="Slim" height={25} className="" />
 
             <p>SLim Gallon</p>
           </div>

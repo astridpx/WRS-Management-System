@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
 import { DataTableRowActions } from "../Customer/data-table-row-action";
-import { DataTableNameColumn } from "@/components/react-table/Data-Table-Name-Column";
+import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
 
 export const CreditsColumns: ColumnDef<any>[] = [
   {

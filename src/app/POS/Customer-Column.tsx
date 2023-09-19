@@ -3,8 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
 // import { DataTableRowActions } from "../Users/data-table-row-action";
-import { DataTableAddressColumn } from "./Data-Table-Address-Column";
-import { DataTableGallonColumn } from "./Data-Table-Gallon-Column";
+import { DataTableAddressColumn } from "../../components/react-table/Data-Table-Columns/Data-Table-Address-Column";
+import { DataTableGallonColumn } from "../../components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
 import { DataTableColumnHeader } from "./Data-Table-Column-Header";
 import { Badge } from "@/components/ui/badge";
 
