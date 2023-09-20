@@ -1,0 +1,40 @@
+// ? The items collection is the items only that monitor? not sure
+
+const Items = [
+  {
+    name: "Slim",
+    img: "image path location",
+    category: "Gallon",
+    pos_item: true,
+    price: 20,
+    buy_price: 200,
+    in: 200,
+    out: 10,
+    stock: 190,
+    worth: 10_000,
+  },
+  {
+    name: "Rounded",
+    img: "image path location",
+    category: "Gallon",
+    pos_item: true,
+    price: 20,
+    buy_price: 200,
+    in: 200,
+    out: 10,
+    stock: 190,
+    worth: 10_000,
+  },
+  {
+    name: "10 L Bottle",
+    img: "image path location",
+    category: "bottle",
+    pos_item: true,
+    price: 20,
+    buy_price: 200,
+    in: 200,
+    out: 10,
+    stock: 190,
+    worth: 10_000,
+  },
+];
