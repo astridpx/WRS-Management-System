@@ -15,22 +15,9 @@ export const StockColumns: ColumnDef<any>[] = [
     accessorKey: "Alias",
   },
   {
-    header: "In",
+    header: "Stock",
     accessorKey: "Alias",
   },
-  {
-    header: "Out",
-    accessorKey: "Alias",
-  },
-  {
-    header: "OnHand",
-    accessorKey: "Alias",
-  },
-  {
-    header: "Worth",
-    accessorKey: "Alias",
-  },
-
   {
     id: "action",
     cell: ({ row }) => <DataTableRowActions row={row} />,

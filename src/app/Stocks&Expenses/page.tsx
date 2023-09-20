@@ -3,10 +3,9 @@
 import { use, useState } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { DataTable } from "@/components/react-table/main-table";
-import { DataTableFilterDate } from "@/components/react-table/Main-Table-Date-Filter";
-import { LastGallonReturnColumns } from "../Monitoring/Last-Gallon-Return-Column";
 import { StockColumns } from "./Stock-Column";
 import fakeCustomer from "@/utils/table-data/MOCK_DATA_CUSTOMER_SEARCH.json";
+import { ExpensesColumns } from "./Expenses-Column";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { StocksModalAddExpenses } from "./_components/Stocks-Modal-Add-Expenses";
@@ -100,10 +99,10 @@ const StockAndExpensesPage = () => {
 
               <Tabs defaultValue="daily" value={tabs}>
                 <TabsContent value="daily">
-                  <DataTable columns={StockColumns} data={monitoringData} />
+                  <DataTable columns={ExpensesColumns} data={monitoringData} />
                 </TabsContent>
                 <TabsContent value="monthly">
-                  <DataTable columns={StockColumns} data={monitoringData} />
+                  <DataTable columns={ExpensesColumns} data={monitoringData} />
                 </TabsContent>
               </Tabs>
             </TabsContent>
