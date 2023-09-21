@@ -38,7 +38,7 @@ const MonitoringPage = async () => {
             <div className="w-full h-max bg-slate-100 dark:bg-inherit">
               <TabsList className="grid  grid-cols-3 w-[30rem]">
                 <TabsTrigger value="last_return">Last Return</TabsTrigger>
-                <TabsTrigger value="history">History</TabsTrigger>
+                <TabsTrigger value="history">POS History</TabsTrigger>
                 <TabsTrigger value="credit">Credit</TabsTrigger>
               </TabsList>
             </div>
