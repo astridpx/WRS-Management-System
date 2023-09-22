@@ -61,7 +61,7 @@ export function DataTableFilterDate<TData, TValue>({
 
   return (
     <>
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-white">
         <div className="flex items-center justify-between p-4  border-b ">
           <Input
             placeholder="Search..."

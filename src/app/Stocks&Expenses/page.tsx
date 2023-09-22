@@ -46,14 +46,13 @@ const StockAndExpensesPage = () => {
       <StocksModalAddExpenses />
 
       <PageWrapper>
-        <div className="relative ">
+        <div className="relative bg-white ">
           <Tabs defaultValue="stock" className="">
-            <div className="w-full h-max bg-slate-100 dark:bg-inherit">
-              <TabsList className="grid  grid-cols-3 w-[30rem] m-0">
-                <TabsTrigger value="stock">Stock</TabsTrigger>
-                <TabsTrigger value="expenses">Expenses</TabsTrigger>
-              </TabsList>
-            </div>
+            <TabsList className="grid  grid-cols-2 w-[30rem] m-0">
+              <TabsTrigger value="stock">Stock</TabsTrigger>
+              <TabsTrigger value="expenses">Expenses</TabsTrigger>
+            </TabsList>
+
             <TabsContent value="stock">
               <DataTable columns={StockColumns} data={monitoringData} />
             </TabsContent>

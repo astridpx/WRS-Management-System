@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-white">
         <div className="p-4  border-b ">
           <Input
             placeholder="Search..."

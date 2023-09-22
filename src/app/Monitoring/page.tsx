@@ -33,15 +33,14 @@ const MonitoringPage = async () => {
   return (
     <>
       <PageWrapper>
-        <div className="relative ">
+        <div className="relative bg-white">
           <Tabs defaultValue="last_return" className="">
-            <div className="w-full h-max bg-slate-100 dark:bg-inherit">
-              <TabsList className="grid  grid-cols-3 w-[30rem]">
-                <TabsTrigger value="last_return">Last Return</TabsTrigger>
-                <TabsTrigger value="history">POS History</TabsTrigger>
-                <TabsTrigger value="credit">Credit</TabsTrigger>
-              </TabsList>
-            </div>
+            <TabsList className="grid  grid-cols-3 w-[30rem]">
+              <TabsTrigger value="last_return">Last Return</TabsTrigger>
+              <TabsTrigger value="history">POS History</TabsTrigger>
+              <TabsTrigger value="credit">Credit</TabsTrigger>
+            </TabsList>
+
             <TabsContent value="last_return">
               <DataTable
                 columns={LastGallonReturnColumns}

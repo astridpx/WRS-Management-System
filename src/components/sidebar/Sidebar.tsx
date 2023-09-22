@@ -9,6 +9,7 @@ import Logo from "@/assets/Water-Drop.svg";
 import WaterDrop from "@/assets/morning-breeze-water-drop.png";
 import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
 import { usePathname } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 export default function Sidebar() {
   const { isExpand } = useSidebarStore();
@@ -17,7 +18,7 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`h-screen bg-gray-100 ${
+        className={`h-screen bg-white ${
           isExpand ? "w-[22rem]" : "w-[5rem]"
         } dark:bg-dark_bg`}
       >
@@ -38,6 +39,8 @@ export default function Sidebar() {
             Morning Breeze
           </h1>
         </div>
+
+        <Separator />
 
         <div className="h-[90vh] font-medium">
           <ScrollArea className="h-full w-full px-4 py-4">

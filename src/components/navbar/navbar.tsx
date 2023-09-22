@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="h-[10vh] w-full px-4 bg-white flex justify-between z-10 sticky top-0 border-b border-gray-200 dark:border-gray-400 dark:bg-dark_bg">
+      <nav className="h-[10vh] w-full px-4 bg-white border flex justify-between z-10 sticky top-0  dark:bg-dark_bg">
         <div className="flex items-center">
           <Toggle onClick={() => toggleSidebar(!isExpand)}>
             <HiOutlineMenuAlt2
@@ -167,6 +167,7 @@ export default function Navbar() {
           </DropdownMenu>
         </div>
       </nav>
+      {/* <Separator /> */}
     </>
   );
 }

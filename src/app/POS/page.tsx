@@ -56,12 +56,12 @@ export default function POS_Page() {
       <PaymentModal />
 
       <PageWrapper>
-        <section className="relative border p-2">
+        <section className="relative border p-2 bg-white rounded-lg">
           {/* BTN HEADER */}
           <POSBTNHeader />
           <Separator />
 
-          <div className="py-4 h-[50rem]">
+          <div className="py-4 min-h-[32rem] ">
             <div className="flex gap-x-4">
               {/* LEFT BOX */}
               <div className="border-2 w-[65%] h-max">
@@ -82,7 +82,7 @@ export default function POS_Page() {
                   </TabsList>
 
                   <div className="bg-slate-100 w-full">
-                    <header className="h-8 grid grid-cols-8 gap-x-1 place-content-center text-center font-semibold bg-sky-300">
+                    <header className="h-8 grid grid-cols-8 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
                       <h4 className="text-sm ">#</h4>
                       <h4 className="text-sm col-span-2">ITEM</h4>
                       <h4 className="text-sm">PRICE</h4>

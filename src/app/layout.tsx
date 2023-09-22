@@ -30,7 +30,7 @@ export default function RootLayout({
       {/* // ? temporary remove auth */}
       {/* <AuthProvider> */}
       <ThemeProviderWrapper>
-        <body className={poppins.className}>
+        <body className={`${poppins.className} bg-[#ECF0FA]`} >
           <ReactQueryProvider>
             {children}
             {/* <Toaster /> */}
