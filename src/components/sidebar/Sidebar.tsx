@@ -19,7 +19,7 @@ export default function Sidebar() {
     <>
       <aside
         className={`h-screen bg-white ${
-          isExpand ? "w-[22rem]" : "w-[5rem]"
+          isExpand ? "w-[21rem]" : "w-[5rem]"
         } dark:bg-dark_bg`}
       >
         <div className="h-[10vh] p-4  flex items-center space-x-4">
@@ -65,20 +65,16 @@ export default function Sidebar() {
                           href={list.path}
                           className={`${
                             currentRoute === list.path
-                              ? "dark:bg-[#1E293B] bg-blue-200 dark:hover:bg-blue-200 "
-                              : false
-                          } relative flex items-center px-3 py-3 cursor-pointer rounded-xl hover:bg-blue-200 `}
+                              ? "dark:bg-[#1E293B] text-blue-500 "
+                              : "text-gray-500"
+                          } relative flex items-center px-3 py-3 cursor-pointer rounded-xl  hover:text-blue-500 `}
                         >
                           {React.createElement(list.icon, {
-                            size: 22,
-                            className: "mr-4 text-gray-500",
+                            size: `${isExpand ? 20 : 22}`,
+                            className: "mr-4  ",
                           })}
                           {/* //? IT WILL BE HIDDEn IF THE SIDEBAR IS MINIMIZE */}
-                          <h1
-                            className={`text-base text-gray-500 ${
-                              !isExpand && "hidden"
-                            }`}
-                          >
+                          <h1 className={`  ${!isExpand && "hidden"}`}>
                             {list.name}
                           </h1>
                         </Link>
