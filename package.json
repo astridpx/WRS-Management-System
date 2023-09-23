@@ -28,6 +28,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-table": "^8.9.3",
     "@types/bcrypt": "^5.0.0",
+    "@types/chart.js": "^2.9.38",
     "@types/mongoose": "^5.11.97",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
