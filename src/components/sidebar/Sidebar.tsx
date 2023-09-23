@@ -32,11 +32,13 @@ export default function Sidebar() {
           />
           {/* // ? font style is brownmen curve bc */}
           <h1
-            className={`text-lg font-bold text-gray-800 dark:text-gray-300 ${
+            className={`text-lg font-bold text-gray-800 dark:text-gray-300 grid ${
               !isExpand && "hidden"
             }`}
           >
             Morning Breeze
+            <br />
+            <span className="text-xs font-medium">Water Management System</span>
           </h1>
         </div>
 
