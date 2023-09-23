@@ -11,6 +11,7 @@ import {
   Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { months as labels } from "@/utils/Dashboard/Months-data";
 
 ChartJS.register(
   CategoryScale,
@@ -55,25 +56,9 @@ export const options = {
       font: {
         size: 19,
       },
-      padding: { bottom: 10 },
     },
   },
 };
-
-const labels = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
 export const data = {
   labels,

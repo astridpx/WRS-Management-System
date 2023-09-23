@@ -18,6 +18,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { months as labels } from "@/utils/Dashboard/Months-data";
 
 ChartJS.register(
   CategoryScale,
@@ -69,21 +70,6 @@ export const options = {
 };
 
 const BarChart = () => {
-  const labels = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
   const data = {
     labels: labels,
     datasets: [
@@ -104,7 +90,7 @@ const BarChart = () => {
     <>
       <div className="p-1 rounded-lg w-full absolute z-10 flex justify-end items-center">
         <Select defaultValue="2020">
-          <SelectTrigger className="min-w-[4rem] w-max h-max  text-sm">
+          <SelectTrigger className="min-w-[6rem] w-max h-max  text-sm">
             <SelectValue placeholder="year" />
           </SelectTrigger>
           <SelectContent>
