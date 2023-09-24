@@ -12,6 +12,15 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { months as labels } from "@/utils/Dashboard/Months-data";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 ChartJS.register(
   CategoryScale,
@@ -93,6 +102,21 @@ export const data = {
 export default function ReLineChart() {
   return (
     <>
+      <div className="p-1 rounded-lg w-full absolute z-10 flex justify-end items-center">
+        <Select defaultValue="2020">
+          <SelectTrigger className="min-w-[6rem] w-max h-max  text-sm">
+            <SelectValue placeholder="year" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Year</SelectLabel>
+              <SelectItem value="2020">2020</SelectItem>
+              <SelectItem value="2021">2021</SelectItem>
+              <SelectItem value="2022">2022</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <Line
         options={options}
         data={data}
