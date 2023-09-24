@@ -2,9 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
-import { DataTableRowActions } from "../Customer/data-table-row-action";
 import { DataTableItemName } from "@/components/react-table/Data-Table-Columns/Data-Table-Item-Name";
 import Round from "@/assets/items_img/rounded_gallon.png";
+import { ExpensesDataTableRowActions } from "./data-expenses-row-action";
 
 export const ExpensesColumns: ColumnDef<any>[] = [
   {
@@ -25,6 +25,6 @@ export const ExpensesColumns: ColumnDef<any>[] = [
   },
   {
     id: "action",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <ExpensesDataTableRowActions row={row} />,
   },
 ];

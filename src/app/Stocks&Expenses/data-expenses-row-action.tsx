@@ -39,7 +39,7 @@ interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
 
-export function ProductDataTableRowActions<TData>({
+export function ExpensesDataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const queryClient = useQueryClient();

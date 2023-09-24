@@ -116,26 +116,6 @@ export function DataTableRowActions<TData>({
           >
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={"Label"}>
-                <DropdownMenuRadioItem key={1} value={""}>
-                  Value 1
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem key={2} value={""}>
-                  Value 2
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem key={3} value={""}>
-                  Value 3
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-          <DropdownMenuSeparator />
           <AlertDialogTrigger
             className="w-full"
             onClick={() => {
@@ -144,7 +124,6 @@ export function DataTableRowActions<TData>({
             }}
           >
             <DropdownMenuItem>Delete</DropdownMenuItem>
-            {/* <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut> */}
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>

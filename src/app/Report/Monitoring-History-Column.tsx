@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
-import { DataTableRowActions } from "../Customer/data-table-row-action";
+import { DataTableRowActions } from "./data-row-action";
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
 
 export const monitoringHistoryColumns: ColumnDef<any>[] = [

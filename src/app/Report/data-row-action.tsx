@@ -4,8 +4,8 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { useMutation, useQueryClient } from "react-query";
-import { DeleteUser } from "../Customer/APIs/api";
 
 import {
   DropdownMenu,
@@ -34,40 +34,17 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
 
-export function ProductDataTableRowActions<TData>({
+export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
-  const { toggleEditItemModal } = ItemsPageModalStore();
-
-  const deleteUserMutation = useMutation({
-    mutationFn: () => DeleteUser(userId),
-    onMutate: () => {
-      notify();
-    },
-    onSuccess: async (data: any) => {
-      await queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.dismiss();
-      setIsOpen(false);
-      toast.success(data?.message);
-    },
-    onError: (error: any) => {
-      toast.dismiss();
-      toast.error(error?.response?.data?.message);
-    },
-  });
-
-  const handleSubmit = async (e: any) => {
-    deleteUserMutation.mutate();
-  };
 
   return (
     <AlertDialog open={isOpen}>
@@ -79,18 +56,10 @@ export function ProductDataTableRowActions<TData>({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel
-            disabled={deleteUserMutation?.isLoading}
-            onClick={() => setIsOpen(false)}
-          >
+          <AlertDialogCancel onClick={() => setIsOpen(false)}>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction
-            disabled={deleteUserMutation?.isLoading}
-            // onClick={(e) => handleSubmit(e)}
-          >
-            Delete
-          </AlertDialogAction>
+          <AlertDialogAction>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
 
@@ -106,24 +75,16 @@ export function ProductDataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem
-            onClick={() => {
-              // setEditData(row?.original);
-              // setEditUserId(row?.original?._id);
+          <DropdownMenuItem>Edit</DropdownMenuItem>
 
-              toggleEditItemModal(true);
-            }}
-          >
-            Edit
-          </DropdownMenuItem>
           <AlertDialogTrigger
             className="w-full"
             onClick={() => {
-              setUserId(row?.original?._id);
               setIsOpen(true);
             }}
           >
             <DropdownMenuItem>Delete</DropdownMenuItem>
+            {/* <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut> */}
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>

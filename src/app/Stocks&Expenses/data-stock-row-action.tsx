@@ -11,13 +11,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "../../../typings";
@@ -39,7 +32,7 @@ interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
 
-export function ProductDataTableRowActions<TData>({
+export function StockDataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const queryClient = useQueryClient();
@@ -70,30 +63,7 @@ export function ProductDataTableRowActions<TData>({
   };
 
   return (
-    <AlertDialog open={isOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently deleted.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel
-            disabled={deleteUserMutation?.isLoading}
-            onClick={() => setIsOpen(false)}
-          >
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            disabled={deleteUserMutation?.isLoading}
-            // onClick={(e) => handleSubmit(e)}
-          >
-            Delete
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-
+    <>
       {/* DROPDOWN */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -108,25 +78,20 @@ export function ProductDataTableRowActions<TData>({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
             onClick={() => {
-              // setEditData(row?.original);
-              // setEditUserId(row?.original?._id);
-
               toggleEditItemModal(true);
             }}
           >
-            Edit
+            Stock In
           </DropdownMenuItem>
-          <AlertDialogTrigger
-            className="w-full"
+          <DropdownMenuItem
             onClick={() => {
-              setUserId(row?.original?._id);
-              setIsOpen(true);
+              toggleEditItemModal(true);
             }}
           >
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </AlertDialogTrigger>
+            Stock Out
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </AlertDialog>
+    </>
   );
 }

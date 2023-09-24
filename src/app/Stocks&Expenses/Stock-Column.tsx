@@ -2,8 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
-import { DataTableRowActions } from "../Customer/data-table-row-action";
-import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
+import { StockDataTableRowActions } from "./data-stock-row-action";
 
 export const StockColumns: ColumnDef<any>[] = [
   {
@@ -20,6 +19,6 @@ export const StockColumns: ColumnDef<any>[] = [
   },
   {
     id: "action",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <StockDataTableRowActions row={row} />,
   },
 ];
