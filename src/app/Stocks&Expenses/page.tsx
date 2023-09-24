@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { StockModal } from "./_components/Stock-In-Modal";
 
 async function getData() {
   const Data = await fakeCustomer.map((d: any) => {
@@ -44,6 +45,7 @@ const StockAndExpensesPage = () => {
   return (
     <>
       <StocksModalAddExpenses />
+      <StockModal />
 
       <PageWrapper>
         <div className="relative bg-white ">

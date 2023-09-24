@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
+import { StocksModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Stocks-Modal";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
@@ -40,27 +41,7 @@ export function StockDataTableRowActions<TData>({
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
   const { toggleEditItemModal } = ItemsPageModalStore();
-
-  const deleteUserMutation = useMutation({
-    mutationFn: () => DeleteUser(userId),
-    onMutate: () => {
-      notify();
-    },
-    onSuccess: async (data: any) => {
-      await queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.dismiss();
-      setIsOpen(false);
-      toast.success(data?.message);
-    },
-    onError: (error: any) => {
-      toast.dismiss();
-      toast.error(error?.response?.data?.message);
-    },
-  });
-
-  const handleSubmit = async (e: any) => {
-    deleteUserMutation.mutate();
-  };
+  const { setModalType, toggleStocksModal } = StocksModalStore();
 
   return (
     <>
@@ -78,17 +59,26 @@ export function StockDataTableRowActions<TData>({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
             onClick={() => {
-              toggleEditItemModal(true);
+              toggleStocksModal(true);
+              setModalType("in");
             }}
           >
             Stock In
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              toggleEditItemModal(true);
+              toggleStocksModal(true);
+              setModalType("out");
             }}
           >
             Stock Out
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toggleEditItemModal(true);
+            }}
+          >
+            History
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
