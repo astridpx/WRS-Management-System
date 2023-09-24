@@ -7,6 +7,7 @@ import { BiBarChart } from "react-icons/bi";
 import { ISidebar } from "../../../typings";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
+import { HiOutlineDocumentReport } from "react-icons/hi";
 
 export const sidebarItems: ISidebar[] = [
   {
@@ -30,6 +31,12 @@ export const sidebarItems: ISidebar[] = [
         icon: FiTruck,
         name: "Delivery",
         path: "/Delivery",
+      },
+      {
+        id: 104,
+        icon: HiOutlineDocumentReport,
+        name: "Report",
+        path: "/Report",
       },
     ],
   },

@@ -111,3 +111,8 @@ export interface IItems {
   prod_import: string;
   prod_code: string;
 }
+
+export interface IReportpageModalStore {
+  detailModal: boolean;
+  toggleDetailModal: (state: boolean) => void;
+}

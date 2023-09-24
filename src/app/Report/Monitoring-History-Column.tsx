@@ -17,7 +17,11 @@ export const monitoringHistoryColumns: ColumnDef<any>[] = [
     accessorKey: "Alias",
   },
   {
-    header: "Qty",
+    header: "Gallon",
+    accessorKey: "phase",
+  },
+  {
+    header: "Bottle",
     accessorKey: "phase",
   },
   {
@@ -27,10 +31,6 @@ export const monitoringHistoryColumns: ColumnDef<any>[] = [
   {
     header: "Unpaid",
     accessorKey: "blk",
-  },
-  {
-    header: "Credit",
-    accessorKey: "Alias",
   },
   {
     header: "Date",

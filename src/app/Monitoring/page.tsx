@@ -4,7 +4,6 @@ import { use } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { DataTable } from "@/components/react-table/main-table";
 import { DataTableFilterDate } from "@/components/react-table/Main-Table-Date-Filter";
-import { monitoringHistoryColumns } from "./Monitoring-History-Column";
 import { LastGallonReturnColumns } from "./Last-Gallon-Return-Column";
 import { CreditsColumns } from "./Credit-Column";
 import fakeCustomer from "@/utils/table-data/MOCK_DATA_CUSTOMER_SEARCH.json";
@@ -37,19 +36,12 @@ const MonitoringPage = async () => {
           <Tabs defaultValue="last_return" className="">
             <TabsList className="grid  grid-cols-3 w-[30rem]">
               <TabsTrigger value="last_return">Last Return</TabsTrigger>
-              <TabsTrigger value="history">POS History</TabsTrigger>
               <TabsTrigger value="credit">Credit</TabsTrigger>
             </TabsList>
 
             <TabsContent value="last_return">
               <DataTable
                 columns={LastGallonReturnColumns}
-                data={monitoringData}
-              />
-            </TabsContent>
-            <TabsContent value="history">
-              <DataTableFilterDate
-                columns={monitoringHistoryColumns}
                 data={monitoringData}
               />
             </TabsContent>
