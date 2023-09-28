@@ -1,21 +1,25 @@
 import { connectDB } from "@/lib/mongodb/config/connect-db";
 import User from "@/lib/mongodb/model/User.model";
+import { Acc } from "@/lib/mongodb/model/Accounts.model";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { ILogin } from "../../../../typings";
 
 export async function POST(req: Request) {
-  const { email, password, role }: ILogin = await req.json();
+  const { username, password, role }: ILogin = await req.json();
 
   await connectDB();
 
   try {
-    const user = await User.findOne({ email, role });
+    const user = await Acc.findOne({ username, role }).exec();
 
     if (!user)
-      return NextResponse.json({ message: "Email not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Username not found" },
+        { status: 404 }
+      );
 
-    const validPassword = await bcrypt.compare(password, user.hashed_password);
+    const validPassword = await bcrypt.compare(password, user.hash_password);
 
     if (!validPassword)
       return NextResponse.json(

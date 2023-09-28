@@ -15,18 +15,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
-import { UpdateUser } from "./APIs/api";
+import { UpdateCustomer } from "./services/api";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function EditUserModal() {
   const queryClient = useQueryClient();
   const { userEditData, showEditUserModal, setShowEditModal, editUserId } =
     editUserStore();
+  const [addr, setAddr] = useState(true);
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
-    email: "",
-    gender: "",
+    mobile1: "",
+    mobile2: "",
+    blk: "",
+    lot: "",
+    phase: "",
+    comment: "",
     address: "",
+    isVillage: true,
   });
 
   useEffect(() => {
@@ -34,24 +41,34 @@ export default function EditUserModal() {
       setUserData({
         first_name: userEditData.first_name,
         last_name: userEditData.last_name,
-        email: userEditData.email,
-        gender: userEditData.gender,
-        address: userEditData.address,
+        mobile1: userEditData.mobile1,
+        mobile2: userEditData.mobile2 ? userEditData.mobile2 : "",
+        blk: userEditData.blk ? userEditData.blk : "",
+        lot: userEditData.lot ? userEditData.lot : "",
+        phase: userEditData.phase ? userEditData.phase : "",
+        comment: userEditData.comment ? userEditData.comment : "",
+        address: userEditData.address ? userEditData.address : "",
+        isVillage: userEditData.isVillage,
       });
     }
   }, [userEditData]);
 
   const updateUserMutation = useMutation({
     // mutationFn: UpdateUser(),
-    mutationFn: () => UpdateUser({ ...userData }, editUserId),
+    mutationFn: () => UpdateCustomer({ ...userData }, editUserId),
     onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
       setUserData({
         first_name: "",
         last_name: "",
-        email: "",
-        gender: "",
+        mobile1: "",
+        mobile2: "",
+        blk: "",
+        lot: "",
+        phase: "",
+        comment: "",
         address: "",
+        isVillage: addr,
       });
 
       toast.success(data?.message);
@@ -73,213 +90,451 @@ export default function EditUserModal() {
       <section
         className={`${
           showEditUserModal ? "flex" : "hidden"
-        } h-screen w-screen  bg-black/75 bg-opacity-95 items-center justify-center absolute z-20 `}
+        } h-screen w-full overflow-y-auto bg-black/75 bg-opacity-95 absolute z-20  `}
       >
-        <form
-          onSubmit={(e) => handleSubmit(e)}
-          className="h-max w-5/6 border border-gray-900/10 shadow-md rounded bg-white p-4 dark:bg-dark_bg"
-        >
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Edit Personal Information
-          </h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">
-            Use a permanent address where you can receive mail.
-          </p>
+        <div className="h-max w-full  flex items-center justify-center py-4   ">
+          <main className="relative  max-w-4xl w-[100%] p-4 bg-white dark:bg-dark_bg border border-gray-900/10 shadow-md rounded">
+            <h2 className="text-base font-semibold leading-7 text-gray-900">
+              Edit Personal Information
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-600">
+              Use a permanent address where you can receive mail.
+            </p>
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="first_name"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                First name
-              </label>
-              <div className="mt-2">
-                <Input
-                  type="text"
-                  name="first_name"
-                  required
-                  value={userData.first_name}
-                  placeholder="Enter your first name"
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      [e.target.name]: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
+            {/* FORM TAB */}
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="last_name"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Last name
-              </label>
-              <div className="mt-2">
-                <Input
-                  type="text"
-                  name="last_name"
-                  required
-                  value={userData.last_name}
-                  placeholder="Enter your last name"
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      [e.target.name]: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-
-            {/* <div className="sm:col-span-4">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <Input
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="Enter your email"
-                />
-              </div>
-            </div> */}
-
-            {/* <div className="sm:col-span-3">
-              <label
-                htmlFor="country"
-                className="block mb-2 text-sm font-medium leading-6 text-gray-900"
-              >
-                Country
-              </label>
-              <Select>
-                <SelectTrigger name="country" className="text-center bg-white">
-                  <SelectValue placeholder="Select your role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Country</SelectLabel>
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="employee">Employee</SelectItem>
-                    <SelectItem value="manager">Manager</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div> */}
-
-            <div className="sm:col-span-2 sm:col-start-1">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email
-              </label>
-              <div className="mt-2">
-                <Input
-                  type="email"
-                  name="email"
-                  required
-                  value={userData.email}
-                  placeholder="Enter your email"
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      [e.target.name]: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="gender"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Gender
-              </label>
-              <div className="mt-2">
-                <Select
-                  value={userData.gender}
-                  onValueChange={(e) => setUserData({ ...userData, gender: e })}
-                >
-                  <SelectTrigger name="gender" className="text-center ">
-                    <SelectValue placeholder="Select your gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Gender</SelectLabel>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {/* <Input
-                  type="text"
-                  name="gender"
-                  required
-                  value={userData.gender}
-                  placeholder="Enter your gender"
-                  onChange={(e) =>
-                    setData({ ...userData, [e.target.name]: e.target.value })
-                  }
-                /> */}
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Address
-              </label>
-              <div className="mt-2">
-                <Input
-                  type="text"
-                  name="address"
-                  required
-                  value={userData.address}
-                  placeholder="Enter your address"
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      [e.target.name]: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* BUTTON FOOTER */}
-          <div className=" flex justify-end space-x-4 mt-8">
-            <Button
-              variant="outline"
-              type="button"
-              disabled={updateUserMutation?.isLoading}
-              onClick={() => setShowEditModal(!showEditUserModal)}
-              // className="bg-red-500 hover:bg-red-600"
+            <Tabs
+              defaultValue={userData.isVillage ? "subd" : "others"}
+              onValueChange={(e) => setAddr(e === "subd" ? true : false)}
             >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={updateUserMutation?.isLoading}
-              // className="bg-blue-500 hover:bg-blue-600"
-            >
-              Save
-            </Button>
-          </div>
-        </form>
+              <TabsList className="w-[20rem] mx-auto my-5 grid  grid-cols-2">
+                <TabsTrigger value="subd">Subdivision</TabsTrigger>
+                <TabsTrigger value="other">Other</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="subd">
+                <form action="" onSubmit={(e) => handleSubmit(e)}>
+                  <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first_name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        First name
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="first_name"
+                          required
+                          placeholder="Enter first name"
+                          value={userData.first_name}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="last_name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Last name
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="last_name"
+                          required
+                          placeholder="Enter last name"
+                          value={userData.last_name}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 sm:col-start-1">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Email
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="email"
+                          name="email"
+                          // required
+                          disabled
+                          placeholder="Enter  email"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="mobile1"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Mobile 1
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="mobile1"
+                          required
+                          placeholder="Enter mobile 1"
+                          value={userData.mobile1}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="mobile2"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Mobile 2
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="mobile2"
+                          placeholder="Enter mobile 2"
+                          value={userData.mobile2}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="sm:col-span-2 sm:col-start-1">
+                      <label
+                        htmlFor="phase"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Phase
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="phase"
+                          required
+                          placeholder="Enter phase"
+                          value={userData.phase}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="blk"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        BLK
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="blk"
+                          required
+                          placeholder="Enter blk"
+                          value={userData.blk}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="lot"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Lot
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="lot"
+                          required
+                          placeholder="Enter lot"
+                          value={userData.lot}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    {/*  */}
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="alias"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Alias / Comments
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="comment"
+                          required
+                          placeholder="Enter alias or comments"
+                          value={userData.comment}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BUTTON FOOTER */}
+                  <div className=" flex justify-end space-x-4 mt-8">
+                    <Button
+                      variant="outline"
+                      type="button"
+                      disabled={updateUserMutation?.isLoading}
+                      onClick={() => setShowEditModal(!showEditUserModal)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={updateUserMutation?.isLoading}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </form>
+              </TabsContent>
+
+              {/* OTHERS ADDRESS TAB */}
+
+              <TabsContent value="other">
+                <form action="" onSubmit={(e) => handleSubmit(e)}>
+                  <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first_name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        First name
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="first_name"
+                          required
+                          placeholder="Enter first name"
+                          value={userData.first_name}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="last_name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Last name
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="last_name"
+                          required
+                          placeholder="Enter last name"
+                          value={userData.last_name}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 sm:col-start-1">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Email
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="email"
+                          name="email"
+                          // required
+                          disabled
+                          placeholder="Enter  email"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="mobile1"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Mobile 1
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="mobile1"
+                          required
+                          placeholder="Enter mobile 1"
+                          value={userData.mobile1}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="mobile2"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Mobile 2
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="mobile2"
+                          placeholder="Enter mobile 2"
+                          value={userData.mobile2}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="address"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Address
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="address"
+                          required
+                          placeholder="Enter customer address"
+                          value={userData.address}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    {/*  */}
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="alias"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Alias / Comments
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="comment"
+                          required
+                          placeholder="Enter alias or comments"
+                          value={userData.comment}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BUTTON FOOTER */}
+                  <div className=" flex justify-end space-x-4 mt-8">
+                    <Button
+                      variant="outline"
+                      type="button"
+                      disabled={updateUserMutation?.isLoading}
+                      onClick={() => setShowEditModal(!showEditUserModal)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={updateUserMutation?.isLoading}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </main>
+        </div>
       </section>
     </>
   );

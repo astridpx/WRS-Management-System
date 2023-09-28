@@ -40,7 +40,7 @@ export const userColumns: ColumnDef<any>[] = [
   },
   {
     header: "Address",
-    accessorKey: "address",
+    accessorKey: "new_address",
     cell: ({ row }) => <DataTableAddressColumn row={row} />,
   },
   {

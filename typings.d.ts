@@ -3,6 +3,7 @@ import { IconType } from "react-icons";
 
 export interface ILogin {
   email: string;
+  username: string;
   password: string;
   role: string;
 }
@@ -56,9 +57,14 @@ export interface IUserFormState {
 export interface IUserEdit {
   first_name: string;
   last_name: string;
-  email: string;
-  gender: string;
-  address: string;
+  email?: string;
+  mobile1: string;
+  mobile2?: string;
+  address?: string;
+  blk?: string;
+  lot?: string;
+  phase?: string;
+  comment?: string;
 }
 export interface IUserEditState {
   userEditData: IUserEdit;

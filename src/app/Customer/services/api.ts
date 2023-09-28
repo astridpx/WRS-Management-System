@@ -13,13 +13,13 @@ export const addNewUser = async (Data: INewUser) => {
   return data;
 };
 
-export const getUser = async () => {
-  const { data } = await axios.get("/api/users");
+export const getAllCustomers = async () => {
+  const { data } = await axios.get("/api/customers");
 
   return data;
 };
 
-export const UpdateUser = async (Data: IUserEdit, id: any) => {
+export const UpdateCustomer = async (Data: IUserEdit, id: any) => {
   const { data } = await axios.put(`/api/users/${id}`, {
     ...Data,
   });

@@ -12,7 +12,7 @@ async function getData() {
     const data = {
       ...d,
       fullname: `${d.first_name} ${d.last_name}`,
-      address: `P-${d.phase} BLK-${d.blk}`,
+      new_address: `P-${d.phase} BLK-${d.blk} L-${d.lot}`,
     };
 
     return data;

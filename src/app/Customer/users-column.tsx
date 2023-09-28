@@ -3,6 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
 import { DataTableRowActions } from "./data-table-row-action";
+import { DataTableAddressColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Address-Column";
+import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
 
 // ? @what this where the table head define. This column will pass on DataTable component
 // ? @desc This column define is a users colemn for user pages
@@ -15,25 +17,17 @@ export const userColumns: ColumnDef<IUser>[] = [
   //   accessorKey: "_id",
   // },
   {
-    header: "Full Name",
+    header: "Name",
     accessorKey: "fullname",
-  },
-
-  {
-    header: "Email",
-    accessorKey: "email",
-  },
-  {
-    header: "Gender",
-    accessorKey: "gender",
   },
   {
     header: "Address",
-    accessorKey: "address",
+    accessorKey: "new_address",
+    cell: ({ row }) => <DataTableAddressColumn row={row} />,
   },
   {
-    header: "Role",
-    accessorKey: "role",
+    header: "Gallon",
+    cell: ({ row }) => <DataTableGallonColumn row={row} />,
   },
   {
     id: "action",

@@ -13,29 +13,26 @@ export function DataTableGallonColumn<TData>({
 }: DataTableRowActionsProps<TData>) {
   return (
     <>
-      <div className="min-w-[25rem]">
-        <header className="grid grid-cols-4 font-semibold text-center bg-gray-200">
+      <div className="min-w-[20rem]">
+        <header className="grid grid-cols-3 font-semibold text-center bg-gray-200">
           <h4 className="col-span-2 ">Item</h4>
-          <h4>Client</h4>
           <h4>WRS</h4>
         </header>
-        <div className="grid grid-cols-4 text-center">
+        <div className="grid grid-cols-3 text-center">
           <div className=" flex items-center gap-4 col-span-2 ">
             <Image src={Slim} alt="Slim" height={25} className="" />
 
-            <p>SLim Gallon</p>
+            <p>Slim Gallon</p>
           </div>
-          <h4>4</h4>
-          <h4>7</h4>
+          <h4>{row?.original?.borrowed_gal.slim?.borrowed}</h4>
         </div>
-        <div className="grid grid-cols-4 text-center">
+        <div className="grid grid-cols-3 text-center">
           <div className=" flex items-center gap-4 col-span-2 ">
             <Image src={Round} alt="Slim" height={25} className="" />
 
-            <p>SLim Gallon</p>
+            <p>Round Gallon</p>
           </div>
-          <h4>4</h4>
-          <h4>7</h4>
+          <h4>{row?.original?.borrowed_gal.round?.borrowed}</h4>
         </div>
       </div>
     </>

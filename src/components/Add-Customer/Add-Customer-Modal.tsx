@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import addCustomerModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
-import { addNewUser } from "@/app/Customer/APIs/api";
+import { addNewUser } from "@/app/Customer/services/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AddNewCustomer() {

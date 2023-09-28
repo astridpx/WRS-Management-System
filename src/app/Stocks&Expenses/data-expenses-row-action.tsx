@@ -5,7 +5,7 @@ import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "react-query";
-import { DeleteUser } from "../Customer/APIs/api";
+import { DeleteUser } from "../Customer/services/api";
 
 import {
   DropdownMenu,
