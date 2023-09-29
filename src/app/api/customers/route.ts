@@ -4,8 +4,6 @@ import { Customer } from "@/lib/mongodb/model/Customer.model";
 
 //  @desc GET All Customers
 export async function GET() {
-  await connectDB();
-
   const customers = await Customer.find().lean();
 
   return NextResponse.json({ data: customers }, { status: 200 });
@@ -25,9 +23,8 @@ export async function POST(req: Request) {
     comment,
     slim,
     round,
+    isVillage,
   } = await req.json();
-
-  await connectDB();
 
   const newCustomer = {
     first_name,
@@ -39,6 +36,7 @@ export async function POST(req: Request) {
     lot,
     phase,
     comment,
+    isVillage,
     borrowed_gal: {
       slim: {
         borrowed: slim,

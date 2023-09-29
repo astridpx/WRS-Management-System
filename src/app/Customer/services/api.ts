@@ -6,7 +6,7 @@ const axios = Axios.create({
 });
 
 export const addNewUser = async (Data: INewUser) => {
-  const { data } = await axios.post("/api/users", {
+  const { data } = await axios.post("/api/customers", {
     ...Data,
   });
 
@@ -20,7 +20,7 @@ export const getAllCustomers = async () => {
 };
 
 export const UpdateCustomer = async (Data: IUserEdit, id: any) => {
-  const { data } = await axios.put(`/api/users/${id}`, {
+  const { data } = await axios.put(`/api/customers/${id}`, {
     ...Data,
   });
 
@@ -28,7 +28,7 @@ export const UpdateCustomer = async (Data: IUserEdit, id: any) => {
 };
 
 export const DeleteUser = async (id: any) => {
-  const { data } = await axios.delete(`/api/users/${id}`);
+  const { data } = await axios.delete(`/api/customers/${id}`);
 
   return data;
 };

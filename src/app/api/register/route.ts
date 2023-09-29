@@ -18,8 +18,6 @@ export async function POST(req: Request) {
   const { first_name, last_name, email, password, role }: IRegister =
     await req.json();
 
-  await connectDB();
-
   try {
     const isExist = await User.findOne({ email });
 

@@ -1,22 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { UpdateCustomer } from "./services/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
 
 export default function EditUserModal() {
   const queryClient = useQueryClient();
@@ -33,7 +29,7 @@ export default function EditUserModal() {
     phase: "",
     comment: "",
     address: "",
-    isVillage: true,
+    isVillage: userEditData.isVillage,
   });
 
   useEffect(() => {
@@ -51,11 +47,16 @@ export default function EditUserModal() {
         isVillage: userEditData.isVillage,
       });
     }
-  }, [userEditData]);
+  }, [userEditData, addr]);
 
   const updateUserMutation = useMutation({
     // mutationFn: UpdateUser(),
     mutationFn: () => UpdateCustomer({ ...userData }, editUserId),
+    onMutate: () => {
+      setShowEditModal(!showEditUserModal);
+
+      LoadingToast("Update pending...");
+    },
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       setUserData({
@@ -68,14 +69,16 @@ export default function EditUserModal() {
         phase: "",
         comment: "",
         address: "",
-        isVillage: addr,
+        isVillage: userEditData.isVillage,
       });
 
-      toast.success(data?.message);
-      setShowEditModal(!showEditUserModal);
+      DissmissToast();
+      SuccessToast(data?.message);
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
+      DissmissToast();
+
+      ErrorToast(error?.response?.data?.message);
     },
   });
 
@@ -104,8 +107,13 @@ export default function EditUserModal() {
             {/* FORM TAB */}
 
             <Tabs
-              defaultValue={userData.isVillage ? "subd" : "others"}
-              onValueChange={(e) => setAddr(e === "subd" ? true : false)}
+              defaultValue={userEditData.isVillage ? "subd" : "other"}
+              onValueChange={(e) =>
+                setUserData({
+                  ...userData,
+                  ["isVillage"]: e === "subd",
+                })
+              }
             >
               <TabsList className="w-[20rem] mx-auto my-5 grid  grid-cols-2">
                 <TabsTrigger value="subd">Subdivision</TabsTrigger>
@@ -311,7 +319,6 @@ export default function EditUserModal() {
                         <Input
                           type="text"
                           name="comment"
-                          required
                           placeholder="Enter alias or comments"
                           value={userData.comment}
                           onChange={(e) =>
@@ -499,7 +506,6 @@ export default function EditUserModal() {
                         <Input
                           type="text"
                           name="comment"
-                          required
                           placeholder="Enter alias or comments"
                           value={userData.comment}
                           onChange={(e) =>

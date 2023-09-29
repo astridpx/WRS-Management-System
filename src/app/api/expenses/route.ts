@@ -5,8 +5,6 @@ import { parseISO, format } from "date-fns";
 
 //  @desc GET All EXPENSES
 export async function GET() {
-  await connectDB();
-
   const expenses = await Exp.find().lean();
 
   return NextResponse.json({ data: expenses }, { status: 200 });
@@ -15,8 +13,6 @@ export async function GET() {
 //  @desc CREATE A Expenses
 export async function POST(req: Request) {
   const { name, amount, date } = await req.json();
-
-  await connectDB();
 
   try {
     await Exp.create({ name, amount, date });

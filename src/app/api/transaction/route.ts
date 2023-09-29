@@ -4,8 +4,6 @@ import { Trans } from "@/lib/mongodb/model/Transaction.model";
 
 //  @desc GET All TRANSACTION
 export async function GET() {
-  await connectDB();
-
   const transactions = await Trans.find()
     .lean()
     .populate("customer")
@@ -30,8 +28,6 @@ export async function POST(req: Request) {
     qty,
     isBuy,
   } = await req.json();
-
-  await connectDB();
 
   const newTrans = {
     customer,

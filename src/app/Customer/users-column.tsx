@@ -12,10 +12,11 @@ import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Colum
 // ? @desc the accessorkey is the value that will display the assigned value must be match in the data that will display
 
 export const userColumns: ColumnDef<IUser>[] = [
-  // {
-  //   header: "Id",
-  //   accessorKey: "_id",
-  // },
+  {
+    header: "No",
+    accessorKey: "id",
+    cell: ({ row }) => row.index + 1,
+  },
   {
     header: "Name",
     accessorKey: "fullname",

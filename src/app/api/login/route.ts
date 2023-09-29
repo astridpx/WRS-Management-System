@@ -8,8 +8,6 @@ import { ILogin } from "../../../../typings";
 export async function POST(req: Request) {
   const { username, password, role }: ILogin = await req.json();
 
-  await connectDB();
-
   try {
     const user = await Acc.findOne({ username, role }).exec();
 

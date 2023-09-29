@@ -137,7 +137,7 @@ export default function AddNewCustomer() {
                       <Input
                         type="email"
                         name="email"
-                        required
+                        disabled
                         placeholder="Enter  email"
                       />
                     </div>
@@ -263,6 +263,151 @@ export default function AddNewCustomer() {
                     Save
                   </Button>
                 </div>
+              </TabsContent>
+
+              {/* Others Add customer */}
+              <TabsContent value="other">
+                <form action="">
+                  <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first_name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        First name
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="first_name"
+                          required
+                          placeholder="Enter first name"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="last_name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Last name
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="last_name"
+                          required
+                          placeholder="Enter last name"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 sm:col-start-1">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Email
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="email"
+                          name="email"
+                          // required
+                          disabled
+                          placeholder="Enter  email"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="mobile1"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Mobile 1
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="mobile1"
+                          required
+                          placeholder="Enter mobile 1"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="mobile2"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Mobile 2
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="mobile2"
+                          placeholder="Enter mobile 2"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="address"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Address
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="address"
+                          required
+                          placeholder="Enter customer address"
+                        />
+                      </div>
+                    </div>
+
+                    {/*  */}
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="alias"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Alias / Comments
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="text"
+                          name="comment"
+                          required
+                          placeholder="Enter alias or comments"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BUTTON FOOTER */}
+                  <div className=" flex justify-end space-x-4 mt-8">
+                    <Button
+                      variant="outline"
+                      type="button"
+                      // disabled={updateUserMutation?.isLoading}
+                      onClick={() => toggleShowCustomerForm(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      // disabled={updateUserMutation?.isLoading}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </form>
               </TabsContent>
             </Tabs>
           </main>

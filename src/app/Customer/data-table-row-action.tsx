@@ -22,7 +22,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "../../../typings";
-
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,17 +57,18 @@ export function DataTableRowActions<TData>({
   const deleteUserMutation = useMutation({
     mutationFn: () => DeleteUser(userId),
     onMutate: () => {
-      notify();
+      setIsOpen(false);
+      LoadingToast("Delete Loading...");
     },
     onSuccess: async (data: any) => {
-      await queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.dismiss();
-      setIsOpen(false);
-      toast.success(data?.message);
+      await queryClient.invalidateQueries({ queryKey: ["customers"] });
+
+      DissmissToast();
+      SuccessToast(data?.message);
     },
     onError: (error: any) => {
-      toast.dismiss();
-      toast.error(error?.response?.data?.message);
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
     },
   });
 
