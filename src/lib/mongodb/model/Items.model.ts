@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/connect-db";
+
+connectDB();
+mongoose.Promise = global.Promise;
 
 const ItemSchema = new mongoose.Schema(
   {
