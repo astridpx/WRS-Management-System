@@ -14,8 +14,13 @@ const ExpensesSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  date: {
+  category: {
     type: String,
+    required: [true, "Category is required"],
+  },
+  date: {
+    type: Date,
+    required: true,
   },
 });
 

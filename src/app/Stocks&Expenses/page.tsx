@@ -20,6 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StockModal } from "./_components/Stock-In-Modal";
+import { useQuery } from "react-query";
+import { getAllExpenses } from "./services/Expenses-Api";
+import Loader from "@/components/loader/Spinner";
 
 async function getData() {
   const Data = await fakeCustomer.map((d: any) => {
@@ -38,6 +41,17 @@ async function getData() {
 const DataGet = getData();
 
 const StockAndExpensesPage = () => {
+  const {
+    isLoading,
+    isError,
+    data: expenses,
+    error,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["expenses"],
+    queryFn: getAllExpenses,
+  });
+  console.log(expenses);
   const monitoringData = use(DataGet);
   const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
   const [tabs, setTabs] = useState<string>("daily");
@@ -100,7 +114,14 @@ const StockAndExpensesPage = () => {
 
               <Tabs defaultValue="daily" value={tabs}>
                 <TabsContent value="daily">
-                  <DataTable columns={ExpensesColumns} data={monitoringData} />
+                  {isLoading ? (
+                    <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
+                      <Loader />
+                      <p className="text-gray-400 ">Loading...</p>
+                    </div>
+                  ) : (
+                    <DataTable columns={ExpensesColumns} data={expenses} />
+                  )}
                 </TabsContent>
                 <TabsContent value="monthly">
                   <DataTable columns={ExpensesColumns} data={monitoringData} />

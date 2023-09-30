@@ -28,7 +28,14 @@ export default function POSReceipt() {
       {/* <div className="h-[32rem] flex flex-col justify-between "> */}
       <div className="py-2">
         <div className="flex justify-between items-center px-2">
-          <h4 className="font-semibold">Date</h4>
+          <h4
+            className="font-semibold"
+            onClick={() =>
+              alert(format(new Date("2023-09-30T08:03:34.000Z"), "LLL dd, y"))
+            }
+          >
+            Date
+          </h4>
           {/* DATE PICKER */}
           <DatePicker
             calendar_width={"w-max"}

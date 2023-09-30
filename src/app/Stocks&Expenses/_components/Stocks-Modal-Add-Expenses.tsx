@@ -16,37 +16,8 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/Date-Picker/Date-Picker";
 import { ExpensesModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Expenses-Modal";
-import Gas from "@/assets/items_img/GAS.png";
-import NoImage from "@/assets/noImage.png";
-import Employee from "@/assets/items_img/employee.png";
-import Seal from "@/assets/items_img/seal.png";
-import Filter from "@/assets/items_img/filter.png";
-
-interface IImages {
-  other: StaticImageData;
-  gas: StaticImageData;
-  employee: StaticImageData;
-  seal: StaticImageData;
-  filter: StaticImageData;
-}
-
-const Images: IImages = {
-  other: NoImage,
-  gas: Gas,
-  employee: Employee,
-  seal: Seal,
-  filter: Filter,
-};
-
-const SealVariant = [
-  "[Small] SLIM - Cap Seal",
-  "[Large] SLIM - Cap Seal",
-  "[Small] ROUND - Cap Seal",
-  "[Large] ROUND - Cap Seal",
-  "Faucet Seal",
-  "Umbrella Seal",
-  "Pet Bottle Seal",
-];
+import { IImages } from "../../../../typings";
+import { ExpenseImages } from "@/utils/Stock&Expenses-img/img-category";
 
 export const StocksModalAddExpenses = () => {
   const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
@@ -125,7 +96,7 @@ export const StocksModalAddExpenses = () => {
                 <h1 className="text-center mb-2 font-semibold">Preview</h1>
                 <figure className="w-[80%]  h-[75%] rounded-lg shadow-xl mx-auto overflow-hidden flex items-center justify-center cursor-pointer bg-slate-200">
                   <Image
-                    src={Images[item]}
+                    src={ExpenseImages[item]}
                     alt="image"
                     height={150}
                     width={150}

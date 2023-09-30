@@ -33,15 +33,6 @@ export interface DataTableRowProps<TData> {
   row: Row<TData & any>;
 }
 
-export interface INewUser {
-  first_name: string;
-  last_name: string;
-  email: string;
-  gender: string;
-  address: string;
-  password: string;
-}
-
 export interface IUserFormState {
   showAddCustomerForm: boolean;
   toggleShowCustomerForm: (state: boolean) => void;
@@ -113,4 +104,24 @@ export interface IItems {
 export interface IReportpageModalStore {
   detailModal: boolean;
   toggleDetailModal: (state: boolean) => void;
+}
+
+// ? EXPENSES
+export interface IExpenses {
+  name: string;
+  amount: number;
+  category: string | keyof IImages;
+  date: Date;
+}
+
+export interface IExpenseDate extends IExpenses {
+  sort_date: any;
+}
+
+export interface IImages {
+  other: StaticImageData;
+  gas: StaticImageData;
+  employee: StaticImageData;
+  seal: StaticImageData;
+  filter: StaticImageData;
 }

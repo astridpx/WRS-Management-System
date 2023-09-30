@@ -12,10 +12,12 @@ export async function GET() {
 
 //  @desc CREATE A Expenses
 export async function POST(req: Request) {
-  const { name, amount, date } = await req.json();
+  const { name, amount, category, date } = await req.json();
 
   try {
-    await Exp.create({ name, amount, date });
+    const expense = new Exp({ name, amount, category, date });
+
+    await expense.save();
 
     return NextResponse.json({ message: "Expenses successfully added." });
   } catch (error) {

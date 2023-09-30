@@ -1,27 +1,29 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { IUser } from "../../../typings";
+import { IExpenseDate } from "../../../typings";
 import { DataTableItemName } from "@/components/react-table/Data-Table-Columns/Data-Table-Item-Name";
 import Round from "@/assets/items_img/rounded_gallon.png";
 import { ExpensesDataTableRowActions } from "./data-expenses-row-action";
 
-export const ExpensesColumns: ColumnDef<any>[] = [
+export const ExpensesColumns: ColumnDef<IExpenseDate>[] = [
   {
     header: "Name",
-    accessorKey: "fullname",
+    accessorKey: "name",
     cell: ({ row }) => (
-      <DataTableItemName item={row?.original?.fullname} img={Round} />
+      <DataTableItemName
+        item={row?.original?.name}
+        img={row?.original?.category}
+      />
     ),
   },
   {
     header: "Amount",
-    accessorKey: "Alias",
+    accessorKey: "amount",
   },
   {
     header: "Date",
-    accessorKey: "Alias",
-    cell: ({ row }) => "August 08 2023",
+    accessorKey: "sort_date",
   },
   {
     id: "action",
