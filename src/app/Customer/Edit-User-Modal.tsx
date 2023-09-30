@@ -18,15 +18,14 @@ export default function EditUserModal() {
   const queryClient = useQueryClient();
   const { userEditData, showEditUserModal, setShowEditModal, editUserId } =
     editUserStore();
-  const [addr, setAddr] = useState(true);
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
     mobile1: "",
     mobile2: "",
-    blk: "",
-    lot: "",
-    phase: "",
+    blk: 0,
+    lot: 0,
+    phase: 0,
     comment: "",
     address: "",
     isVillage: userEditData.isVillage,
@@ -39,19 +38,25 @@ export default function EditUserModal() {
         last_name: userEditData.last_name,
         mobile1: userEditData.mobile1,
         mobile2: userEditData.mobile2 ? userEditData.mobile2 : "",
-        blk: userEditData.blk ? userEditData.blk : "",
-        lot: userEditData.lot ? userEditData.lot : "",
-        phase: userEditData.phase ? userEditData.phase : "",
+        blk: userEditData.blk ? userEditData.blk : 0,
+        lot: userEditData.lot ? userEditData.lot : 0,
+        phase: userEditData.phase ? userEditData.phase : 0,
         comment: userEditData.comment ? userEditData.comment : "",
         address: userEditData.address ? userEditData.address : "",
         isVillage: userEditData.isVillage,
       });
     }
-  }, [userEditData, addr]);
+  }, [userEditData]);
 
   const updateUserMutation = useMutation({
     // mutationFn: UpdateUser(),
-    mutationFn: () => UpdateCustomer({ ...userData }, editUserId),
+    mutationFn: () =>
+      UpdateCustomer(
+        {
+          ...userData,
+        },
+        editUserId
+      ),
     onMutate: () => {
       setShowEditModal(!showEditUserModal);
 
@@ -64,9 +69,9 @@ export default function EditUserModal() {
         last_name: "",
         mobile1: "",
         mobile2: "",
-        blk: "",
-        lot: "",
-        phase: "",
+        blk: 0,
+        lot: 0,
+        phase: 0,
         comment: "",
         address: "",
         isVillage: userEditData.isVillage,
@@ -235,31 +240,8 @@ export default function EditUserModal() {
                         />
                       </div>
                     </div>
-                    <div className="sm:col-span-2 sm:col-start-1">
-                      <label
-                        htmlFor="phase"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Phase
-                      </label>
-                      <div className="mt-2">
-                        <Input
-                          type="text"
-                          name="phase"
-                          required
-                          placeholder="Enter phase"
-                          value={userData.phase}
-                          onChange={(e) =>
-                            setUserData({
-                              ...userData,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
 
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-2 sm:col-start-1">
                       <label
                         htmlFor="blk"
                         className="block text-sm font-medium leading-6 text-gray-900"
@@ -268,17 +250,19 @@ export default function EditUserModal() {
                       </label>
                       <div className="mt-2">
                         <Input
-                          type="text"
+                          type="number"
                           name="blk"
                           required
                           placeholder="Enter blk"
                           value={userData.blk}
-                          onChange={(e) =>
+                          min={0}
+                          defaultValue={0}
+                          onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
+                              [e.target.name]: parseFloat(e.target.value),
+                            });
+                          }}
                         />
                       </div>
                     </div>
@@ -292,17 +276,45 @@ export default function EditUserModal() {
                       </label>
                       <div className="mt-2">
                         <Input
-                          type="text"
+                          type="number"
                           name="lot"
                           required
                           placeholder="Enter lot"
                           value={userData.lot}
-                          onChange={(e) =>
+                          min={0}
+                          defaultValue={0}
+                          onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
+                              [e.target.name]: parseFloat(e.target.value),
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 ">
+                      <label
+                        htmlFor="phase"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Phase
+                      </label>
+                      <div className="mt-2">
+                        <Input
+                          type="number"
+                          name="phase"
+                          required
+                          placeholder="Enter phase"
+                          value={userData.phase}
+                          min={0}
+                          defaultValue={0}
+                          onChange={(e) => {
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: parseFloat(e.target.value),
+                            });
+                          }}
                         />
                       </div>
                     </div>

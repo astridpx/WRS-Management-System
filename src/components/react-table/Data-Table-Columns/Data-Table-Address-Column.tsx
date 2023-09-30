@@ -1,5 +1,11 @@
 import React from "react";
 import { Row } from "@tanstack/react-table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { MdLocationPin, MdContactEmergency } from "react-icons/md";
 
@@ -14,24 +20,57 @@ export function DataTableAddressColumn<TData>({
     <>
       <div className=" w-max">
         <div className="flex gap-x-2 gap-y-2  pr-2 truncate max-w-sm">
-          <MdLocationPin size={18} className="text-gray-600 " />
           {row?.original?.isVillage ? (
-            <p className="flex gap-x-1 text-sm items-center">
-              <span>P-{row?.original?.phase}</span>
-              <span>BLK-{row?.original?.blk}</span>
-              <span>L-{row?.original?.lot}</span>
-            </p>
+            <>
+              <MdLocationPin size={18} className="text-gray-600 " />
+              <p className="flex gap-x-1 text-sm items-center">
+                <span>P-{row?.original?.phase}</span>
+                <span>BLK-{row?.original?.blk}</span>
+                <span>L-{row?.original?.lot}</span>
+              </p>
+            </>
           ) : (
-            <p className=" text-sm items-center">{row?.original?.address}</p>
+            // ADDRESS
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipContent>
+                  <p> {row?.original?.address}</p>
+                </TooltipContent>
+
+                <MdLocationPin size={18} className="text-gray-600 " />
+                <TooltipTrigger className="max-w-xs w-max h-max inline-block text-sm items-center">
+                  <p>
+                    <span className="truncate text-ellipsis block">
+                      {row?.original?.address}
+                    </span>
+                  </p>
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
 
-        <p className="flex gap-x-2 text-sm items-center pr-2   ">
-          <MdContactEmergency size={18} className="text-gray-600" />
-          <span className="max-w-sm inline-block truncate text-ellipsis">
-            {row?.original?.comment ? row?.original?.comment : "No comment"}
-          </span>
-        </p>
+        {/* COMMENTS */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipContent>
+              <p>
+                {row?.original?.comment ? row?.original?.comment : "No comment"}
+              </p>
+            </TooltipContent>
+
+            <TooltipTrigger>
+              <p className="flex gap-x-2 text-sm items-center pr-2   ">
+                <MdContactEmergency size={18} className="text-gray-600" />
+                <span className="max-w-xs inline-block truncate text-ellipsis">
+                  {row?.original?.comment
+                    ? row?.original?.comment
+                    : "No comment"}
+                </span>
+              </p>
+            </TooltipTrigger>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </>
   );

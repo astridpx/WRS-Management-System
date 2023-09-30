@@ -32,14 +32,6 @@ export interface ISidebarState {
 export interface DataTableRowProps<TData> {
   row: Row<TData & any>;
 }
-export type IUser = {
-  _id?: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  gender: string;
-  address: string;
-};
 
 export interface INewUser {
   first_name: string;
@@ -54,7 +46,7 @@ export interface IUserFormState {
   showAddCustomerForm: boolean;
   toggleShowCustomerForm: (state: boolean) => void;
 }
-export interface IUserEdit {
+export interface IUser {
   isVillage: boolean;
   first_name: string;
   last_name: string;
@@ -62,9 +54,9 @@ export interface IUserEdit {
   mobile1: string;
   mobile2?: string;
   address?: string;
-  blk?: string;
-  lot?: string;
-  phase?: string;
+  blk?: number;
+  lot?: number;
+  phase?: number;
   comment?: string;
 }
 export interface IUserEditState {
