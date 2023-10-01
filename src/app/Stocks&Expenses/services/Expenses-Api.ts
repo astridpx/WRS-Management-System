@@ -29,7 +29,7 @@ export const getAllExpenses = async () => {
 };
 
 export const updateExpenses = async (Data: any, id: any) => {
-  const { data } = await axios.put(`/api/expenses${id}`, {
+  const { data } = await axios.put(`/api/expenses/${id}`, {
     ...Data,
   });
 
@@ -37,7 +37,7 @@ export const updateExpenses = async (Data: any, id: any) => {
 };
 
 export const deleteExpenses = async (id: any) => {
-  const { data } = await axios.delete(`/api/expenses${id}`);
+  const { data } = await axios.delete(`/api/expenses/${id}`);
 
   return data;
 };

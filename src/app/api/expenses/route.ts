@@ -7,7 +7,10 @@ import { parseISO, format } from "date-fns";
 export async function GET() {
   const expenses = await Exp.find().lean();
 
-  return NextResponse.json({ data: expenses }, { status: 200 });
+  return NextResponse.json(
+    { data: expenses.sort((a, b) => b.date - a.date) },
+    { status: 200 }
+  );
 }
 
 //  @desc CREATE A Expenses

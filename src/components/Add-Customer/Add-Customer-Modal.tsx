@@ -30,7 +30,7 @@ export default function AddNewCustomer() {
     address: "",
     isVillage: true,
   });
-  const userMutation: any = useMutation({
+  const userMutation = useMutation({
     mutationFn: addNewUser,
     onMutate: () => {
       toggleShowCustomerForm(!showAddCustomerForm);

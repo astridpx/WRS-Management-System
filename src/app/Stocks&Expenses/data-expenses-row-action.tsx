@@ -5,7 +5,6 @@ import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "react-query";
-import { DeleteUser } from "../Customer/services/api";
 
 import {
   DropdownMenu,
@@ -35,6 +34,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
+import { deleteExpenses } from "./services/Expenses-Api";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
@@ -43,31 +50,27 @@ export function ExpensesDataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const queryClient = useQueryClient();
-  const [userId, setUserId] = useState("");
+  const [expenseId, setExpenseId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
   const { toggleEditItemModal } = ItemsPageModalStore();
 
-  const deleteUserMutation = useMutation({
-    mutationFn: () => DeleteUser(userId),
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: () => deleteExpenses(expenseId),
     onMutate: () => {
-      notify();
+      setIsOpen(false);
+      LoadingToast("Deleting expenses...");
     },
     onSuccess: async (data: any) => {
-      await queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.dismiss();
-      setIsOpen(false);
-      toast.success(data?.message);
+      DissmissToast();
+      await queryClient.invalidateQueries({ queryKey: ["expenses"] });
+      SuccessToast(data?.message);
     },
     onError: (error: any) => {
-      toast.dismiss();
-      toast.error(error?.response?.data?.message);
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
     },
   });
-
-  const handleSubmit = async (e: any) => {
-    deleteUserMutation.mutate();
-  };
 
   return (
     <AlertDialog open={isOpen}>
@@ -80,14 +83,14 @@ export function ExpensesDataTableRowActions<TData>({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            disabled={deleteUserMutation?.isLoading}
+            disabled={isLoading}
             onClick={() => setIsOpen(false)}
           >
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            disabled={deleteUserMutation?.isLoading}
-            // onClick={(e) => handleSubmit(e)}
+            disabled={isLoading}
+            onClick={async () => await mutateAsync()}
           >
             Delete
           </AlertDialogAction>
@@ -119,7 +122,7 @@ export function ExpensesDataTableRowActions<TData>({
           <AlertDialogTrigger
             className="w-full"
             onClick={() => {
-              setUserId(row?.original?._id);
+              setExpenseId(row?.original?._id);
               setIsOpen(true);
             }}
           >

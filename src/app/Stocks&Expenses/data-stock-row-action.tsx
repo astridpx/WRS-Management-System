@@ -37,7 +37,7 @@ export function StockDataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const queryClient = useQueryClient();
-  const [userId, setUserId] = useState("");
+  const [expenseId, setExpenseId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
   const { toggleEditItemModal } = ItemsPageModalStore();
