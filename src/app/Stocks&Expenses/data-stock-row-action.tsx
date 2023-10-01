@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUser } from "../../../typings";
+import { DataTableRowProps } from "../../../typings";
 
 import {
   AlertDialog,
@@ -29,15 +29,12 @@ import {
 import { useState } from "react";
 import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 import { StocksModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Stocks-Modal";
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData & any>;
-}
 
 export function StockDataTableRowActions<TData>({
   row,
-}: DataTableRowActionsProps<TData>) {
+}: DataTableRowProps<TData>) {
   const queryClient = useQueryClient();
-  const [userId, setUserId] = useState("");
+  const [expenseId, setExpenseId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
   const { toggleEditItemModal } = ItemsPageModalStore();
