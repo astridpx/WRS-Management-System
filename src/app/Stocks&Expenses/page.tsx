@@ -23,6 +23,7 @@ import { StockModal } from "./_components/Stock-In-Modal";
 import { useQuery } from "react-query";
 import { getAllExpenses } from "./services/Expenses-Api";
 import Loader from "@/components/loader/Spinner";
+import { StockHistoryModal } from "./_components/Stock-History-Modal";
 
 async function getData() {
   const Data = await fakeCustomer.map((d: any) => {
@@ -53,6 +54,7 @@ const StockAndExpensesPage = () => {
     <>
       <StocksModalAddExpenses />
       <StockModal />
+      <StockHistoryModal data={monitoringData} />
 
       <PageWrapper>
         <div className="relative bg-white ">

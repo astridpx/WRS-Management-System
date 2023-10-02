@@ -26,7 +26,8 @@ export function StockDataTableRowActions<TData>({
   const [isOpen, setIsOpen] = useState(false);
   const notify = () => toast.loading("Loading...");
   const { toggleEditItemModal } = ItemsPageModalStore();
-  const { setModalType, toggleStocksModal } = StocksModalStore();
+  const { setModalType, toggleStocksModal, toggleHistoryModal } =
+    StocksModalStore();
 
   return (
     <>
@@ -60,7 +61,7 @@ export function StockDataTableRowActions<TData>({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              toggleEditItemModal(true);
+              toggleHistoryModal(true);
             }}
           >
             History

@@ -30,10 +30,9 @@ const ItemSchema = new mongoose.Schema(
     stock: Number,
     stock_history: [
       {
-        category: String,
-        qty: Number,
         worth: Number,
-        reason: String,
+        qty: Number,
+        status: String,
         transaction: String,
         date: Date,
       },
