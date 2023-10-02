@@ -41,17 +41,10 @@ async function getData() {
 const DataGet = getData();
 
 const StockAndExpensesPage = () => {
-  const {
-    isLoading,
-    isError,
-    data: expenses,
-    error,
-    isSuccess,
-  } = useQuery({
+  const { isLoading, isError, data, error, isSuccess } = useQuery({
     queryKey: ["expenses"],
     queryFn: getAllExpenses,
   });
-  console.log(expenses);
   const monitoringData = use(DataGet);
   const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
   const [tabs, setTabs] = useState<string>("daily");
@@ -120,7 +113,7 @@ const StockAndExpensesPage = () => {
                       <p className="text-gray-400 ">Loading...</p>
                     </div>
                   ) : (
-                    <DataTable columns={ExpensesColumns} data={expenses} />
+                    <DataTable columns={ExpensesColumns} data={data} />
                   )}
                 </TabsContent>
                 <TabsContent value="monthly">

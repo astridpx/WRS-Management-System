@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { ItemsModalAdd } from "./_components/ITEMS-Modal-Add";
 import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 import { ItemsModalEdit } from "./_components/ITEMS-Modal-Edit";
+import { getAllItems } from "./services/Item-Api";
+import { useQuery } from "react-query";
+import Loader from "@/components/loader/Spinner";
 
 async function getData() {
   const Data = fakeProductsData.map((d) => {
@@ -21,6 +24,14 @@ async function getData() {
 const DataGet = getData();
 
 export default function ItemsPage() {
+  const {
+    isLoading,
+    isError,
+    data: allItems,
+  } = useQuery({
+    queryKey: ["items"],
+    queryFn: getAllItems,
+  });
   const prodData = use(DataGet);
   const { toggleAddItemModal } = ItemsPageModalStore();
 
@@ -39,7 +50,14 @@ export default function ItemsPage() {
               Add New
             </Button>
           </div>
-          <DataTable columns={productColumns} data={prodData} />
+          {isLoading ? (
+            <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
+              <Loader />
+              <p className="text-gray-400 ">Loading...</p>
+            </div>
+          ) : (
+            <DataTable columns={productColumns} data={allItems} />
+          )}
         </div>
       </PageWrapper>
     </>

@@ -1,26 +1,17 @@
 "use client";
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "react-query";
-import { DeleteUser } from "../Customer/services/api";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUser } from "../../../typings";
+import { DataTableRowProps } from "../../../typings";
 
 import {
   AlertDialog,
@@ -35,38 +26,41 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData & any>;
-}
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+import { deleteItem } from "./services/Item-Api";
 
 export function ProductDataTableRowActions<TData>({
   row,
-}: DataTableRowActionsProps<TData>) {
+}: DataTableRowProps<TData>) {
   const queryClient = useQueryClient();
-  const [userId, setUserId] = useState("");
+  const [itemId, setItemId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const notify = () => toast.loading("Loading...");
-  const { toggleEditItemModal } = ItemsPageModalStore();
+  const { toggleEditItemModal, setEditData } = ItemsPageModalStore();
 
-  const deleteUserMutation = useMutation({
-    mutationFn: () => DeleteUser(userId),
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: () => deleteItem(itemId),
     onMutate: () => {
-      notify();
+      setIsOpen(false);
+      LoadingToast("Removing item...");
     },
     onSuccess: async (data: any) => {
-      await queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.dismiss();
-      setIsOpen(false);
-      toast.success(data?.message);
+      DissmissToast();
+      SuccessToast(data?.message);
+      await queryClient.invalidateQueries({ queryKey: ["items"] });
     },
     onError: (error: any) => {
-      toast.dismiss();
-      toast.error(error?.response?.data?.message);
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
     },
   });
 
-  const handleSubmit = async (e: any) => {
-    deleteUserMutation.mutate();
+  const handleSubmit = async () => {
+    await mutateAsync();
   };
 
   return (
@@ -80,15 +74,12 @@ export function ProductDataTableRowActions<TData>({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            disabled={deleteUserMutation?.isLoading}
+            disabled={isLoading}
             onClick={() => setIsOpen(false)}
           >
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction
-            disabled={deleteUserMutation?.isLoading}
-            // onClick={(e) => handleSubmit(e)}
-          >
+          <AlertDialogAction disabled={isLoading} onClick={handleSubmit}>
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -108,9 +99,7 @@ export function ProductDataTableRowActions<TData>({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
             onClick={() => {
-              // setEditData(row?.original);
-              // setEditUserId(row?.original?._id);
-
+              setEditData(row?.original);
               toggleEditItemModal(true);
             }}
           >
@@ -119,7 +108,7 @@ export function ProductDataTableRowActions<TData>({
           <AlertDialogTrigger
             className="w-full"
             onClick={() => {
-              setUserId(row?.original?._id);
+              setItemId(row?.original?._id);
               setIsOpen(true);
             }}
           >

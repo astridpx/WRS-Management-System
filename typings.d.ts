@@ -89,16 +89,22 @@ export interface IPOSPaymentModal {
 export interface IItemspageModalStore {
   addItemModal: boolean;
   editItemModal: boolean;
+  editData: IItems;
   toggleAddItemModal: (state: boolean) => void;
   toggleEditItemModal: (state: boolean) => void;
+  setEditData: (state: Partial<typeof InitialState>) => void;
+  setClearState: () => void;
 }
 
 export interface IItems {
-  id: number;
-  prod_name: string;
-  stock: any;
-  prod_import: string;
-  prod_code: string;
+  _id: any;
+  name: string;
+  img: string;
+  category: string;
+  reorder: number;
+  pos_item: boolean;
+  price: number;
+  buy_price: number;
 }
 
 export interface IReportpageModalStore {

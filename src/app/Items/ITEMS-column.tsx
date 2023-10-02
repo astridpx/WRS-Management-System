@@ -6,28 +6,31 @@ import { ProductDataTableRowActions } from "./Data-Table-Row-Action";
 
 export const productColumns: ColumnDef<IItems>[] = [
   {
-    header: "Id",
+    header: "No",
     accessorKey: "id",
+    cell: ({ row }) => row.index + 1,
   },
   {
     header: "Item",
-    accessorKey: "prod_code",
+    accessorKey: "name",
   },
   {
     header: "Type",
-    accessorKey: "prod_name",
+    accessorKey: "category",
   },
   {
     header: "Price",
-    accessorKey: "stock",
+    accessorKey: "price",
+    cell: ({ row }) => (row.original?.price ? row.original?.price : "n/a"),
   },
   {
     header: "Buy",
-    accessorKey: "prod_import",
+    accessorKey: "buy_price",
+    cell: ({ row }) =>
+      row.original?.buy_price ? row.original?.buy_price : "n/a",
   },
   {
     id: "action",
-
     cell: ({ row }) => <ProductDataTableRowActions row={row} />,
   },
 ];

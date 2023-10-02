@@ -15,12 +15,66 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
+import { useMutation, useQueryClient } from "react-query";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+import { createItem } from "../services/Item-Api";
 
 export const ItemsModalAdd = () => {
+  const queryClient = useQueryClient();
   const { addItemModal, toggleAddItemModal } = ItemsPageModalStore();
   const [pos, setPos] = useState<boolean>(true);
-
+  const [image, setImage] = useState<FileList | null>();
+  const [itemData, setItemData] = useState({
+    name: "",
+    img: "",
+    category: "",
+    reorder: 0,
+    pos_item: false,
+    price: 0,
+    buy_price: 0,
+  });
   const InputRef = useRef<HTMLInputElement | null>(null);
+  const prevImg = image ? URL.createObjectURL(image[0]) : null;
+
+  const clearForm = () => {
+    setItemData({
+      name: "",
+      img: "",
+      category: "",
+      reorder: 0,
+      pos_item: false,
+      price: 0,
+      buy_price: 0,
+    });
+  };
+
+  const { mutateAsync } = useMutation({
+    mutationFn: createItem,
+    onMutate: () => {
+      toggleAddItemModal(false);
+      clearForm();
+      LoadingToast("Creating new item...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await mutateAsync({ ...itemData });
+  };
 
   return (
     <>
@@ -34,177 +88,227 @@ export const ItemsModalAdd = () => {
             <h2 className="text-base font-semibold leading-7 text-gray-900 ml-3 relative before:absolute before:-left-3 before:h-full before:w-2 before:bg-red-400">
               Add Item
             </h2>
-            <div className="flex gap-x-4">
-              <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="item_name"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Item Name
-                  </label>
-                  <div className="mt-2">
-                    <Input
-                      type="text"
-                      name="item_name"
-                      required
-                      placeholder="Enter  item name"
-                    />
-                  </div>
-                </div>
 
-                {/* SECOND FIELD GROUP */}
-                <div className="sm:col-span-2 sm:col-start-1">
-                  <label
-                    htmlFor="category"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Category
-                  </label>
-                  <div className="mt-2">
-                    <Select name="category" required>
-                      <SelectTrigger className="text-center ">
-                        <SelectValue
-                          placeholder="Select Category"
-                          className="placeholder:text-sm placeholder:text-slate-400"
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Choose Category</SelectLabel>
-                          <SelectItem value="container">Container</SelectItem>
-                          <SelectItem value="bottle">Bottle</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="pos_item"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Buy Price
-                  </label>
-                  <div className="mt-2">
-                    <Select
-                      name="pos_item"
-                      required
-                      defaultValue="no"
-                      onValueChange={(e) => setPos(e === "yes" ? false : true)}
+            <form action="" onSubmit={(e) => handleSubmit(e)}>
+              <div className="flex gap-x-4">
+                <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-6">
+                    <label
+                      htmlFor="item_name"
+                      className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      <SelectTrigger className="text-center ">
-                        <SelectValue
-                          placeholder="Is this sellable"
-                          className="placeholder:text-sm placeholder:text-slate-400"
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                      Item Name
+                    </label>
+                    <div className="mt-2">
+                      <Input
+                        type="text"
+                        name="name"
+                        required
+                        placeholder="Enter  item name"
+                        value={itemData.name}
+                        onChange={(e) =>
+                          setItemData({
+                            ...itemData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* SECOND FIELD GROUP */}
+                  <div className="sm:col-span-2 sm:col-start-1">
+                    <label
+                      htmlFor="category"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                      onClick={() => console.log({ ...itemData })}
+                    >
+                      Category
+                    </label>
+                    <div className="mt-2">
+                      <Select
+                        name="category"
+                        required
+                        onValueChange={(e) =>
+                          setItemData({ ...itemData, category: e })
+                        }
+                      >
+                        <SelectTrigger className="text-center ">
+                          <SelectValue
+                            placeholder="Select Category"
+                            className="placeholder:text-sm placeholder:text-slate-400"
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Choose Category</SelectLabel>
+                            <SelectItem value="container">Container</SelectItem>
+                            <SelectItem value="bottle">Bottle</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="pos_item"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Buy Price
+                    </label>
+                    <div className="mt-2">
+                      <Select
+                        name="pos_item"
+                        required
+                        defaultValue="no"
+                        onValueChange={(e) => {
+                          setPos(e === "yes" ? false : true);
+                          setItemData({
+                            ...itemData,
+                            pos_item: e === "yes" ? false : true,
+                          });
+                        }}
+                      >
+                        <SelectTrigger className="text-center ">
+                          <SelectValue
+                            placeholder="Is this sellable"
+                            className="placeholder:text-sm placeholder:text-slate-400"
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="yes">Yes</SelectItem>
+                            <SelectItem value="no">No</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="reorder"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Reorder Level
+                    </label>
+                    <div className="mt-2">
+                      <Input
+                        type="number"
+                        name="reorder"
+                        min={0}
+                        required
+                        placeholder="Enter level"
+                        value={itemData.reorder}
+                        onChange={(e) =>
+                          setItemData({
+                            ...itemData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* 3RD FIELD GROUP */}
+                  <div className="sm:col-span-3 sm:col-start-1">
+                    <label
+                      htmlFor="price"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Price
+                    </label>
+                    <div className="mt-2">
+                      <Input
+                        type="number"
+                        name="price"
+                        min={0}
+                        required={pos}
+                        disabled={pos}
+                        placeholder="Enter price"
+                        value={itemData.price}
+                        onChange={(e) =>
+                          setItemData({
+                            ...itemData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-3">
+                    <label
+                      htmlFor="buy"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Buy Price
+                    </label>
+                    <div className="mt-2">
+                      <Input
+                        type="number"
+                        name="buy_price"
+                        min={0}
+                        required={pos}
+                        disabled={pos}
+                        placeholder="Enter buy price"
+                        value={itemData.buy_price}
+                        onChange={(e) =>
+                          setItemData({
+                            ...itemData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="reorder"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Reorder Level
-                  </label>
-                  <div className="mt-2">
-                    <Input
-                      type="number"
-                      name="reorder"
-                      min={0}
-                      required
-                      placeholder="Enter level"
+                <div className="w-[20rem] grid place-content-center gap-y-4 p-4">
+                  <div className="border w-[10rem] h-[10rem] shadow-2xl rounded-lg">
+                    <Image
+                      src={prevImg ? prevImg : NoImage}
+                      alt="NoImage"
+                      height={100}
+                      width={50}
+                      className="w-full h-full object-contain"
                     />
                   </div>
-                </div>
-
-                {/* 3RD FIELD GROUP */}
-                <div className="sm:col-span-3 sm:col-start-1">
-                  <label
-                    htmlFor="price"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Price
-                  </label>
-                  <div className="mt-2">
-                    <Input
-                      type="number"
-                      name="price"
-                      min={0}
-                      required={pos}
-                      disabled={pos}
-                      placeholder="Enter price"
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="buy"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Buy Price
-                  </label>
-                  <div className="mt-2">
-                    <Input
-                      type="number"
-                      name="buy"
-                      min={0}
-                      required={pos}
-                      disabled={pos}
-                      placeholder="Enter buy price"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-[20rem] grid place-content-center gap-y-4 p-4">
-                <div className="border w-[10rem] h-[10rem] shadow-2xl rounded-lg">
-                  <Image
-                    src={NoImage}
-                    alt="NoImage"
-                    height={100}
-                    width={100}
-                    className="w-full h-full"
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    ref={InputRef}
+                    className="hidden"
+                    onChange={(e) => {
+                      setImage(e.target.files);
+                    }}
                   />
+                  <Button
+                    // variant="outline"
+                    onClick={() => InputRef?.current?.click()}
+                  >
+                    Upload
+                  </Button>
                 </div>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  ref={InputRef}
-                  className="hidden"
-                />
-                <Button
-                  // variant="outline"
-                  onClick={() => InputRef?.current?.click()}
-                >
-                  Upload
-                </Button>
               </div>
-            </div>
 
-            {/* BUTTON FOOTER */}
-            <div className=" flex justify-end space-x-4 mt-8 ">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => toggleAddItemModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Save</Button>
-            </div>
+              {/* BUTTON FOOTER */}
+              <div className=" flex justify-end space-x-4 mt-8 ">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    toggleAddItemModal(false);
+                    clearForm();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Save</Button>
+              </div>
+            </form>
           </main>
         </div>
       </section>
