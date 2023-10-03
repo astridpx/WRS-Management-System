@@ -1,11 +1,8 @@
 "use client";
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { Row } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import { useMutation, useQueryClient } from "react-query";
-import { DeleteUser } from "../Customer/services/api";
 
 import {
   DropdownMenu,
@@ -21,12 +18,8 @@ import { StocksModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Stocks
 export function StockDataTableRowActions<TData>({
   row,
 }: DataTableRowProps<TData>) {
-  const queryClient = useQueryClient();
-  const [expenseId, setExpenseId] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const notify = () => toast.loading("Loading...");
   const { toggleEditItemModal } = ItemsPageModalStore();
-  const { setModalType, toggleStocksModal, toggleHistoryModal } =
+  const { setModalType, setItemId, toggleStocksModal, toggleHistoryModal } =
     StocksModalStore();
 
   return (
@@ -47,6 +40,7 @@ export function StockDataTableRowActions<TData>({
             onClick={() => {
               toggleStocksModal(true);
               setModalType("in");
+              setItemId(row?.original?._id);
             }}
           >
             Stock In
@@ -55,6 +49,7 @@ export function StockDataTableRowActions<TData>({
             onClick={() => {
               toggleStocksModal(true);
               setModalType("out");
+              setItemId(row?.original?._id);
             }}
           >
             Stock Out

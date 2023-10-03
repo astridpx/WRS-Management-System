@@ -19,6 +19,12 @@ export async function PUT(req: Request, { params }: any) {
         { status: 400 }
       );
 
+    if (qty <= 0)
+      return NextResponse.json(
+        { message: "Null value is not allowed." },
+        { status: 400 }
+      );
+
     const history = {
       worth,
       qty,
@@ -32,7 +38,7 @@ export async function PUT(req: Request, { params }: any) {
       $push: { stock_history: history },
     });
 
-    return NextResponse.json({ message: "Item updated successfully." });
+    return NextResponse.json({ message: "Stocks updated successfully." });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

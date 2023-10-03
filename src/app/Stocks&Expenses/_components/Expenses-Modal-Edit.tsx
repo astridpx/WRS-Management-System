@@ -25,7 +25,7 @@ import {
   LoadingToast,
   DissmissToast,
 } from "@/components/Toast/toast";
-import { createExpenses } from "../services/Expenses-Api";
+import { updateExpenses } from "../services/Expenses-Api";
 
 // HANDLE EXPENSE NAME / DROPDOWN
 const handleExpenseName = (name: string) => {
@@ -43,44 +43,53 @@ const handleExpenseName = (name: string) => {
   }
 };
 
-export const StocksModalAddExpenses = () => {
+export const ExpensesModalEdit = () => {
   const queryClient = useQueryClient();
-  const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
+  const { editExpensesModal, toggleEditExpensesModal, editData } =
+    ExpensesModalStore();
   const [item, setItem] = useState<keyof IImages>("other");
   const [disable, setDisable] = useState<boolean>(true);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [amount, setAmount] = useState(0);
+  const [date2, setDate2] = useState<Date | undefined>();
   const [expData, setExpData] = useState({
+    _id: "",
     name: "",
-    amount,
+    amount: 0,
     category: "",
     date,
   });
 
+  useEffect(() => {
+    setExpData({ ...editData });
+    setDate(new Date(editData.date));
+    setItem(editData.category as keyof IImages);
+  }, [editData]);
+
   const clearForm = () => {
     setExpData({
+      _id: "",
       name: "",
-      amount,
+      amount: 0,
       category: "",
       date,
     });
   };
 
   const { mutateAsync } = useMutation({
-    mutationFn: createExpenses,
+    mutationFn: () => updateExpenses({ ...expData }, expData._id),
     onMutate: () => {
-      toggleAddExpensesModal(false);
-      LoadingToast("Creating new expenses...");
+      clearForm();
+      toggleEditExpensesModal(false);
+      LoadingToast("Updating expenses...");
     },
     onSuccess: (data) => {
       DissmissToast();
-      clearForm();
+
       SuccessToast(data?.message);
       queryClient.invalidateQueries({ queryKey: ["expenses"] });
     },
     onError: (error: any) => {
       DissmissToast();
-      clearForm();
       ErrorToast(error?.response?.data?.message);
     },
   });
@@ -88,14 +97,14 @@ export const StocksModalAddExpenses = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await mutateAsync({ ...expData });
+    await mutateAsync();
   };
 
   return (
     <>
       <section
         className={`${
-          addExpensesModal ? "block" : "hidden"
+          editExpensesModal ? "block" : "hidden"
         } h-screen w-full overflow-y-auto bg-black/75 bg-opacity-95 absolute z-20  `}
       >
         <div className="h-max w-full  flex items-center justify-center py-4   ">
@@ -109,7 +118,7 @@ export const StocksModalAddExpenses = () => {
                 <div className="w-full space-y-8">
                   <Select
                     required
-                    defaultValue="other"
+                    value={expData.category}
                     onValueChange={(e) => {
                       setExpData({
                         ...expData,
@@ -157,7 +166,9 @@ export const StocksModalAddExpenses = () => {
 
                   <div className="grid grid-cols-2 w-full gap-x-4">
                     <div className="space-y-2 ">
-                      <Label htmlFor="amount">Total Value</Label>
+                      <Label htmlFor="amount" onClick={() => alert(date)}>
+                        Total Value
+                      </Label>
                       <Input
                         name="amount"
                         type="number"
@@ -178,7 +189,13 @@ export const StocksModalAddExpenses = () => {
                       <DatePicker
                         calendar_width={"w-full"}
                         variant={"outline"}
-                        setDate={setDate}
+                        setDate={(newDate) => {
+                          setDate(newDate);
+                          setExpData({
+                            ...expData,
+                            date: newDate as Date,
+                          });
+                        }}
                         date={date}
                       />
                     </div>
@@ -204,7 +221,7 @@ export const StocksModalAddExpenses = () => {
                   variant="outline"
                   type="button"
                   onClick={() => {
-                    toggleAddExpensesModal(false);
+                    toggleEditExpensesModal(false);
                     clearForm();
                   }}
                   // className="bg-red-500 hover:bg-red-600"

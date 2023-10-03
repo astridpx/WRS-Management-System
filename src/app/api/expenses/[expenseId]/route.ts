@@ -5,11 +5,12 @@ import { Expenses as Exp } from "@/lib/mongodb/model/Expenses.model";
 
 export async function PUT(req: Request, { params }: any) {
   const { expenseId } = params;
+  const id = expenseId.trim();
   const { name, amount, category, date } = await req.json();
 
   try {
     // ? CHECK CUSTOMER ID IF EXIST
-    const isExist = await Exp.findById(expenseId).lean().exec();
+    const isExist = await Exp.findById(id).lean().exec();
 
     if (!isExist)
       return NextResponse.json(
@@ -17,7 +18,7 @@ export async function PUT(req: Request, { params }: any) {
         { status: 400 }
       );
 
-    await Exp.findByIdAndUpdate(expenseId, {
+    await Exp.findByIdAndUpdate(id, {
       name,
       amount,
       category,

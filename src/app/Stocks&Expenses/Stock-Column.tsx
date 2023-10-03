@@ -3,19 +3,35 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
 import { StockDataTableRowActions } from "./data-stock-row-action";
+import { DataTableItemName } from "@/components/react-table/Data-Table-Columns/Data-Table-Item-Name";
 
 export const StockColumns: ColumnDef<any>[] = [
   {
+    header: "No",
+    accessorKey: "id",
+    cell: ({ row }) => row.index + 1,
+  },
+  {
+    header: "Name",
+    accessorKey: "name",
+    cell: ({ row }) => (
+      <DataTableItemName
+        item={row?.original?.name}
+        img={row?.original?.category}
+      />
+    ),
+  },
+  {
     header: "Item",
-    accessorKey: "fullname",
+    accessorKey: "name",
   },
   {
     header: "Type",
-    accessorKey: "Alias",
+    accessorKey: "category",
   },
   {
     header: "Stock",
-    accessorKey: "Alias",
+    accessorKey: "stock",
   },
   {
     id: "action",

@@ -8,8 +8,10 @@ import fakeCustomer from "@/utils/table-data/MOCK_DATA_CUSTOMER_SEARCH.json";
 import { ExpensesColumns } from "./Expenses-Column";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { StocksModalAddExpenses } from "./_components/Stocks-Modal-Add-Expenses";
 import { ExpensesModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Expenses-Modal";
+import { StockHistoryModal } from "./_components/Stock-History-Modal";
+import { ExpensesModalAdd } from "./_components/Expenses-Modal-Add";
+import { ExpensesModalEdit } from "./_components/Expenses-Modal-Edit";
 import {
   Select,
   SelectContent,
@@ -20,10 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StockModal } from "./_components/Stock-In-Modal";
-import { useQuery } from "react-query";
+import { useQueries } from "react-query";
 import { getAllExpenses } from "./services/Expenses-Api";
 import Loader from "@/components/loader/Spinner";
-import { StockHistoryModal } from "./_components/Stock-History-Modal";
+import { getAllStocks } from "./services/Stock-Api";
+import { IItems, IStocks } from "../../../typings";
 
 async function getData() {
   const Data = await fakeCustomer.map((d: any) => {
@@ -42,17 +45,24 @@ async function getData() {
 const DataGet = getData();
 
 const StockAndExpensesPage = () => {
-  const { isLoading, isError, data, error, isSuccess } = useQuery({
-    queryKey: ["expenses"],
-    queryFn: getAllExpenses,
-  });
+  const results = useQueries([
+    { queryKey: ["stocks"], queryFn: getAllStocks },
+    { queryKey: ["expenses"], queryFn: getAllExpenses },
+  ]);
   const monitoringData = use(DataGet);
-  const { addExpensesModal, toggleAddExpensesModal } = ExpensesModalStore();
+  const { toggleAddExpensesModal } = ExpensesModalStore();
   const [tabs, setTabs] = useState<string>("daily");
+
+  const stocksData = results[0]?.data?.data;
+  const expensesData = results[1].data;
+
+  const stocksIsLoading = results[0].isLoading;
+  const expensesIsLoading = results[1].isLoading;
 
   return (
     <>
-      <StocksModalAddExpenses />
+      <ExpensesModalAdd />
+      <ExpensesModalEdit />
       <StockModal />
       <StockHistoryModal data={monitoringData} />
 
@@ -65,7 +75,14 @@ const StockAndExpensesPage = () => {
             </TabsList>
 
             <TabsContent value="stock">
-              <DataTable columns={StockColumns} data={monitoringData} />
+              {stocksIsLoading ? (
+                <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
+                  <Loader />
+                  <p className="text-gray-400 ">Loading...</p>
+                </div>
+              ) : (
+                <DataTable columns={StockColumns} data={stocksData} />
+              )}
             </TabsContent>
 
             <TabsContent value="expenses">
@@ -109,17 +126,17 @@ const StockAndExpensesPage = () => {
 
               <Tabs defaultValue="daily" value={tabs}>
                 <TabsContent value="daily">
-                  {isLoading ? (
+                  {expensesIsLoading ? (
                     <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
                       <Loader />
                       <p className="text-gray-400 ">Loading...</p>
                     </div>
                   ) : (
-                    <DataTable columns={ExpensesColumns} data={data} />
+                    <DataTable columns={ExpensesColumns} data={expensesData} />
                   )}
                 </TabsContent>
                 <TabsContent value="monthly">
-                  <DataTable columns={ExpensesColumns} data={monitoringData} />
+                  <DataTable columns={ExpensesColumns} data={expensesData} />
                 </TabsContent>
               </Tabs>
             </TabsContent>

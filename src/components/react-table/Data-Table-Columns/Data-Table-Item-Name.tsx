@@ -1,10 +1,8 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
 import Round from "@/assets/items_img/rounded_gallon.png";
-import {
-  ExpenseImages,
-  IImages,
-} from "@/utils/Stock&Expenses-img/img-category";
+import { ExpenseImages } from "@/utils/Stock&Expenses-img/img-category";
+import { IImages } from "../../../../typings";
 
 export interface IItemsNameColumn {
   item: string;

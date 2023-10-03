@@ -1,8 +1,6 @@
 "use client";
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { Row } from "@tanstack/react-table";
-import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "react-query";
 
@@ -10,13 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableRowProps } from "../../../typings";
@@ -33,7 +24,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 import { deleteExpenses } from "./services/Expenses-Api";
 import {
   SuccessToast,
@@ -41,6 +31,7 @@ import {
   LoadingToast,
   DissmissToast,
 } from "@/components/Toast/toast";
+import { ExpensesModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Expenses-Modal";
 
 export function ExpensesDataTableRowActions<TData>({
   row,
@@ -48,7 +39,7 @@ export function ExpensesDataTableRowActions<TData>({
   const queryClient = useQueryClient();
   const [expenseId, setExpenseId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const { toggleEditItemModal } = ItemsPageModalStore();
+  const { setEditData, toggleEditExpensesModal } = ExpensesModalStore();
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: () => deleteExpenses(expenseId),
@@ -106,10 +97,8 @@ export function ExpensesDataTableRowActions<TData>({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
             onClick={() => {
-              // setEditData(row?.original);
-              // setEditUserId(row?.original?._id);
-
-              toggleEditItemModal(true);
+              setEditData(row?.original);
+              toggleEditExpensesModal(true);
             }}
           >
             Edit

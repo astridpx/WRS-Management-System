@@ -105,6 +105,7 @@ export interface IItems {
   pos_item: boolean;
   price: number;
   buy_price: number;
+  stock_history: IStocks[];
 }
 
 export interface IReportpageModalStore {
@@ -114,6 +115,7 @@ export interface IReportpageModalStore {
 
 // ? EXPENSES
 export interface IExpenses {
+  _id: any;
   name: string;
   amount: number;
   category: string | keyof IImages;
@@ -123,6 +125,14 @@ export interface IExpenses {
 export interface IExpenseDate extends IExpenses {
   sort_date: any;
 }
+export interface IExpensesPageStore {
+  addExpensesModal: boolean;
+  editExpensesModal: boolean;
+  editData: IExpenses;
+  toggleAddExpensesModal: (state: boolean) => void;
+  toggleEditExpensesModal: (state: boolean) => void;
+  setEditData: (state: Partial<typeof InitialState>) => void;
+}
 
 export interface IImages {
   other: StaticImageData;
@@ -130,4 +140,23 @@ export interface IImages {
   employee: StaticImageData;
   seal: StaticImageData;
   filter: StaticImageData;
+}
+
+// ? STOCKS
+export interface IStocks {
+  worth: number;
+  qty: number;
+  transaction: string;
+  date: Date | undefined;
+}
+
+export interface IStocksPageStore {
+  stockModal: boolean;
+  historyModal: boolean;
+  modalType: string;
+  itemId: string;
+  toggleStocksModal: (state: boolean) => void;
+  setModalType: (state: string) => void;
+  toggleHistoryModal: (state: boolean) => void;
+  setItemId: (state: string) => void;
 }
