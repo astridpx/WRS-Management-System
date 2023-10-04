@@ -7,6 +7,11 @@ import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns
 
 export const CreditsColumns: ColumnDef<any>[] = [
   {
+    header: "No",
+    accessorKey: "id",
+    cell: ({ row }) => row.index + 1,
+  },
+  {
     header: "Name",
     accessorKey: "fullname",
     cell: ({ row }) => <DataTableNameColumn row={row} />,

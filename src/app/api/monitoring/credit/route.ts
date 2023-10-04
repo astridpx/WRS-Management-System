@@ -5,7 +5,7 @@ import { Trans } from "@/lib/mongodb/model/Transaction.model";
 export async function GET() {
   const credits = await Trans.find()
     .populate("customer")
-    .select("-mobile2  -mobile1")
+    .select("-mobile2  -mobile1 -borrowed_gal")
     .lean();
 
   return NextResponse.json({ data: credits }, { status: 200 });

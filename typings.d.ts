@@ -43,11 +43,22 @@ export interface IUser {
   email?: string;
   mobile1: string;
   mobile2?: string;
+  isVillage: boolean;
   address?: string;
   blk?: number;
   lot?: number;
   phase?: number;
   comment?: string;
+  borrowed_gal: {
+    slim: {
+      borrowed: number;
+      gal_type: string;
+    };
+    round: {
+      borrowed: number;
+      gal_type: string;
+    };
+  };
 }
 export interface IUserEditState {
   userEditData: IUserEdit;
