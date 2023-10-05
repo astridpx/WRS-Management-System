@@ -26,17 +26,6 @@ const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 );
 
-// Declare the HTML elements used in your JSX
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      // Add declarations for HTML elements you use in your JSX
-      div: React.HTMLAttributes<HTMLDivElement>;
-      span: React.HTMLAttributes<HTMLSpanElement>;
-      // Add more as needed
-    }
-  }
-
 export default function Navbar() {
   const { toggleSidebar, isExpand } = useSidebarStore();
   const { theme, setTheme } = useTheme();
