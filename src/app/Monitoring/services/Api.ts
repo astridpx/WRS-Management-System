@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { IUser } from "../../../../typings";
+import { format } from "date-fns";
 
 const axios = Axios.create({
   baseURL: "http://localhost:3000",
@@ -11,6 +12,7 @@ export const getLastReturn = async () => {
   const Data = await data.data.map((d: IUser) => {
     const newData = {
       ...d,
+      sort_date: format(new Date(), "LLL dd, y"),
       customer: `${d.first_name} ${d.last_name} d.isVillage
       ? P-${d.phase} BLK-${d.blk} L-${d.lot}
       : d.address`,
@@ -25,12 +27,15 @@ export const getAllCredits = async () => {
   const { data } = await axios.get("/api/monitoring/credit");
 
   const Data = await data.data.map((d: any) => {
+    const addr = d.customer.isVillage
+      ? ` P-${d.customer.phase} BLK-${d.customer.blk} L-${d.customer.lot}`
+      : ` ${d.customer.address}`;
+
     const newData = {
       ...d,
-      fullname: `${d.first_name} ${d.last_name}`,
-      customer: `${d.first_name} ${d.last_name} d.isVillage
-      ? P-${d.phase} BLK-${d.blk} L-${d.lot}
-      : d.address`,
+      fullname: `${d.customer.first_name} ${d.customer.last_name}`,
+      customer: `${d.customer.first_name} ${d.customer.last_name} ${addr}`,
+      sort_date: format(new Date(d.date), "LLL dd, y"),
     };
 
     return newData;

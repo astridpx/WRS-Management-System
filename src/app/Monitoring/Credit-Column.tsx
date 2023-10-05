@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
 import { DataTableRowActions } from "../Customer/data-table-row-action";
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
+import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
 
 export const CreditsColumns: ColumnDef<any>[] = [
   {
@@ -17,24 +18,25 @@ export const CreditsColumns: ColumnDef<any>[] = [
     cell: ({ row }) => <DataTableNameColumn row={row} />,
   },
   {
-    header: "Service",
-    accessorKey: "Alias",
+    header: "Orders",
+    accessorKey: "customer",
+    cell: ({ row }) => <DataTableGallonColumn row={row} />,
   },
   {
-    header: "QTY",
-    accessorKey: "Alias",
+    header: "Service",
+    accessorKey: "service",
   },
   {
     header: "Total",
-    accessorKey: "Alias",
+    accessorKey: "amount",
   },
   {
     header: "Unpaid",
-    accessorKey: "Alias",
+    accessorKey: "balance",
   },
   {
     header: "Date",
-    cell: ({ row }) => new Date().toDateString(),
+    accessorKey: "sort_date",
   },
   {
     id: "action",

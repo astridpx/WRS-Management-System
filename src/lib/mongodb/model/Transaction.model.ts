@@ -19,7 +19,7 @@ const TransactionSchema = new mongoose.Schema(
       required: true,
     },
     date: {
-      type: String,
+      type: Date,
       required: true,
     },
     amount: {
@@ -29,6 +29,7 @@ const TransactionSchema = new mongoose.Schema(
     discount: Number,
     paid: Boolean,
     balance: Number,
+    isBuy: Boolean,
     orders: [
       {
         item: {
@@ -36,7 +37,6 @@ const TransactionSchema = new mongoose.Schema(
           ref: "Items",
         },
         qty: Number,
-        isBuy: Boolean,
       },
     ],
   },

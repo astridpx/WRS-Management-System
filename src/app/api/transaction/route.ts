@@ -7,7 +7,10 @@ export async function GET() {
   const transactions = await Trans.find()
     .lean()
     .populate("customer")
-    .populate("orders.item")
+    .populate({
+      path: "orders.item",
+      select: "-stock_history", // Exclude stock_history from orders.item
+    })
     .exec();
 
   return NextResponse.json({ data: transactions }, { status: 200 });
@@ -27,7 +30,15 @@ export async function POST(req: Request) {
     item,
     qty,
     isBuy,
+    orders,
   } = await req.json();
+
+  const newOrders = orders?.map((o: any) => {
+    return {
+      item: o.item,
+      qty: o.qty,
+    };
+  });
 
   const newTrans = {
     customer,
@@ -38,13 +49,8 @@ export async function POST(req: Request) {
     discount,
     paid,
     balance,
-    orders: [
-      {
-        item,
-        qty,
-        isBuy,
-      },
-    ],
+    isBuy,
+    orders: newOrders,
   };
 
   try {

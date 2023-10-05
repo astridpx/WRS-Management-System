@@ -40,8 +40,6 @@ const MonitoringPage = () => {
   const lastReturnIsLoading = results[0].isLoading;
   const creditsIsLoading = results[1].isLoading;
 
-  console.log(creditsData);
-
   return (
     <>
       <PageWrapper>
@@ -66,15 +64,15 @@ const MonitoringPage = () => {
               )}
             </TabsContent>
             <TabsContent value="credit">
-              {/* {creditsIsLoading ? (
+              {creditsIsLoading ? (
                 <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
                   <Loader />
                   <p className="text-gray-400 ">Loading...</p>
                 </div>
               ) : (
-                <DataTable columns={CreditsColumns} data={monitoringData} />
-                )} */}
-              <DataTable columns={CreditsColumns} data={monitoringData} />
+                <DataTable columns={CreditsColumns} data={creditsData} />
+              )}
+              {/* <DataTable columns={CreditsColumns} data={monitoringData} /> */}
             </TabsContent>
           </Tabs>
         </div>
