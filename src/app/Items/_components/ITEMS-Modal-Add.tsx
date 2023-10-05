@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import NoImage from "@/assets/noImage.png";
 import { Input } from "@/components/ui/input";
@@ -23,12 +23,17 @@ import {
   DissmissToast,
 } from "@/components/Toast/toast";
 import { createItem } from "../services/Item-Api";
+import "@uploadthing/react/styles.css";
+import { UploadButton, UploadDropzone } from "@uploadthing/react";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
+import { utapi } from "uploadthing/server";
+// await utapi.deleteFiles(images.map(img => img.key));
 
 export const ItemsModalAdd = () => {
   const queryClient = useQueryClient();
   const { addItemModal, toggleAddItemModal } = ItemsPageModalStore();
   const [pos, setPos] = useState<boolean>(true);
-  const [image, setImage] = useState<FileList | null>();
+  const [image, setImage] = useState("");
   const [itemData, setItemData] = useState({
     name: "",
     img: "",
@@ -38,8 +43,7 @@ export const ItemsModalAdd = () => {
     price: 0,
     buy_price: 0,
   });
-  const InputRef = useRef<HTMLInputElement | null>(null);
-  const prevImg = image ? URL.createObjectURL(image[0]) : null;
+  const [uploading, setUploading] = useState(false);
 
   const clearForm = () => {
     setItemData({
@@ -51,6 +55,7 @@ export const ItemsModalAdd = () => {
       price: 0,
       buy_price: 0,
     });
+    setImage("");
   };
 
   const { mutateAsync } = useMutation({
@@ -73,6 +78,9 @@ export const ItemsModalAdd = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!itemData.img.length) return ErrorToast("Item image is required");
+
     await mutateAsync({ ...itemData });
   };
 
@@ -156,7 +164,7 @@ export const ItemsModalAdd = () => {
                       htmlFor="pos_item"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Buy Price
+                      POS Item
                     </label>
                     <div className="mt-2">
                       <Select
@@ -269,28 +277,31 @@ export const ItemsModalAdd = () => {
                 <div className="w-[20rem] grid place-content-center gap-y-4 p-4">
                   <div className="border w-[10rem] h-[10rem] shadow-2xl rounded-lg">
                     <Image
-                      src={prevImg ? prevImg : NoImage}
+                      src={image ? image : NoImage}
                       alt="NoImage"
                       height={100}
                       width={50}
                       className="w-full h-full object-contain"
                     />
                   </div>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    ref={InputRef}
-                    className="hidden"
-                    onChange={(e) => {
-                      setImage(e.target.files);
+
+                  <UploadButton<OurFileRouter>
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res: any) => {
+                      // Do something with the response
+                      setUploading(false);
+                      setImage(res[0].fileUrl);
+                      setItemData({ ...itemData, img: res[0].fileUrl });
+                    }}
+                    onUploadProgress={(e) => {
+                      setUploading(true);
+                    }}
+                    onUploadError={(error: Error) => {
+                      setUploading(false);
+                      // Do something with the error.
+                      alert(`ERROR! ${error.message}`);
                     }}
                   />
-                  <Button
-                    // variant="outline"
-                    onClick={() => InputRef?.current?.click()}
-                  >
-                    Upload
-                  </Button>
                 </div>
               </div>
 
@@ -299,6 +310,7 @@ export const ItemsModalAdd = () => {
                 <Button
                   variant="outline"
                   type="button"
+                  disabled={uploading}
                   onClick={() => {
                     toggleAddItemModal(false);
                     clearForm();
@@ -306,7 +318,10 @@ export const ItemsModalAdd = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Save</Button>
+
+                <Button disabled={uploading} type="submit">
+                  Save
+                </Button>
               </div>
             </form>
           </main>
