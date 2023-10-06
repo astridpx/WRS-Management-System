@@ -11,34 +11,21 @@ import { useQueries } from "react-query";
 import Loader from "@/components/loader/Spinner";
 import { getAllCredits, getLastReturn } from "./services/Api";
 
-async function getData() {
-  const Data = await fakeCustomer.map((d: any) => {
-    const data = {
-      ...d,
-      fullname: `${d.first_name} ${d.last_name}`,
-      address: `P-${d.phase} BLK-${d.blk}`,
-    };
-
-    return data;
-  });
-
-  return Data;
-}
-
-const DataGet = getData();
-
 const MonitoringPage = () => {
   const results = useQueries([
     { queryKey: ["last_return"], queryFn: getLastReturn },
     { queryKey: ["credits"], queryFn: getAllCredits },
   ]);
-  const monitoringData = use(DataGet);
 
   const lastReturnData = results[0]?.data;
   const creditsData = results[1]?.data;
 
   const lastReturnIsLoading = results[0].isLoading;
   const creditsIsLoading = results[1].isLoading;
+
+  if (!lastReturnIsLoading) {
+    console.log(lastReturnData);
+  }
 
   return (
     <>
@@ -72,7 +59,6 @@ const MonitoringPage = () => {
               ) : (
                 <DataTable columns={CreditsColumns} data={creditsData} />
               )}
-              {/* <DataTable columns={CreditsColumns} data={monitoringData} /> */}
             </TabsContent>
           </Tabs>
         </div>

@@ -8,9 +8,15 @@ interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
 
+interface IGallons {
+  slim: number;
+  round: number;
+}
+
 export function DataTableGallonColumn<TData>({
-  row,
-}: DataTableRowActionsProps<TData>) {
+  slim,
+  round,
+}: IGallons) {
   return (
     <>
       <div className="min-w-[20rem]">
@@ -24,7 +30,7 @@ export function DataTableGallonColumn<TData>({
 
             <p>Slim Gallon</p>
           </div>
-          <h4>{row?.original?.borrowed_gal?.slim?.borrowed}</h4>
+          <h4>{slim}</h4>
         </div>
         <div className="grid grid-cols-3 text-center">
           <div className=" flex items-center gap-4 col-span-2 ">
@@ -32,7 +38,7 @@ export function DataTableGallonColumn<TData>({
 
             <p>Round Gallon</p>
           </div>
-          <h4>{row?.original?.borrowed_gal?.round?.borrowed}</h4>
+          <h4>{round}</h4>
         </div>
       </div>
     </>

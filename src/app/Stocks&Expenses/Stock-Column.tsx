@@ -17,7 +17,7 @@ export const StockColumns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <DataTableItemName
         item={row?.original?.name}
-        img={row?.original?.category}
+        image={row?.original?.img}
       />
     ),
   },

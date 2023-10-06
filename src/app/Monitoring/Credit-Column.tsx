@@ -20,7 +20,12 @@ export const CreditsColumns: ColumnDef<any>[] = [
   {
     header: "Orders",
     accessorKey: "customer",
-    cell: ({ row }) => <DataTableGallonColumn row={row} />,
+    cell: ({ row }) => (
+      <DataTableGallonColumn
+        slim={row?.original?.orders[0]?.slim?.qty}
+        round={row?.original?.orders[0]?.round?.qty}
+      />
+    ),
   },
   {
     header: "Service",

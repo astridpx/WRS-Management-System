@@ -35,12 +35,12 @@ const CustomerSchema = new mongoose.Schema(
       slim: {
         borrowed: Number,
         last_return: Date,
-        gal_type: { type: String, default: "Slim" },
+        // gal_type: { type: String, default: "Slim" },
       },
       round: {
         borrowed: Number,
         last_return: Date,
-        gal_type: { type: String, default: "Round" },
+        // gal_type: { type: String, default: "Round" },
       },
     },
   },

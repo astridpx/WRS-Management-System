@@ -1,21 +1,28 @@
-import Axios from "axios";
+import axios from "axios";
 import { IUser } from "../../../../typings";
 import { format } from "date-fns";
 
-const axios = Axios.create({
-  baseURL: "http://localhost:3000",
-});
+// const axios = Axios.create({
+//   baseURL: "http://localhost:3000",
+// });
 
 export const getLastReturn = async () => {
   const { data } = await axios.get("/api/monitoring/last_return");
 
   const Data = await data.data.map((d: IUser) => {
+    const addr = d.isVillage
+      ? ` P-${d.phase} BLK-${d.blk} L-${d.lot}`
+      : ` ${d.address}`;
+
+    const date = d?.borrowed_gal?.slim?.last_return
+      ? d?.borrowed_gal?.slim?.last_return
+      : d?.borrowed_gal?.round?.last_return;
+
     const newData = {
       ...d,
-      sort_date: format(new Date(), "LLL dd, y"),
-      customer: `${d.first_name} ${d.last_name} d.isVillage
-      ? P-${d.phase} BLK-${d.blk} L-${d.lot}
-      : d.address`,
+      fullname: `${d.first_name} ${d.last_name}`,
+      sort_date: format(new Date(date), "LLL dd, y"),
+      customer: `${d.first_name} ${d.last_name} ${addr}`,
     };
 
     return newData;

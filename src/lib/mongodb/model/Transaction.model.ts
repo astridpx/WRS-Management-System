@@ -32,11 +32,12 @@ const TransactionSchema = new mongoose.Schema(
     isBuy: Boolean,
     orders: [
       {
-        item: {
-          type: mongoose.Schema.Types.ObjectId, //? ID OF ITEMS
-          ref: "Items",
+        slim: {
+          qty: Number,
         },
-        qty: Number,
+        round: {
+          qty: Number,
+        },
       },
     ],
   },

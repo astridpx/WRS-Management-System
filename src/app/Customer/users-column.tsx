@@ -28,7 +28,13 @@ export const userColumns: ColumnDef<IUser>[] = [
   },
   {
     header: "Gallon",
-    cell: ({ row }) => <DataTableGallonColumn row={row} />,
+    cell: ({ row }) => (
+      <DataTableGallonColumn
+        slim={row.original?.borrowed_gal?.slim?.borrowed}
+        round={row.original?.borrowed_gal?.round?.borrowed}
+      />
+    ),
+    // cell: ({ row }) => console.log(row.original) />
   },
   {
     id: "action",

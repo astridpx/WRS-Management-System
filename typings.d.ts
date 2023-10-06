@@ -51,11 +51,13 @@ export interface IUser {
   comment?: string;
   borrowed_gal: {
     slim: {
+      last_return: Date;
       borrowed: number;
       gal_type: string;
     };
     round: {
       borrowed: number;
+      last_return: Date;
       gal_type: string;
     };
   };

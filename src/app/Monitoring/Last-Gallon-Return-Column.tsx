@@ -19,12 +19,17 @@ export const LastGallonReturnColumns: ColumnDef<IUser>[] = [
   },
   {
     header: "Gallom",
-    cell: ({ row }) => <DataTableGallonColumn row={row} />,
+    cell: ({ row }) => (
+      <DataTableGallonColumn
+        slim={row?.original?.borrowed_gal?.slim?.borrowed}
+        round={row?.original?.borrowed_gal?.round?.borrowed}
+      />
+    ),
   },
 
   {
     header: "Last Return",
-    accessorKey: "customer",
-    cell: ({ row }) => new Date().toDateString(),
+    accessorKey: "sort_date",
+    // cell: ({ row }) => new Date().toDateString(),
   },
 ];
