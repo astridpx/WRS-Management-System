@@ -15,7 +15,17 @@ export const CreditsColumns: ColumnDef<any>[] = [
   {
     header: "Name",
     accessorKey: "fullname",
-    cell: ({ row }) => <DataTableNameColumn row={row} />,
+    cell: ({ row }) => (
+      <DataTableNameColumn
+        name={row?.original?.fullname ? row?.original?.fullname : ""}
+        isVillage={row?.original?.customer.isVillage}
+        phase={row?.original?.customer.phase}
+        blk={row?.original?.customer.blk}
+        lot={row?.original?.customer.lot}
+        addr={row?.original?.customer.address}
+        comment={row?.original?.customer.comment}
+      />
+    ),
   },
   {
     header: "Orders",

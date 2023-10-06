@@ -10,22 +10,40 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export function DataTableNameColumn<TData>({ row }: DataTableRowProps<TData>) {
+export interface ITNameAddress {
+  name: string;
+  isVillage: Boolean;
+  addr?: string;
+  comment?: string;
+  phase?: number;
+  blk?: number;
+  lot?: number;
+}
+
+export function DataTableNameColumn<TData>({
+  name,
+  addr,
+  comment,
+  isVillage,
+  phase,
+  blk,
+  lot,
+}: ITNameAddress) {
   return (
     <>
       <div className="w-max">
         <h1 className="flex gap-x-2 text-sm items-center pr-2   ">
           <BiSolidUser size={18} className="text-slate-500" />
-          {row?.original?.fullname}
+          {name}
         </h1>
         <div className="flex gap-x-2 gap-y-2  pr-2 truncate max-w-sm">
-          {row?.original?.isVillage ? (
+          {isVillage ? (
             <>
               <MdLocationPin size={18} className="text-gray-600 " />
               <p className="flex gap-x-1 text-sm items-center">
-                <span>P-{row?.original?.phase}</span>
-                <span>BLK-{row?.original?.blk}</span>
-                <span>L-{row?.original?.lot}</span>
+                <span>P-{phase}</span>
+                <span>BLK-{blk}</span>
+                <span>L-{lot}</span>
               </p>
             </>
           ) : (
@@ -33,15 +51,13 @@ export function DataTableNameColumn<TData>({ row }: DataTableRowProps<TData>) {
             <TooltipProvider>
               <Tooltip>
                 <TooltipContent>
-                  <p> {row?.original?.address}</p>
+                  <p>{addr}</p>
                 </TooltipContent>
 
                 <MdLocationPin size={18} className="text-gray-600 " />
                 <TooltipTrigger className="max-w-xs w-max h-max inline-block text-sm items-center">
                   <p>
-                    <span className="truncate text-ellipsis block">
-                      {row?.original?.address}
-                    </span>
+                    <span className="truncate text-ellipsis block">{addr}</span>
                   </p>
                 </TooltipTrigger>
               </Tooltip>
@@ -51,7 +67,7 @@ export function DataTableNameColumn<TData>({ row }: DataTableRowProps<TData>) {
         <p className="flex gap-x-2 text-sm items-center pr-2   ">
           <MdContactEmergency size={18} className="text-slate-500" />
           <span className="max-w-sm inline-block truncate text-ellipsis">
-            {row?.original?.comment}
+            {comment ? comment : "No comment"}
           </span>
         </p>
       </div>

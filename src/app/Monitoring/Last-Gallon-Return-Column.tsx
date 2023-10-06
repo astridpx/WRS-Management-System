@@ -15,7 +15,17 @@ export const LastGallonReturnColumns: ColumnDef<IUser>[] = [
   {
     header: "Name",
     accessorKey: "customer",
-    cell: ({ row }) => <DataTableNameColumn row={row} />,
+    cell: ({ row }) => (
+      <DataTableNameColumn
+        name={row?.original?.fullname ? row?.original?.fullname : ""}
+        isVillage={row?.original?.isVillage}
+        phase={row?.original?.phase}
+        blk={row?.original?.blk}
+        lot={row?.original?.lot}
+        addr={row?.original?.address}
+        comment={row?.original?.comment}
+      />
+    ),
   },
   {
     header: "Gallom",
