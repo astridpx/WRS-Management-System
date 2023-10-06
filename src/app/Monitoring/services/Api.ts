@@ -21,7 +21,7 @@ export const getLastReturn = async () => {
     const newData = {
       ...d,
       fullname: `${d.first_name} ${d.last_name}`,
-      sort_date: format(new Date(date), "LLL dd, y"),
+      sort_date: format(new Date(date as Date), "LLL dd, y"),
       customer: `${d.first_name} ${d.last_name} ${addr}`,
     };
 
