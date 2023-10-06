@@ -19,6 +19,7 @@ export async function PUT(req: Request, { params }: any) {
     round,
     isVillage,
   } = await req.json();
+  const id = customerId.trim();
 
   const updateCustomer = {
     first_name,
@@ -31,19 +32,15 @@ export async function PUT(req: Request, { params }: any) {
     phase,
     comment,
     isVillage,
-    borrowed_gal: {
-      slim: {
-        borrowed: slim,
-      },
-      round: {
-        borrowed: round,
-      },
+    $set: {
+      "borrowed_gal.slim.borrowed": slim,
+      "borrowed_gal.round.borrowed": round,
     },
   };
 
   try {
     // ? CHECK CUSTOMER ID IF EXIST
-    const isExist = await Customer.findById(customerId).lean().exec();
+    const isExist = await Customer.findById(id).lean().exec();
 
     if (!isExist)
       return NextResponse.json(
@@ -51,7 +48,7 @@ export async function PUT(req: Request, { params }: any) {
         { status: 400 }
       );
 
-    await Customer.findByIdAndUpdate(customerId, updateCustomer).exec();
+    await Customer.findByIdAndUpdate(id, updateCustomer).exec();
 
     return NextResponse.json({ message: "Customer updated successfully." });
   } catch (error) {
