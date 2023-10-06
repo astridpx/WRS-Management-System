@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IItems } from "../../../typings";
 import { ProductDataTableRowActions } from "./Data-Table-Row-Action";
+import { DataTableItemName } from "@/components/react-table/Data-Table-Columns/Data-Table-Item-Name";
 
 export const productColumns: ColumnDef<IItems>[] = [
   {
@@ -13,6 +14,12 @@ export const productColumns: ColumnDef<IItems>[] = [
   {
     header: "Item",
     accessorKey: "name",
+    cell: ({ row }) => (
+      <DataTableItemName
+        image={row?.original?.img}
+        item={row?.original?.name}
+      />
+    ),
   },
   {
     header: "Type",

@@ -27,12 +27,10 @@ import "@uploadthing/react/styles.css";
 import { UploadButton, UploadDropzone } from "@uploadthing/react";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import { utapi } from "uploadthing/server";
-// await utapi.deleteFiles(images.map(img => img.key));
 
 export const ItemsModalAdd = () => {
   const queryClient = useQueryClient();
   const { addItemModal, toggleAddItemModal } = ItemsPageModalStore();
-  const [pos, setPos] = useState<boolean>(true);
   const [image, setImage] = useState("");
   const [itemData, setItemData] = useState({
     name: "",
@@ -170,12 +168,11 @@ export const ItemsModalAdd = () => {
                       <Select
                         name="pos_item"
                         required
-                        defaultValue="no"
+                        value={itemData.pos_item ? "yes" : "no"}
                         onValueChange={(e) => {
-                          setPos(e === "yes" ? false : true);
                           setItemData({
                             ...itemData,
-                            pos_item: e === "yes" ? false : true,
+                            pos_item: e === "yes" ? true : false,
                           });
                         }}
                       >
@@ -233,8 +230,8 @@ export const ItemsModalAdd = () => {
                         type="number"
                         name="price"
                         min={0}
-                        required={pos}
-                        disabled={pos}
+                        required={itemData.pos_item}
+                        disabled={!itemData.pos_item}
                         placeholder="Enter price"
                         value={itemData.price}
                         onChange={(e) =>
@@ -259,8 +256,8 @@ export const ItemsModalAdd = () => {
                         type="number"
                         name="buy_price"
                         min={0}
-                        required={pos}
-                        disabled={pos}
+                        required={itemData.pos_item}
+                        disabled={!itemData.pos_item}
                         placeholder="Enter buy price"
                         value={itemData.buy_price}
                         onChange={(e) =>
@@ -299,7 +296,7 @@ export const ItemsModalAdd = () => {
                     onUploadError={(error: Error) => {
                       setUploading(false);
                       // Do something with the error.
-                      alert(`ERROR! ${error.message}`);
+                      ErrorToast(`ERROR! ${error.message}`);
                     }}
                   />
                 </div>

@@ -23,6 +23,9 @@ import {
 } from "@/components/Toast/toast";
 import { useMutation, useQueryClient } from "react-query";
 import { updateItem } from "../services/Item-Api";
+import "@uploadthing/react/styles.css";
+import { UploadButton, UploadDropzone } from "@uploadthing/react";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
 
 export const ItemsModalEdit = () => {
   const queryClient = useQueryClient();
@@ -39,6 +42,7 @@ export const ItemsModalEdit = () => {
     price: 0,
     buy_price: 0,
   });
+  const [uploading, setUploading] = useState(false);
 
   const { mutateAsync } = useMutation({
     mutationFn: () =>
@@ -162,13 +166,13 @@ export const ItemsModalEdit = () => {
                       htmlFor="pos_item"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Buy Price
+                      POS Item
                     </label>
                     <div className="mt-2">
                       <Select
                         name="pos_item"
                         required
-                        value={data.pos_item ? "yes" : "no"}
+                        value={data.pos_item === true ? "yes" : "no"}
                         onValueChange={(e) =>
                           setData({
                             ...data,
@@ -230,7 +234,7 @@ export const ItemsModalEdit = () => {
                         type="number"
                         name="price"
                         min={0}
-                        required={!data.pos_item}
+                        required={data.pos_item}
                         disabled={!data.pos_item}
                         placeholder="Enter price"
                         value={data.price}
@@ -256,7 +260,7 @@ export const ItemsModalEdit = () => {
                         type="number"
                         name="buy_price"
                         min={0}
-                        required={!data.pos_item}
+                        required={data.pos_item}
                         disabled={!data.pos_item}
                         placeholder="Enter buy price"
                         value={data.buy_price}
@@ -274,26 +278,29 @@ export const ItemsModalEdit = () => {
                 <div className="w-[20rem] grid place-content-center gap-y-4 p-4">
                   <div className="border w-[10rem] h-[10rem] shadow-2xl rounded-lg">
                     <Image
-                      src={NoImage}
+                      src={data.img ? data.img : NoImage}
                       alt="NoImage"
                       height={100}
                       width={100}
-                      className="w-full h-full"
+                      className="w-full h-full object-contain"
                     />
                   </div>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    ref={InputRef}
-                    className="hidden"
+                  <UploadButton<OurFileRouter>
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res: any) => {
+                      // Do something with the response
+                      setUploading(false);
+                      setData({ ...data, img: res[0].fileUrl });
+                    }}
+                    onUploadProgress={(e) => {
+                      setUploading(true);
+                    }}
+                    onUploadError={(error: Error) => {
+                      setUploading(false);
+                      // Do something with the error.
+                      ErrorToast(`ERROR! ${error.message}`);
+                    }}
                   />
-                  <Button
-                    // variant="outline"
-                    onClick={() => InputRef?.current?.click()}
-                    // className="bg-red-500 hover:bg-red-600"
-                  >
-                    Upload
-                  </Button>
                 </div>
               </div>
 
@@ -302,6 +309,7 @@ export const ItemsModalEdit = () => {
                 <Button
                   variant="outline"
                   type="button"
+                  disabled={uploading}
                   // className="bg-red-500 hover:bg-red-600"
                   onClick={() => {
                     setClearState();
@@ -311,6 +319,7 @@ export const ItemsModalEdit = () => {
                   Cancel
                 </Button>
                 <Button
+                  disabled={uploading}
                   type="submit"
                   // className="bg-blue-500 hover:bg-blue-600"
                 >

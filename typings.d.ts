@@ -116,7 +116,7 @@ export interface IItems {
   pos_item: boolean;
   price: number;
   buy_price: number;
-  stock_history: IStocks[];
+  stock_history?: IStocks[];
 }
 
 export interface IReportpageModalStore {

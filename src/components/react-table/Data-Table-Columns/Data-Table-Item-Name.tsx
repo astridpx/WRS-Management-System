@@ -6,14 +6,21 @@ import { IImages } from "../../../../typings";
 
 export interface IItemsNameColumn {
   item: string;
-  img: keyof IImages;
+  img?: keyof IImages;
+  image?: string;
 }
 
-export function DataTableItemName({ img, item }: IItemsNameColumn) {
+export function DataTableItemName({ img, item, image }: IItemsNameColumn) {
   return (
     <>
       <div className="  flex items-center gap-x-2">
-        <Image src={ExpenseImages[img]} alt="Item" height={25} className="" />
+        <Image
+          src={img ? ExpenseImages[img] : image}
+          alt="Item"
+          height={100}
+          width={50}
+          className="h-7 w-auto aspect-[4/3] object-contain"
+        />
         <p>{item}</p>
       </div>
     </>
