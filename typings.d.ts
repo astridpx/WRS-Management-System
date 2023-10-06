@@ -49,7 +49,7 @@ export interface IUser {
   lot?: number;
   phase?: number;
   comment?: string;
-  borrowed_gal: {
+  borrowed_gal?: {
     slim: {
       last_return: Date;
       borrowed: number;
@@ -61,6 +61,11 @@ export interface IUser {
       gal_type: string;
     };
   };
+}
+
+export interface IGallons {
+  slim?: number;
+  round?: number;
 }
 export interface IUserEditState {
   userEditData: IUserEdit;

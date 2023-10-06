@@ -23,10 +23,6 @@ const MonitoringPage = () => {
   const lastReturnIsLoading = results[0].isLoading;
   const creditsIsLoading = results[1].isLoading;
 
-  if (!lastReturnIsLoading) {
-    console.log(lastReturnData);
-  }
-
   return (
     <>
       <PageWrapper>

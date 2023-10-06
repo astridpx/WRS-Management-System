@@ -29,27 +29,19 @@ export default function EditUserModal() {
     comment: "",
     address: "",
     isVillage: userEditData.isVillage,
+    slim: 0,
+    round: 0,
   });
 
   useEffect(() => {
-    if (userEditData) {
-      setUserData({
-        first_name: userEditData.first_name,
-        last_name: userEditData.last_name,
-        mobile1: userEditData.mobile1,
-        mobile2: userEditData.mobile2 ? userEditData.mobile2 : "",
-        blk: userEditData.blk ? userEditData.blk : 0,
-        lot: userEditData.lot ? userEditData.lot : 0,
-        phase: userEditData.phase ? userEditData.phase : 0,
-        comment: userEditData.comment ? userEditData.comment : "",
-        address: userEditData.address ? userEditData.address : "",
-        isVillage: userEditData.isVillage,
-      });
-    }
+    setUserData({
+      ...userEditData,
+      slim: userEditData?.borrowed_gal?.slim?.borrowed,
+      round: userEditData?.borrowed_gal?.round?.borrowed,
+    });
   }, [userEditData]);
 
   const updateUserMutation = useMutation({
-    // mutationFn: UpdateUser(),
     mutationFn: () =>
       UpdateCustomer(
         {
@@ -75,6 +67,8 @@ export default function EditUserModal() {
         comment: "",
         address: "",
         isVillage: userEditData.isVillage,
+        slim: 0,
+        round: 0,
       });
 
       DissmissToast();
@@ -112,7 +106,7 @@ export default function EditUserModal() {
             {/* FORM TAB */}
 
             <Tabs
-              defaultValue={userEditData.isVillage ? "subd" : "other"}
+              value={userEditData.isVillage ? "subd" : "other"}
               onValueChange={(e) =>
                 setUserData({
                   ...userData,

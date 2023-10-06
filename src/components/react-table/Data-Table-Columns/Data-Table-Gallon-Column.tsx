@@ -2,21 +2,14 @@ import Slim from "@/assets/items_img/slim_gallon.png";
 import Round from "@/assets/items_img/rounded_gallon.png";
 import Image from "next/image";
 import { Row } from "@tanstack/react-table";
+import { IGallons } from "../../../../typings";
 
 // w   W
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
 }
 
-interface IGallons {
-  slim: number;
-  round: number;
-}
-
-export function DataTableGallonColumn<TData>({
-  slim,
-  round,
-}: IGallons) {
+export function DataTableGallonColumn<TData>({ slim, round }: IGallons) {
   return (
     <>
       <div className="min-w-[20rem]">
