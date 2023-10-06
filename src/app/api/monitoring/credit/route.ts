@@ -3,9 +3,8 @@ import { Trans } from "@/lib/mongodb/model/Transaction.model";
 
 //  @desc GET  Credit
 export async function GET() {
-  const credits = await Trans.find()
+  const credits = await Trans.find({ balance: { $gt: 0 } })
     .populate("customer")
-    .select("-mobile2  -mobile1 -borrowed_gal")
     .lean();
 
   return NextResponse.json({ data: credits }, { status: 200 });
