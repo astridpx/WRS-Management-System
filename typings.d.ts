@@ -68,6 +68,7 @@ export interface IGallons {
   slim?: number;
   round?: number;
 }
+
 export interface IUserEditState {
   userEditData: IUserEdit;
   showEditUserModal: boolean;

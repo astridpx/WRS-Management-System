@@ -31,18 +31,16 @@ const CustomerSchema = new mongoose.Schema(
     lot: String,
     phase: String,
     comment: String,
-    borrowed_gal: {
-      slim: {
+    borrowed_gal: [
+      {
+        item: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Items",
+        },
         borrowed: Number,
         last_return: { type: Date, default: new Date() },
-        // gal_type: { type: String, default: "Slim" },
       },
-      round: {
-        borrowed: Number,
-        last_return: { type: Date, default: new Date() },
-        // gal_type: { type: String, default: "Round" },
-      },
-    },
+    ],
   },
   {
     timestamps: true,

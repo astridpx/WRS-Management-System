@@ -4,7 +4,13 @@ import { Customer } from "@/lib/mongodb/model/Customer.model";
 
 //  @desc GET All Customers
 export async function GET() {
-  const customers = await Customer.find().lean();
+  const customers = await Customer.find()
+    .populate({
+      path: "borrowed_gal.item",
+      select: "-stock_history",
+    })
+    .lean()
+    .exec();
 
   return NextResponse.json({ data: customers }, { status: 200 });
 }
@@ -21,10 +27,14 @@ export async function POST(req: Request) {
     lot,
     phase,
     comment,
-    slim,
-    round,
+    item,
     isVillage,
   } = await req.json();
+
+  // const borrow ={
+  //   item: "id",
+  //   borrowed: 3
+  // }
 
   const newCustomer = {
     first_name,
@@ -37,14 +47,7 @@ export async function POST(req: Request) {
     phase,
     comment,
     isVillage,
-    borrowed_gal: {
-      slim: {
-        borrowed: slim,
-      },
-      round: {
-        borrowed: round,
-      },
-    },
+    borrowed_gal: item,
   };
 
   try {

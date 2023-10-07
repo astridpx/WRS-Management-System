@@ -1,23 +1,39 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient, useQuery } from "react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { UpdateCustomer } from "./services/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import axios from "axios";
 import {
   SuccessToast,
   ErrorToast,
   LoadingToast,
   DissmissToast,
 } from "@/components/Toast/toast";
+import Image from "next/image";
+
+interface Item {
+  item: string;
+  borrowed: number;
+}
 
 export default function EditUserModal() {
   const queryClient = useQueryClient();
   const { userEditData, showEditUserModal, setShowEditModal, editUserId } =
     editUserStore();
+  const { isLoading, data, error, isSuccess } = useQuery({
+    queryKey: ["gallon"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/gallons");
+
+      return data.data;
+    },
+  });
+  const [item, setItem] = useState<Item[]>([]);
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
@@ -29,17 +45,33 @@ export default function EditUserModal() {
     comment: "",
     address: "",
     isVillage: userEditData.isVillage,
-    slim: 0,
-    round: 0,
+    item,
   });
 
   useEffect(() => {
+    console.log(userEditData);
     setUserData({
       ...userEditData,
-      slim: userEditData?.borrowed_gal?.slim?.borrowed,
-      round: userEditData?.borrowed_gal?.round?.borrowed,
     });
+
+    if (Array.isArray(userEditData?.borrowed_gal)) {
+      const newItemArray: Item[] = userEditData?.borrowed_gal?.map(
+        (d: any) => ({
+          item: d.item._id,
+          borrowed: d.borrowed,
+        })
+      );
+
+      setItem(newItemArray);
+    }
   }, [userEditData]);
+
+  useEffect(() => {
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      item: item,
+    }));
+  }, [item]);
 
   const updateUserMutation = useMutation({
     mutationFn: () =>
@@ -67,8 +99,7 @@ export default function EditUserModal() {
         comment: "",
         address: "",
         isVillage: userEditData.isVillage,
-        slim: 0,
-        round: 0,
+        item,
       });
 
       DissmissToast();
@@ -84,7 +115,68 @@ export default function EditUserModal() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    updateUserMutation.mutate();
+    // updateUserMutation.mutate();
+    alert("Finish routes first");
+  };
+
+  const handleInputChange = (id: string, borrowedValue: number) => {
+    // Find the index of the item with the matching id in the 'item' array
+    const itemIndex = item.findIndex((item) => item.item === id);
+
+    if (itemIndex !== -1) {
+      // If the item with the same id exists, update its 'borrowed' property
+      const updatedItem = { ...item[itemIndex], borrowed: borrowedValue };
+      const updatedItemList = [...item];
+      updatedItemList[itemIndex] = updatedItem;
+      setItem(updatedItemList);
+    } else {
+      // If the item with the same id doesn't exist, create a new one
+      const newItem = { item: id, borrowed: borrowedValue };
+      setItem([...item, newItem]);
+    }
+  };
+
+  const BorrowGallon = ({
+    id,
+    img,
+    name,
+    index,
+  }: {
+    id: string;
+    img: string;
+    name: string;
+    index: number;
+  }) => {
+    return (
+      <>
+        <div
+          key={id}
+          className="mt-2 grid grid-cols-4 gap-x-1 place-content-center items-center "
+        >
+          <h5 className="text-center">{(index = index + 1)}</h5>
+          <div className="text-sm col-span-2 flex items-center gap-x-2 place-self-center">
+            <Image
+              src={img}
+              alt="Slim "
+              height={30}
+              width={30}
+              className="object-contain aspect-[4/3]"
+            />
+            <p>{name}</p>
+          </div>
+          <Input
+            type="number"
+            min={0}
+            value={userData?.item?.find((it) => it.item === id)?.borrowed}
+            defaultValue={0}
+            onChange={(e) => {
+              handleInputChange(id, parseFloat(e.target.value));
+            }}
+            className="outline-none h-max py-1 text-center"
+          />
+        </div>
+      </>
+    );
   };
 
   return (
@@ -336,6 +428,48 @@ export default function EditUserModal() {
                         />
                       </div>
                     </div>
+
+                    {/* Borrowd gallon field */}
+                    <div className="col-span-4 ">
+                      <h2 className="font-semibold text-lg">Borrowed Gallon</h2>
+
+                      <div>
+                        <header className="h-8 grid grid-cols-4 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
+                          <h4 className="text-sm ">#</h4>
+                          <h4 className="text-sm col-span-2">ITEM</h4>
+                          <h4 className="text-sm">WRS-GAL</h4>
+                        </header>
+
+                        {/* {Array.isArray(userEditData?.borrowed_gal) */}
+                        {userEditData?.borrowed_gal?.length
+                          ? userEditData?.borrowed_gal?.map(
+                              (d: any, index: number) => {
+                                return (
+                                  <BorrowGallon
+                                    key={d.item._id}
+                                    id={d.item._id}
+                                    index={index}
+                                    img={d.item.img}
+                                    name={d.item.name}
+                                  />
+                                );
+                              }
+                            )
+                          : isLoading
+                          ? "Loading .."
+                          : data.map((d: any, index: number) => {
+                              return (
+                                <BorrowGallon
+                                  key={d._id}
+                                  id={d._id}
+                                  index={index}
+                                  img={d.img}
+                                  name={d.name}
+                                />
+                              );
+                            })}
+                      </div>
+                    </div>
                   </div>
 
                   {/* BUTTON FOOTER */}
@@ -521,6 +655,48 @@ export default function EditUserModal() {
                             })
                           }
                         />
+                      </div>
+                    </div>
+
+                    {/* Borrowd gallon field */}
+                    <div className="col-span-4 ">
+                      <h2 className="font-semibold text-lg">Borrowed Gallon</h2>
+
+                      <div>
+                        <header className="h-8 grid grid-cols-4 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
+                          <h4 className="text-sm ">#</h4>
+                          <h4 className="text-sm col-span-2">ITEM</h4>
+                          <h4 className="text-sm">WRS-GAL</h4>
+                        </header>
+
+                        {/* {Array.isArray(userEditData?.borrowed_gal) */}
+                        {userEditData?.borrowed_gal?.length
+                          ? userEditData?.borrowed_gal?.map(
+                              (d: any, index: number) => {
+                                return (
+                                  <BorrowGallon
+                                    key={d.item._id}
+                                    id={d.item._id}
+                                    index={index}
+                                    img={d.item.img}
+                                    name={d.item.name}
+                                  />
+                                );
+                              }
+                            )
+                          : isLoading
+                          ? "Loading .."
+                          : data.map((d: any, index: number) => {
+                              return (
+                                <BorrowGallon
+                                  key={d._id}
+                                  id={d._id}
+                                  index={index}
+                                  img={d.img}
+                                  name={d.name}
+                                />
+                              );
+                            })}
                       </div>
                     </div>
                   </div>

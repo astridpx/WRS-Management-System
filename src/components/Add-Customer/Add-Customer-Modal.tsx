@@ -1,21 +1,38 @@
 "use client";
 
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQueryClient, useQuery } from "react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import addCustomerModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
 import { addNewUser } from "@/app/Customer/services/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import axios from "axios";
 import {
   SuccessToast,
   ErrorToast,
   LoadingToast,
   DissmissToast,
 } from "@/components/Toast/toast";
+import Image from "next/image";
+
+interface Item {
+  item: string;
+  borrowed: number;
+}
 
 export default function AddNewCustomer() {
   const queryClient = useQueryClient();
+  const { isLoading, data, error, isSuccess } = useQuery({
+    queryKey: ["gallon"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/gallons");
+
+      return data.data;
+    },
+  });
+  const [item, setItem] = useState<Item[]>([]);
+
   const { toggleShowCustomerForm, showAddCustomerForm } =
     addCustomerModalStore();
   const [userData, setUserData] = useState({
@@ -29,6 +46,7 @@ export default function AddNewCustomer() {
     comment: "",
     address: "",
     isVillage: true,
+    item,
   });
   const userMutation = useMutation({
     mutationFn: addNewUser,
@@ -51,6 +69,7 @@ export default function AddNewCustomer() {
         comment: "",
         address: "",
         isVillage: true,
+        item,
       });
       console.log("success bro!");
     },
@@ -83,8 +102,6 @@ export default function AddNewCustomer() {
 
     if (isVillage) {
       if (blk <= 0 || lot <= 0 || phase <= 0) {
-        alert(isVillage);
-        alert("hahah");
         return ErrorToast("The field blk & lot & phase is required");
       }
     } else {
@@ -95,6 +112,30 @@ export default function AddNewCustomer() {
 
     await userMutation.mutate({ ...userData });
   };
+
+  const handleInputChange = (id: string, borrowedValue: number) => {
+    // Find the index of the item with the matching id in the 'item' array
+    const itemIndex = item.findIndex((item) => item.item === id);
+
+    if (itemIndex !== -1) {
+      // If the item with the same id exists, update its 'borrowed' property
+      const updatedItem = { ...item[itemIndex], borrowed: borrowedValue };
+      const updatedItemList = [...item];
+      updatedItemList[itemIndex] = updatedItem;
+      setItem(updatedItemList);
+    } else {
+      // If the item with the same id doesn't exist, create a new one
+      const newItem = { item: id, borrowed: borrowedValue };
+      setItem([...item, newItem]);
+    }
+  };
+
+  useEffect(() => {
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      item: item,
+    }));
+  }, [item]);
 
   return (
     <>
@@ -340,6 +381,66 @@ export default function AddNewCustomer() {
                         />
                       </div>
                     </div>
+
+                    {/* Borrowd gallon field */}
+                    <div className="col-span-4 ">
+                      <h2 className="font-semibold text-lg">Borrowed Gallon</h2>
+
+                      <div>
+                        <header className="h-8 grid grid-cols-4 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
+                          <h4 className="text-sm ">#</h4>
+                          <h4 className="text-sm col-span-2">ITEM</h4>
+                          <h4 className="text-sm">WRS-GAL</h4>
+                        </header>
+
+                        {isLoading
+                          ? "Loading .."
+                          : data.map((d: any, index: number) => {
+                              return (
+                                <>
+                                  <div
+                                    key={d._id}
+                                    className="mt-2 grid grid-cols-4 gap-x-1 place-content-center items-center "
+                                  >
+                                    <h5 className="text-center">
+                                      {(index = index + 1)}
+                                    </h5>
+                                    <div className="text-sm col-span-2 flex items-center gap-x-2 place-self-center">
+                                      <Image
+                                        src={d.img}
+                                        alt="Slim "
+                                        height={30}
+                                        width={30}
+                                        className="object-contain aspect-[4/3]"
+                                      />
+                                      <p>{d.name}</p>
+                                    </div>
+                                    <Input
+                                      type="number"
+                                      min={0}
+                                      value={
+                                        item.find((it) => it.item === d._id)
+                                          ?.borrowed
+                                      }
+                                      defaultValue={0}
+                                      onChange={(e) => {
+                                        // setItem({
+                                        //   ...item,
+                                        //   borrowed: parseFloat(e.target.value),
+                                        // });
+                                        handleInputChange(
+                                          d._id,
+                                          parseFloat(e.target.value)
+                                        );
+                                      }}
+                                      className="outline-none h-max py-1 text-center"
+                                    />
+                                  </div>
+                                </>
+                              );
+                            })}
+                      </div>
+                    </div>
                   </div>
 
                   {/* BUTTON FOOTER */}
@@ -524,6 +625,66 @@ export default function AddNewCustomer() {
                             })
                           }
                         />
+                      </div>
+                    </div>
+
+                    {/* Borrowd gallon field */}
+                    <div className="col-span-4 ">
+                      <h2 className="font-semibold text-lg">Borrowed Gallon</h2>
+
+                      <div>
+                        <header className="h-8 grid grid-cols-4 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
+                          <h4 className="text-sm ">#</h4>
+                          <h4 className="text-sm col-span-2">ITEM</h4>
+                          <h4 className="text-sm">WRS-GAL</h4>
+                        </header>
+
+                        {isLoading
+                          ? "Loading .."
+                          : data.map((d: any, index: number) => {
+                              return (
+                                <>
+                                  <div
+                                    key={d._id}
+                                    className="mt-2 grid grid-cols-4 gap-x-1 place-content-center items-center "
+                                  >
+                                    <h5 className="text-center">
+                                      {(index = index + 1)}
+                                    </h5>
+                                    <div className="text-sm col-span-2 flex items-center gap-x-2 place-self-center">
+                                      <Image
+                                        src={d.img}
+                                        alt="Slim "
+                                        height={30}
+                                        width={30}
+                                        className="object-contain aspect-[4/3]"
+                                      />
+                                      <p>{d.name}</p>
+                                    </div>
+                                    <Input
+                                      type="number"
+                                      min={0}
+                                      value={
+                                        item.find((it) => it.item === d._id)
+                                          ?.borrowed
+                                      }
+                                      defaultValue={0}
+                                      onChange={(e) => {
+                                        // setItem({
+                                        //   ...item,
+                                        //   borrowed: parseFloat(e.target.value),
+                                        // });
+                                        handleInputChange(
+                                          d._id,
+                                          parseFloat(e.target.value)
+                                        );
+                                      }}
+                                      className="outline-none h-max py-1 text-center"
+                                    />
+                                  </div>
+                                </>
+                              );
+                            })}
                       </div>
                     </div>
                   </div>

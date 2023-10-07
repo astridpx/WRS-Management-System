@@ -30,8 +30,9 @@ export const userColumns: ColumnDef<IUser>[] = [
     header: "Gallon",
     cell: ({ row }) => (
       <DataTableGallonColumn
-        slim={row.original?.borrowed_gal?.slim?.borrowed}
-        round={row.original?.borrowed_gal?.round?.borrowed}
+        // slim={row.original?.borrowed_gal?.slim?.borrowed}
+        // round={row.original?.borrowed_gal?.round?.borrowed}
+        borrowed_gal={row.original?.borrowed_gal}
       />
     ),
     // cell: ({ row }) => console.log(row.original) />

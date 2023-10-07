@@ -27,6 +27,7 @@ export default function UsersPage() {
   });
 
   const newCustomer = users?.data?.map((user: any) => {
+    console.log(user);
     const User = {
       fullname: `${user.first_name} ${user.last_name}`,
       new_address: user.isVillage
