@@ -15,8 +15,7 @@ export async function PUT(req: Request, { params }: any) {
     lot,
     phase,
     comment,
-    slim,
-    round,
+    item,
     isVillage,
   } = await req.json();
   const id = customerId.trim();
@@ -32,10 +31,7 @@ export async function PUT(req: Request, { params }: any) {
     phase,
     comment,
     isVillage,
-    $set: {
-      "borrowed_gal.slim.borrowed": slim,
-      "borrowed_gal.round.borrowed": round,
-    },
+    borrowed_gal: item,
   };
 
   try {

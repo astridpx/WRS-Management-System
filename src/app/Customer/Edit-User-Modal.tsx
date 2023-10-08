@@ -49,7 +49,6 @@ export default function EditUserModal() {
   });
 
   useEffect(() => {
-    console.log(userEditData);
     setUserData({
       ...userEditData,
     });
@@ -115,8 +114,7 @@ export default function EditUserModal() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // updateUserMutation.mutate();
-    alert("Finish routes first");
+    updateUserMutation.mutate();
   };
 
   const handleInputChange = (id: string, borrowedValue: number) => {
@@ -198,13 +196,13 @@ export default function EditUserModal() {
             {/* FORM TAB */}
 
             <Tabs
-              value={userEditData.isVillage ? "subd" : "other"}
-              onValueChange={(e) =>
+              value={userData.isVillage ? "subd" : "other"}
+              onValueChange={(e) => {
                 setUserData({
                   ...userData,
-                  ["isVillage"]: e === "subd",
-                })
-              }
+                  isVillage: e === "subd" ? true : false,
+                });
+              }}
             >
               <TabsList className="w-[20rem] mx-auto my-5 grid  grid-cols-2">
                 <TabsTrigger value="subd">Subdivision</TabsTrigger>
