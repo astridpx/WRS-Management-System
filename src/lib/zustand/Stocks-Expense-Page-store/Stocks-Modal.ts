@@ -6,9 +6,11 @@ export const StocksModalStore = create<IStocksPageStore>((set) => ({
   historyModal: false,
   modalType: "",
   itemId: "",
+  img: "",
 
   toggleStocksModal: (state) => set({ stockModal: state }),
   setModalType: (state) => set({ modalType: state }),
   toggleHistoryModal: (state) => set({ historyModal: state }),
   setItemId: (state) => set({ itemId: state }),
+  setImg: (state) => set({ img: state }),
 }));

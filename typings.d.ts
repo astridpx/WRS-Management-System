@@ -175,8 +175,10 @@ export interface IStocksPageStore {
   historyModal: boolean;
   modalType: string;
   itemId: string;
+  img: string;
   toggleStocksModal: (state: boolean) => void;
   setModalType: (state: string) => void;
   toggleHistoryModal: (state: boolean) => void;
   setItemId: (state: string) => void;
+  setImg: (state: string) => void;
 }

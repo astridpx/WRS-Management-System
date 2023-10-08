@@ -1,7 +1,6 @@
 "use client";
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -11,16 +10,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableRowProps } from "../../../typings";
-import { useState } from "react";
-import { ItemsPageModalStore } from "@/lib/zustand/ItemsPage-store/Modals";
 import { StocksModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Stocks-Modal";
 
 export function StockDataTableRowActions<TData>({
   row,
 }: DataTableRowProps<TData>) {
-  const { toggleEditItemModal } = ItemsPageModalStore();
-  const { setModalType, setItemId, toggleStocksModal, toggleHistoryModal } =
-    StocksModalStore();
+  const {
+    setModalType,
+    setItemId,
+    toggleStocksModal,
+    toggleHistoryModal,
+    setImg,
+  } = StocksModalStore();
 
   return (
     <>
@@ -41,6 +42,8 @@ export function StockDataTableRowActions<TData>({
               toggleStocksModal(true);
               setModalType("in");
               setItemId(row?.original?._id);
+              setImg(row?.original?.img);
+
             }}
           >
             Stock In
@@ -50,6 +53,7 @@ export function StockDataTableRowActions<TData>({
               toggleStocksModal(true);
               setModalType("out");
               setItemId(row?.original?._id);
+              setImg(row?.original?.img);
             }}
           >
             Stock Out

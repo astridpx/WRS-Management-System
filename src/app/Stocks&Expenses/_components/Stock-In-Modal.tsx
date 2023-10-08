@@ -29,7 +29,7 @@ import { stockIn, stockOut } from "../services/Stock-Api";
 
 export const StockModal = () => {
   const queryClient = useQueryClient();
-  const { stockModal, itemId, modalType, toggleStocksModal } =
+  const { stockModal, itemId, modalType, img, toggleStocksModal } =
     StocksModalStore();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [data, setData] = useState({
@@ -250,11 +250,11 @@ export const StockModal = () => {
                 <div className="w-[20rem] grid place-content-center p-4">
                   <div className="border w-[10rem] h-[10rem] shadow-2xl rounded-lg">
                     <Image
-                      src={NoImage}
+                      src={img ? img : NoImage}
                       alt="NoImage"
                       height={100}
                       width={100}
-                      className="w-full h-full"
+                      className="h-full w-full object-contain aspect-[4/3]"
                     />
                   </div>
                 </div>
