@@ -14,7 +14,7 @@ export const CreditsColumns: ColumnDef<any>[] = [
   },
   {
     header: "Name",
-    accessorKey: "fullname",
+    accessorKey: "customers",
     cell: ({ row }) => (
       <DataTableNameColumn
         name={row?.original?.fullname ? row?.original?.fullname : ""}
@@ -31,10 +31,7 @@ export const CreditsColumns: ColumnDef<any>[] = [
     header: "Orders",
     accessorKey: "customer",
     cell: ({ row }) => (
-      <DataTableGallonColumn
-        slim={row?.original?.orders[0]?.slim?.qty}
-        round={row?.original?.orders[0]?.round?.qty}
-      />
+      <DataTableGallonColumn borrowed_gal={row?.original?.borrowed_gal} />
     ),
   },
   {

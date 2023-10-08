@@ -5,7 +5,12 @@ import { Trans } from "@/lib/mongodb/model/Transaction.model";
 export async function GET() {
   const credits = await Trans.find({ balance: { $gt: 0 } })
     .populate("customer")
-    .lean();
+    .populate({
+      path: "orders.item",
+      select: "img name",
+    })
+    .lean()
+    .exec();
 
   return NextResponse.json({ data: credits }, { status: 200 });
 }

@@ -30,10 +30,7 @@ export const LastGallonReturnColumns: ColumnDef<IUser>[] = [
   {
     header: "Gallom",
     cell: ({ row }) => (
-      <DataTableGallonColumn
-        slim={row?.original?.borrowed_gal?.slim?.borrowed}
-        round={row?.original?.borrowed_gal?.round?.borrowed}
-      />
+      <DataTableGallonColumn borrowed_gal={row?.original?.borrowed_gal} />
     ),
   },
 

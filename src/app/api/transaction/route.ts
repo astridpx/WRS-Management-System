@@ -1,4 +1,3 @@
-import { connectDB } from "@/lib/mongodb/config/connect-db";
 import { NextResponse } from "next/server";
 import { Trans } from "@/lib/mongodb/model/Transaction.model";
 import { Customer } from "@/lib/mongodb/model/Customer.model";
@@ -21,8 +20,7 @@ export async function POST(req: Request) {
     discount,
     paid,
     balance,
-    slim_qty,
-    round_qty,
+    orders,
     isBuy,
   } = await req.json();
 
@@ -38,34 +36,35 @@ export async function POST(req: Request) {
     paid,
     balance,
     isBuy,
-    orders: [
-      {
-        slim: {
-          qty: slim_qty,
-        },
-        round: {
-          qty: round_qty,
-        },
-      },
-    ],
+    orders,
   };
 
   try {
-    // await Trans.create(newTrans);
+    await Trans.create(newTrans);
 
-    const x = await Customer.findOneAndUpdate(
+    // @desc Update the last_return of borrowed gallon
+    const customer = await Customer.findOneAndUpdate(
       {
         _id: customerId,
-        $or: [
-          { "borrowed_gal.slim.borrowed": { $gt: 0 } },
-          { "borrowed_gal.round.borrowed": { $gt: 0 } },
-        ],
+        borrowed_gal: {
+          $elemMatch: {
+            item: { $in: orders.map((d: any) => d.item) },
+            borrowed: { $gt: 0 },
+          },
+        },
       },
       {
         $set: {
-          "borrowed_gal.slim.last_return": date,
-          "borrowed_gal.round.last_return": date,
+          "borrowed_gal.$[elem].last_return": date,
         },
+      },
+      {
+        arrayFilters: [
+          {
+            "elem.item": { $in: orders.map((d: any) => d.item) },
+            "elem.borrowed": { $gt: 0 },
+          },
+        ],
       }
     );
 

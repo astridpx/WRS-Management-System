@@ -50,18 +50,13 @@ export interface IUser {
   lot?: number;
   phase?: number;
   comment?: string;
-  borrowed_gal?: {
-    slim: {
+  borrowed_gal?: [
+    {
       last_return: Date;
-      borrowed: number;
-      gal_type: string;
-    };
-    round: {
-      borrowed: number;
-      last_return: Date;
-      gal_type: string;
-    };
-  };
+      borrowed?: number;
+      item?: string | IItems;
+    }
+  ];
 }
 
 export interface IGallons {
