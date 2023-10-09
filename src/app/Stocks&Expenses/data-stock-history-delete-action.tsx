@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { RiDeleteBack2Line } from "react-icons/ri";
-import { DataTableRowProps } from "../../../typings";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,14 +11,54 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useMutation, useQueryClient } from "react-query";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+import { deleteStockHistory } from "./services/Stock-Api";
 
-export function DataRowDeleteHistoryAction<TData>({
-  row,
-}: DataTableRowProps<TData>) {
+interface IDs {
+  ID: string;
+  id: string;
+}
+
+export function DataRowDeleteHistoryAction({ ID, id }: IDs) {
+  const queryClient = useQueryClient();
+  const [PID, setPID] = useState("");
+  const [FID, setFID] = useState("");
+
+  const { mutateAsync } = useMutation({
+    mutationFn: () => deleteStockHistory(FID, PID),
+    onMutate: () => {
+      LoadingToast("Deleting history...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({ queryKey: ["stocks"] });
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const handleSubmit = async () => {
+    await mutateAsync();
+  };
+
   return (
     <>
       <AlertDialog>
-        <AlertDialogTrigger>
+        <AlertDialogTrigger
+          onClick={() => {
+            setPID(ID);
+            setFID(id);
+          }}
+        >
           <RiDeleteBack2Line size={18} className="cursor-pointer" />
         </AlertDialogTrigger>
         <AlertDialogContent>
@@ -31,7 +70,9 @@ export function DataRowDeleteHistoryAction<TData>({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={() => handleSubmit()}>
+              Continue
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

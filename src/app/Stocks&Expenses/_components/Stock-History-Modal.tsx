@@ -19,6 +19,7 @@ export const StockHistoryModal = () => {
 
   const Data = item?.stock_history?.map((d: any) => {
     return {
+      ID: item._id,
       ...d,
       sort_date: format(new Date(d.date), "LLL dd, y"),
     };

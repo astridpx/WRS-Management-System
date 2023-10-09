@@ -16,7 +16,7 @@ export const StockHistoryColumns: ColumnDef<any>[] = [
   },
   {
     header: "QTY",
-    accessorKey: "wty",
+    accessorKey: "qty",
   },
   {
     header: "Reason",
@@ -32,6 +32,11 @@ export const StockHistoryColumns: ColumnDef<any>[] = [
   },
   {
     id: "action",
-    cell: ({ row }) => <DataRowDeleteHistoryAction row={row} />,
+    cell: ({ row }) => (
+      <DataRowDeleteHistoryAction
+        ID={row?.original?.ID}
+        id={row?.original?._id}
+      />
+    ),
   },
 ];

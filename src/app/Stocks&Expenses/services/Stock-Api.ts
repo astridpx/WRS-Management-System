@@ -11,8 +11,8 @@ export const getAllStocks = async () => {
   return data;
 };
 
-export const getStockHistory = async (id: string) => {
-  const { data } = await axios.post("/api/stocks/history", { id });
+export const deleteStockHistory = async (fieldId: string, ID: string) => {
+  const { data } = await axios.put(`/api/stocks/${ID}`, { fieldId });
 
   return data;
 };
