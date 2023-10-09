@@ -12,23 +12,23 @@ export const StockHistoryColumns: ColumnDef<any>[] = [
   },
   {
     header: "Price",
-    accessorKey: "fullname",
+    accessorKey: "worth",
   },
   {
     header: "QTY",
-    accessorKey: "Alias",
+    accessorKey: "wty",
   },
   {
     header: "Reason",
-    accessorKey: "Alias",
+    accessorKey: "transaction",
   },
   {
     header: "Status",
-    accessorKey: "Alias",
+    accessorKey: "status",
   },
   {
     header: "Date",
-    accessorKey: "Alias",
+    accessorKey: "sort_date",
   },
   {
     id: "action",

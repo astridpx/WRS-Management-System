@@ -21,6 +21,7 @@ export function StockDataTableRowActions<TData>({
     toggleStocksModal,
     toggleHistoryModal,
     setImg,
+    setStockHistory,
   } = StocksModalStore();
 
   return (
@@ -43,7 +44,6 @@ export function StockDataTableRowActions<TData>({
               setModalType("in");
               setItemId(row?.original?._id);
               setImg(row?.original?.img);
-
             }}
           >
             Stock In
@@ -61,6 +61,7 @@ export function StockDataTableRowActions<TData>({
           <DropdownMenuItem
             onClick={() => {
               toggleHistoryModal(true);
+              setStockHistory(row?.original);
             }}
           >
             History

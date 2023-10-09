@@ -1,27 +1,28 @@
 "use client";
 
-import { useState, useRef } from "react";
 import Image from "next/image";
 import NoImage from "@/assets/noImage.png";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { StocksModalStore } from "@/lib/zustand/Stocks-Expense-Page-store/Stocks-Modal";
 import { IoClose } from "react-icons/io5";
-import Slim from "@/assets/items_img/slim_gallon.png";
 import { DataTable } from "@/components/react-table/main-table";
 import { StockHistoryColumns } from "../Stock-History-column";
+import { format } from "date-fns";
 
-export const StockHistoryModal = ({ data }: any) => {
-  const { toggleHistoryModal, historyModal } = StocksModalStore();
+export const StockHistoryModal = () => {
+  const { toggleHistoryModal, historyModal, stock_history } =
+    StocksModalStore();
+  // Check if stock_history is an array before using map
+  const item = Array.isArray(stock_history)
+    ? stock_history.map((d: any) => d)
+    : stock_history;
+
+  const Data = item?.stock_history?.map((d: any) => {
+    return {
+      ...d,
+      sort_date: format(new Date(d.date), "LLL dd, y"),
+    };
+  });
 
   return (
     <>
@@ -43,18 +44,28 @@ export const StockHistoryModal = ({ data }: any) => {
               />
             </div>
 
-            <div className="flex justify-between items-center mt-8">
-              <div className="flex items-center">
-                <Image src={Slim} alt="Image" width={50} height={100} />
-                <h1 className="text-3xl font-semibold">Slim Gallon</h1>
+            <div className="flex justify-between items-center mt-8 mb-4">
+              <div className="flex items-center space-x-4 ">
+                <div className="border w-[6rem] h-[6rem] p-2 shadow-sm rounded-lg">
+                  <Image
+                    src={item.img}
+                    alt="Image"
+                    height={100}
+                    width={100}
+                    className="h-full w-full object-contain aspect-[4/3]"
+                  />
+                </div>
+                <h1 className="text-2xl font-semibold text-slate-600">
+                  {item.name}
+                </h1>
               </div>
 
               <Button variant={"outline"}>Print</Button>
             </div>
 
             <div className="relative">
-              {data ? (
-                <DataTable columns={StockHistoryColumns} data={data} />
+              {Data ? (
+                <DataTable columns={StockHistoryColumns} data={Data} />
               ) : (
                 "Loading.."
               )}

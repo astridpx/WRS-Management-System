@@ -163,6 +163,8 @@ export interface IStocks {
   qty: number;
   transaction: string;
   date: Date | undefined;
+  status?: string;
+  _id?: string;
 }
 
 export interface IStocksPageStore {
@@ -171,9 +173,11 @@ export interface IStocksPageStore {
   modalType: string;
   itemId: string;
   img: string;
+  stock_history: any;
   toggleStocksModal: (state: boolean) => void;
   setModalType: (state: string) => void;
   toggleHistoryModal: (state: boolean) => void;
   setItemId: (state: string) => void;
   setImg: (state: string) => void;
+  setStockHistory: (state: any) => void;
 }

@@ -64,7 +64,7 @@ const StockAndExpensesPage = () => {
       <ExpensesModalAdd />
       <ExpensesModalEdit />
       <StockModal />
-      <StockHistoryModal data={monitoringData} />
+      <StockHistoryModal />
 
       <PageWrapper>
         <div className="relative bg-white ">

@@ -1,10 +1,10 @@
-import Axios from "axios";
+import axios from "axios";
 import { IExpenses } from "../../../../typings";
 import { format } from "date-fns";
 
-const axios = Axios.create({
-  baseURL: "http://localhost:3000",
-});
+// const axios = Axios.create({
+//   baseURL: "http://localhost:3000",
+// });
 
 export const createExpenses = async (Data: any) => {
   const { data } = await axios.post("/api/expenses", {
