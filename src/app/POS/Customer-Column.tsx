@@ -2,32 +2,10 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { IUser } from "../../../typings";
-// import { DataTableRowActions } from "../Users/data-table-row-action";
 import { DataTableAddressColumn } from "../../components/react-table/Data-Table-Columns/Data-Table-Address-Column";
 import { DataTableGallonColumn } from "../../components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
-import { DataTableColumnHeader } from "./Data-Table-Column-Header";
-import { Badge } from "@/components/ui/badge";
 
-export const userColumns: ColumnDef<any>[] = [
-  // {
-  //   accessorKey: "id",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Id" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     console.log(row);
-  //     const label = row.find((label) => row.original.id--);
-
-  //     return (
-  //       <div className="flex space-x-2">
-  //         {label && <Badge variant="outline">{label.label}</Badge>}
-  //         <span className="max-w-[500px] truncate font-medium">
-  //           {row.getValue("id")}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  // },
+export const userColumns: ColumnDef<IUser>[] = [
   {
     header: "Id",
     accessorKey: "id",
@@ -36,7 +14,6 @@ export const userColumns: ColumnDef<any>[] = [
   {
     header: "Fullname",
     accessorKey: "fullname",
-    cell: ({ row }) => `${row.original.first_name}  ${row.original.last_name}`,
   },
   {
     header: "Address",
@@ -46,11 +23,8 @@ export const userColumns: ColumnDef<any>[] = [
   {
     header: "Gallon",
     accessorKey: "Alias",
-    cell: ({ row }) => <DataTableGallonColumn row={row} />,
+    cell: ({ row }) => (
+      <DataTableGallonColumn borrowed_gal={row.original?.borrowed_gal} />
+    ),
   },
-  // {
-  //   header: "Action",
-  //   id: "action",
-  //   cell: ({ row }) => <DataTableRowActions row={row} />,
-  // },
 ];

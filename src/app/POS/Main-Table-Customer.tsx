@@ -31,7 +31,7 @@ import {
   HiChevronLeft,
   HiChevronRight,
 } from "react-icons/hi2";
-// import DataTablePagination from "./data-tables-pagination";
+import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
 
 // ? TYPESOF DATA TABLE
 interface DataTableProps<TData, TValue> {
@@ -43,6 +43,9 @@ export function POSDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { setCustomer, toggleShowSelect, setselectedCustomer } =
+    POSBTNHeaderStore();
+
   // ? USING REACT TABLEHOOK
   const [tableFilter, setTableFilter] = useState<string>("");
   const table = useReactTable({
@@ -92,6 +95,11 @@ export function POSDataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  onClick={() => {
+                    setselectedCustomer(true);
+                    setCustomer(row.original);
+                    toggleShowSelect(false);
+                  }}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (

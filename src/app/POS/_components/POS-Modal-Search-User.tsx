@@ -3,28 +3,18 @@
 import { use } from "react";
 import { POSDataTable } from "../Main-Table-Customer";
 import { userColumns } from "../Customer-Column";
-import fakeCustomer from "@/utils/table-data/MOCK_DATA_CUSTOMER_SEARCH.json";
 import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
 import { IoClose } from "react-icons/io5";
-
-async function getData() {
-  const Data = await fakeCustomer.map((d: any) => {
-    const data = {
-      ...d,
-      fullname: `${d.first_name} ${d.last_name}`,
-      new_address: `P-${d.phase} BLK-${d.blk} L-${d.lot}`,
-    };
-
-    return data;
-  });
-
-  return Data;
-}
-const dataPromise = getData();
+import { useQuery } from "react-query";
+import { getAllCustomers } from "../services/Apis";
+import Loader from "@/components/loader/Spinner";
 
 export default function POSSearchUserModal() {
-  const customer = use(dataPromise);
   const { showSelectCustomer, toggleShowSelect } = POSBTNHeaderStore();
+  const { isLoading, data: customers } = useQuery({
+    queryKey: ["customers"],
+    queryFn: getAllCustomers,
+  });
 
   return (
     <>
@@ -47,7 +37,14 @@ export default function POSSearchUserModal() {
             </div>
 
             <div className="relative  ">
-              <POSDataTable columns={userColumns} data={customer} />
+              {isLoading ? (
+                <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
+                  <Loader />
+                  <p className="text-gray-400 ">Loading...</p>
+                </div>
+              ) : (
+                <POSDataTable columns={userColumns} data={customers} />
+              )}
             </div>
           </main>
         </div>

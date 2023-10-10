@@ -17,9 +17,19 @@ import {
 } from "@/components/ui/select";
 import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
 
 export const POSSelectCustomerBTN = () => {
-  const { toggleShowSelect, selectedCustomer } = POSBTNHeaderStore();
+  const { toggleShowSelect, selectedCustomer, customer } = POSBTNHeaderStore();
+  const { setService } = POSPaymentModal();
+
+  const person = Array.isArray(customer) ? customer.map((d) => d) : customer;
 
   const getTime = () => {
     const currentTime = new Date();
@@ -29,12 +39,8 @@ export const POSSelectCustomerBTN = () => {
   return (
     <>
       <div className="py-4 px-2  flex gap-x-4">
-        <div
-          className={`flex-grow ${
-            selectedCustomer && "bg-red-300"
-          } flex items-center justify-center`}
-        >
-          {selectedCustomer ? (
+        <div className={`flex-grow  flex items-center justify-center`}>
+          {!selectedCustomer ? (
             <button
               className="h-max w-max  text-2xl font-semibold flex  justify-between items-center gap-x-4"
               onClick={() => toggleShowSelect(true)}
@@ -57,21 +63,43 @@ export const POSSelectCustomerBTN = () => {
                 onClick={() => toggleShowSelect(true)}
               >
                 <FaUsers size={28} />
-                <h3 className="font-semibold">Armando Witchalls</h3>
+                <h3 className="font-semibold">{person.fullname}</h3>
               </div>
-              <div className="flex gap-x-2 text-sm text-gray-400">
-                <p className="flex gap-x-2">
-                  <span>
-                    <MdContactEmergency size={18} className="text-gray-500 " />
-                  </span>
-                  George Pilay Kapitbahay ni Mang jose
-                </p>
-                <p className="flex gap-x-1">
-                  <span>
-                    <MdLocationPin size={18} className="text-gray-500 " />
-                  </span>
-                  P-1 BLK-1 L-14
-                </p>
+              <div className="flex gap-x-2 text-sm text-gray-400  ">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipContent>
+                      <p>{person.comment}</p>
+                    </TooltipContent>
+
+                    <TooltipTrigger>
+                      <p className="flex gap-x-2  max-w-sms">
+                        <MdContactEmergency
+                          size={18}
+                          className="text-gray-500 "
+                        />
+                        <span className="inline-block overflow-hidden whitespace-nowrap text-ellipsis  truncate max-w-[14rem]">
+                          {person.comment ? person.comment : "No comment"}
+                        </span>
+                      </p>
+                    </TooltipTrigger>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipContent>{person.new_address}</TooltipContent>
+
+                    <TooltipTrigger>
+                      <p className="flex gap-x-1  max-w-sms">
+                        <MdLocationPin size={18} className="text-gray-500 " />
+                        <span className="inline-block whitespace-nowrap overflow-hidden text-ellipsis  truncate max-w-[14rem]">
+                          {person.new_address}
+                        </span>
+                      </p>
+                    </TooltipTrigger>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
           )}
@@ -79,15 +107,18 @@ export const POSSelectCustomerBTN = () => {
 
         {/* SERVICES TYPE */}
         <div className="w-40 space-y-2">
-          <Select name="role" defaultValue="deliver">
+          <Select
+            name="role"
+            defaultValue="Deliver"
+            onValueChange={(e) => setService(e)}
+          >
             <SelectTrigger className="text-center ">
               <SelectValue placeholder="Select Services" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="deliver">Deliver</SelectItem>
-                <SelectItem value="employee">Employee</SelectItem>
-                <SelectItem value="manager">Manager</SelectItem>
+                <SelectItem value="Deliver">Deliver</SelectItem>
+                <SelectItem value="PickUp">Pick Up</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

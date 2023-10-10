@@ -2,9 +2,8 @@
 
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { Separator } from "@/components/ui/separator";
-import Slim from "@/assets/items_img/slim_gallon.png";
-import Rounded from "@/assets/items_img/rounded_gallon.png";
-import POSItems from "./_components/POS-Table-Items";
+import POSGallon from "./_components/POS-Table-Gallon";
+import POSBottle from "./_components/POS-Table-Bottle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import POSReceipt from "./_components/POS-Receipt";
 import POSSearchUserModal from "./_components/POS-Modal-Search-User";
@@ -14,39 +13,29 @@ import POSModalReturnGallon from "./_components/POS-Modal-Return-Gallon";
 import AddNewCustomerModal from "@/components/Add-Customer/Add-Customer-Modal";
 import { PaymentModal } from "./_components/POS-Modal-Payment";
 import { StaticImageData } from "next/image";
-import { ItemsGallon } from "@/utils/Products-data/items";
-import { ItemsBottle } from "@/utils/Products-data/items";
-import { use } from "react";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
+import { useQueries } from "react-query";
+import { getGallons, getBottles } from "./services/Apis";
 
 interface PosItemProps {
-  id?: string;
-  type: string;
+  _id?: string;
+  namae: string;
   price: number;
   img: StaticImageData;
 }
 
-const GetItems = async () => {
-  const Data: PosItemProps[] = await ItemsGallon.map((data) => {
-    return data;
-  });
-  return Data;
-};
-const GetItemsBottle = async () => {
-  const Data: PosItemProps[] = await ItemsBottle.map((data) => {
-    return data;
-  });
-  return Data;
-};
-
-const ItemsGet = GetItems();
-const ItemsGetBottle = GetItemsBottle();
-
 export default function POS_Page() {
   const { clearOrder } = POSPaymentModal();
+  const results = useQueries([
+    { queryKey: ["items1"], queryFn: getGallons },
+    { queryKey: ["items"], queryFn: getBottles },
+  ]);
 
-  const items = use(ItemsGet);
-  const items2 = use(ItemsGetBottle);
+  const gallons = results[0]?.data;
+  const bottles = results[1]?.data;
+
+  const gallonsIsLoading = results[0].isLoading;
+  const bottlesIsLoading = results[1].isLoading;
 
   return (
     <>
@@ -82,48 +71,60 @@ export default function POS_Page() {
                   </TabsList>
 
                   <div className="bg-slate-100 w-full">
-                    <header className="h-8 grid grid-cols-8 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
-                      <h4 className="text-sm ">#</h4>
-                      <h4 className="text-sm col-span-2">ITEM</h4>
-                      <h4 className="text-sm">PRICE</h4>
-                      <h4 className="text-sm">CLI-GAL</h4>
-                      <h4 className="text-sm">WRS-GAL</h4>
-                      {/* <h4 className="text-sm">FREE</h4> */}
-                      <h4 className="text-sm">TOTAL</h4>
-                      <h4 className="text-sm ">BUY</h4>
-                    </header>
                     {/* Gallon TAB*/}
                     <TabsContent value="gallon">
-                      {items.map((item) => {
-                        return (
-                          <>
-                            <POSItems
-                              key={item.id}
-                              id={item.id}
-                              type={item.type}
-                              price={item.price}
-                              img={item.img}
-                            />
-                          </>
-                        );
-                      })}
+                      <header className="h-8 grid grid-cols-8 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
+                        <h4 className="text-sm ">#</h4>
+                        <h4 className="text-sm col-span-2">ITEM</h4>
+                        <h4 className="text-sm">PRICE</h4>
+                        <h4 className="text-sm">CLI-GAL</h4>
+                        <h4 className="text-sm">WRS-GAL</h4>
+                        {/* <h4 className="text-sm">FREE</h4> */}
+                        <h4 className="text-sm">TOTAL</h4>
+                        <h4 className="text-sm ">BUY</h4>
+                      </header>
+                      {gallonsIsLoading
+                        ? "Loading..."
+                        : gallons.map((item: any) => {
+                            return (
+                              <>
+                                <POSGallon
+                                  key={item._id}
+                                  id={item._id}
+                                  name={item.name}
+                                  price={item.price}
+                                  img={item.img}
+                                />
+                              </>
+                            );
+                          })}
                     </TabsContent>
 
                     {/* BOTTLE TAB */}
                     <TabsContent value="bottle">
-                      {items2.map((item: PosItemProps) => {
-                        return (
-                          <>
-                            <POSItems
-                              key={item.id}
-                              id={item.id}
-                              type={item.type}
-                              price={item.price}
-                              img={item.img}
-                            />
-                          </>
-                        );
-                      })}
+                      <header className="h-8 grid grid-cols-6 gap-x-1 place-content-center text-center font-semibold bg-blue-600 text-slate-50">
+                        <h4 className="text-sm ">#</h4>
+                        <h4 className="text-sm col-span-2">ITEM</h4>
+                        <h4 className="text-sm">PRICE</h4>
+                        <h4 className="text-sm">ORDER</h4>
+                        {/* <h4 className="text-sm">FREE</h4> */}
+                        <h4 className="text-sm">TOTAL</h4>
+                      </header>
+                      {bottlesIsLoading
+                        ? "Loading..."
+                        : bottles.map((item: any) => {
+                            return (
+                              <>
+                                <POSBottle
+                                  key={item._id}
+                                  id={item._id}
+                                  name={item.name}
+                                  price={item.price}
+                                  img={item.img}
+                                />
+                              </>
+                            );
+                          })}
                     </TabsContent>
                   </div>
                 </Tabs>

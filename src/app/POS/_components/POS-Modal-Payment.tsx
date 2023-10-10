@@ -2,13 +2,32 @@
 
 import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
+import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
+import { useMutation, useQueryClient } from "react-query";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+import { createTransaction } from "../services/Apis";
 
 export const PaymentModal = () => {
-  const { paymentModal, togglePaymentModal, payment } = POSPaymentModal();
+  const queryClient = useQueryClient();
+  const {
+    paymentModal,
+    togglePaymentModal,
+    clearOrder,
+    payment,
+    order,
+    service,
+    date,
+    time,
+  } = POSPaymentModal();
+  const { setCustomer, customer, setselectedCustomer } = POSBTNHeaderStore();
   const [discount, setDiscount] = useState<number>(0);
   const [cash, setCash] = useState<number>(0);
   const [credit, setCredit] = useState<number>(0);
@@ -21,6 +40,48 @@ export const PaymentModal = () => {
     const total_due = payment - discount;
     setTotal(total_due);
   }, [cash, payment, discount, total]);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: createTransaction,
+    onMutate: () => {
+      togglePaymentModal(false);
+      setselectedCustomer(false);
+      LoadingToast("Creating new transaction...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      setCustomer([]);
+      clearOrder();
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // TODO the ordrs item.id must be a in a "item" key value
+    const Data = {
+      customer: customer._id,
+      service,
+      date,
+      time,
+      status: "To Ship",
+      amount: total,
+      discount,
+      balance: credit < 0 ? Math.abs(credit) : credit,
+      paid: credit > 0 ? false : true,
+      orders: order.flatMap((order) => (order.qty > 0 ? [order] : [])),
+    };
+
+    if (!customer._id) return ErrorToast("Pls Select a customer");
+
+    await mutateAsync({ ...Data });
+  };
 
   return (
     <>
@@ -43,7 +104,10 @@ export const PaymentModal = () => {
             </div>
 
             <div className="flex justify-center">
-              <form className=" w-[80%] font-semibold">
+              <form
+                className=" w-[80%] font-semibold"
+                onSubmit={(e) => handleSubmit(e)}
+              >
                 <section className="py-2 bg-gray-200 space-y-2 mb-4">
                   <div className="flex justify-between px-4">
                     <h1>Sub Total</h1>
@@ -112,7 +176,7 @@ export const PaymentModal = () => {
                 </section>
 
                 <div className="w-full flex justify-end">
-                  <Button>Submit Payment</Button>
+                  <Button type="submit">Submit Payment</Button>
                 </div>
               </form>
             </div>

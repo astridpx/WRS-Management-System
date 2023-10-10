@@ -79,14 +79,18 @@ export interface IPOSBtnStore {
   showSelectCustomer: boolean;
   showReturnGallon: boolean;
   selectedCustomer: any;
+  customer: any;
   toggleShowSelect: (state: boolean) => void;
   toggleShowReturn: (state: boolean) => void;
+  setselectedCustomer: (state: boolean) => void;
+  setCustomer: (state: Partial<typeof InitialState>) => void;
 }
 
 export interface Orders {
   id: string | null;
-  img: StaticImport | null;
-  type: string | null;
+  img: string | null;
+  type?: string | null;
+  name: string | null;
   qty: number;
   price: number;
 }
@@ -94,10 +98,16 @@ export interface IPOSPaymentModal {
   paymentModal: boolean;
   payment: number;
   order: Orders[];
+  service: string;
+  time: any;
+  date: Date | undefined;
   togglePaymentModal: (state: boolean) => void;
   setPayment: (state: number) => void;
   clearOrder: () => void;
   setOrder: (id: string | undefined, value: any) => void;
+  setService: (state: string) => void;
+  setTime: (state: any) => void;
+  setDate: (state: Date) => void;
 }
 
 // ItemsPage

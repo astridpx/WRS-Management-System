@@ -30,6 +30,12 @@ const TransactionSchema = new mongoose.Schema(
     paid: Boolean,
     balance: Number,
     isBuy: Boolean,
+    time: String, // time whre it will  be deliver
+    deliverBy: {
+      type: String,
+      default: "none",
+      required: false,
+    },
     orders: [
       {
         item: {

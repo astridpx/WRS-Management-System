@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     balance,
     orders,
     isBuy,
+    time,
   } = await req.json();
 
   const customerId = customer?.trim();
@@ -36,6 +37,7 @@ export async function POST(req: Request) {
     paid,
     balance,
     isBuy,
+    time,
     orders,
   };
 

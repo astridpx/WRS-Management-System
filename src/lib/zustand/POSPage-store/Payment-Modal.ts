@@ -5,6 +5,9 @@ export const POSPaymentModal = create<IPOSPaymentModal>((set) => ({
   paymentModal: false,
   payment: 0,
   order: [],
+  service: "Deliver",
+  time: "",
+  date: new Date(),
 
   togglePaymentModal: (state) => set({ paymentModal: state }),
   setPayment: (state) => set({ payment: state }),
@@ -29,4 +32,7 @@ export const POSPaymentModal = create<IPOSPaymentModal>((set) => ({
       return { ...state, order: updatedOrder };
     });
   },
+  setService: (state) => set({ service: state }),
+  setTime: (state) => set({ time: state }),
+  setDate: (state) => set({ date: state }),
 }));
