@@ -21,12 +21,14 @@ const MonitoringPage = () => {
   const creditsData = results[1]?.data;
 
   const lastReturnIsLoading = results[0].isLoading;
+  const lastReturnSuccess = results[0].isSuccess;
   const creditsIsLoading = results[1].isLoading;
+  const creditsIsSuccess = results[1].isSuccess;
 
   return (
     <>
       <PageWrapper>
-        <div className="relative bg-white">
+        <div className="relative bg-white overflow-x-hidden">
           <Tabs defaultValue="last_return" className="">
             <TabsList className="grid  grid-cols-3 w-[30rem]">
               <TabsTrigger value="last_return">Last Return</TabsTrigger>
@@ -34,26 +36,30 @@ const MonitoringPage = () => {
             </TabsList>
 
             <TabsContent value="last_return">
-              {lastReturnIsLoading ? (
+              {!lastReturnSuccess ? (
                 <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
                   <Loader />
                   <p className="text-gray-400 ">Loading...</p>
                 </div>
               ) : (
-                <DataTable
-                  columns={LastGallonReturnColumns}
-                  data={lastReturnData}
-                />
+                <div className="relative">
+                  <DataTable
+                    columns={LastGallonReturnColumns}
+                    data={lastReturnData}
+                  />
+                </div>
               )}
             </TabsContent>
             <TabsContent value="credit">
-              {creditsIsLoading ? (
+              {!creditsIsSuccess ? (
                 <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
                   <Loader />
                   <p className="text-gray-400 ">Loading...</p>
                 </div>
               ) : (
-                <DataTable columns={CreditsColumns} data={creditsData} />
+                <div className="relative">
+                  <DataTable columns={CreditsColumns} data={creditsData} />
+                </div>
               )}
             </TabsContent>
           </Tabs>
