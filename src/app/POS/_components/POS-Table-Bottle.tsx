@@ -14,17 +14,16 @@ interface PosItemProps {
 }
 
 export default function POSBottle({ id, name, price, img }: PosItemProps) {
-  const { setOrder, order, setPayment } = POSPaymentModal();
+  const { setOrder, order, setPayment, resetorder } = POSPaymentModal();
   const [total, setTotal] = useState<number>(0);
-  const [clientGal, setClientGal] = useState<number>(0);
-  const [WRSGal, setWRSGal] = useState<number>(0);
+  const [bottle, setBottle] = useState<number>(0);
 
   useEffect(() => {
-    const qty = clientGal + WRSGal;
-    setTotal(price * qty);
-    setOrder(id, { id, img, name, qty, price: total });
-  }, [clientGal, WRSGal, price, setOrder, id, img, total, name]);
+    setTotal(price * bottle);
+    setOrder(id, { id, img, name, qty: bottle, price: total });
+  }, [bottle, price, setOrder, id, img, total, name]);
 
+  // SET TOTAL PAYMENT
   useEffect(() => {
     const amount = order.reduce((accumulator, currentOrder) => {
       return accumulator + currentOrder?.price;
@@ -32,6 +31,11 @@ export default function POSBottle({ id, name, price, img }: PosItemProps) {
 
     setPayment(amount);
   }, [order, setPayment]);
+
+  // reset input fields after submitting form
+  useEffect(() => {
+    setBottle(0);
+  }, [resetorder]);
 
   return (
     <>
@@ -51,14 +55,14 @@ export default function POSBottle({ id, name, price, img }: PosItemProps) {
         <input
           type="number"
           min={0}
-          value={WRSGal}
+          value={bottle}
           defaultValue={0}
           onChange={(e) => {
             const newValue = parseFloat(e.target.value);
             if (isNaN(newValue)) {
-              setWRSGal(0);
+              setBottle(0);
             } else {
-              setWRSGal(parseFloat(e.target.value));
+              setBottle(parseFloat(e.target.value));
             }
           }}
           className="outline-none text-sm text-center"

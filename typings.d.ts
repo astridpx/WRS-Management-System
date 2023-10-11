@@ -101,6 +101,8 @@ export interface IPOSPaymentModal {
   service: string;
   time: any;
   date: Date | undefined;
+  resetorder: boolean;
+  isBuy: boolean;
   togglePaymentModal: (state: boolean) => void;
   setPayment: (state: number) => void;
   clearOrder: () => void;
@@ -108,6 +110,8 @@ export interface IPOSPaymentModal {
   setService: (state: string) => void;
   setTime: (state: any) => void;
   setDate: (state: Date) => void;
+  setResetOrder: (state: boolean) => void;
+  setIsBuy: (state: boolean) => void;
 }
 
 // ItemsPage

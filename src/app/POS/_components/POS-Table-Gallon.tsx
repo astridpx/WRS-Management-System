@@ -10,24 +10,51 @@ interface PosItemProps {
   id?: string;
   name: string;
   price: number;
+  buy_price: number;
   img: string;
 }
 
-export default function POSItems({ id, name, price, img }: PosItemProps) {
-  const { setOrder, order, setPayment } = POSPaymentModal();
+export default function POSItems({
+  id,
+  name,
+  price,
+  buy_price,
+  img,
+}: PosItemProps) {
+  const { setOrder, order, setPayment, resetorder, setIsBuy, isBuy } =
+    POSPaymentModal();
   const [total, setTotal] = useState<number>(0);
   const [clientGal, setClientGal] = useState<number>(0);
   const [WRSGal, setWRSGal] = useState<number>(0);
-  const [buy, setBuy] = useState<boolean>(false);
 
   useEffect(() => {
     const qty = clientGal + WRSGal;
-    setTotal(price * qty);
-    setOrder(id, { id, img, name, qty, price: total });
-  }, [clientGal, WRSGal, price, setOrder, id, img, total, name]);
+    const newTotal = isBuy ? buy_price * qty : price * qty;
 
+    setTotal(newTotal);
+    setOrder(id, { id, img, name, qty, price: total });
+  }, [
+    clientGal,
+    WRSGal,
+    price,
+    setOrder,
+    id,
+    img,
+    total,
+    name,
+    isBuy,
+    buy_price,
+  ]);
+
+  // reset input fields after submitting form
   useEffect(() => {
-    const amount = order.reduce((accumulator, currentOrder) => {
+    setWRSGal(0);
+    setClientGal(0);
+  }, [resetorder]);
+
+  // set total payment
+  useEffect(() => {
+    const amount = order.reduce((accumulator: any, currentOrder: any) => {
       return accumulator + currentOrder?.price;
     }, 0);
 
@@ -48,13 +75,17 @@ export default function POSItems({ id, name, price, img }: PosItemProps) {
           />
           <p>{name}</p>
         </div>
-        <h5 className="text-sm">{price.toFixed(2)}</h5>
+        {isBuy ? (
+          <h5 className="text-sm">{buy_price.toFixed(2)}</h5>
+        ) : (
+          <h5 className="text-sm">{price.toFixed(2)}</h5>
+        )}
         <input
           type="number"
           min={0}
           value={clientGal}
           defaultValue={0}
-          disabled={buy}
+          disabled={isBuy}
           onChange={(e) => {
             const newValue = parseFloat(e.target.value);
             if (isNaN(newValue)) {
@@ -84,8 +115,8 @@ export default function POSItems({ id, name, price, img }: PosItemProps) {
 
         <Checkbox
           className="mx-auto"
-          checked={buy}
-          onCheckedChange={(e) => setBuy(e ? true : false)}
+          checked={isBuy}
+          onCheckedChange={(e) => setIsBuy(e ? true : false)}
         />
       </div>
     </>

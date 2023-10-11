@@ -17,11 +17,12 @@ import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
 import { useQueries } from "react-query";
 import { getGallons, getBottles } from "./services/Apis";
 
-interface PosItemProps {
+export interface PosItemProps {
   _id?: string;
   namae: string;
   price: number;
-  img: StaticImageData;
+  buy_price: number;
+  img: string;
 }
 
 export default function POS_Page() {
@@ -93,6 +94,7 @@ export default function POS_Page() {
                                   id={item._id}
                                   name={item.name}
                                   price={item.price}
+                                  buy_price={item.buy_price}
                                   img={item.img}
                                 />
                               </>

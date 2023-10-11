@@ -20,12 +20,16 @@ export const PaymentModal = () => {
   const {
     paymentModal,
     togglePaymentModal,
+    setIsBuy,
+    setResetOrder,
+    resetorder,
     clearOrder,
     payment,
     order,
     service,
     date,
     time,
+    isBuy,
   } = POSPaymentModal();
   const { setCustomer, customer, setselectedCustomer } = POSBTNHeaderStore();
   const [discount, setDiscount] = useState<number>(0);
@@ -45,15 +49,28 @@ export const PaymentModal = () => {
     mutationFn: createTransaction,
     onMutate: () => {
       togglePaymentModal(false);
-      setselectedCustomer(false);
       LoadingToast("Creating new transaction...");
     },
     onSuccess: (data) => {
       DissmissToast();
       SuccessToast(data?.message);
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["transactions"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["last_return"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["credits"],
+      });
+
       setCustomer([]);
+      setselectedCustomer(false);
       clearOrder();
+      setResetOrder(!resetorder);
+      setDiscount(0);
+      setCash(0);
+      setIsBuy(false);
     },
     onError: (error: any) => {
       DissmissToast();
@@ -63,8 +80,10 @@ export const PaymentModal = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const Orders = await order
+      .filter((order) => order.qty > 0)
+      .map((order) => ({ item: order.id, ...order }));
 
-    // TODO the ordrs item.id must be a in a "item" key value
     const Data = {
       customer: customer._id,
       service,
@@ -74,11 +93,12 @@ export const PaymentModal = () => {
       amount: total,
       discount,
       balance: credit < 0 ? Math.abs(credit) : credit,
-      paid: credit > 0 ? false : true,
-      orders: order.flatMap((order) => (order.qty > 0 ? [order] : [])),
+      paid: credit !== 0 ? false : true,
+      isBuy,
+      orders: Orders,
     };
-
     if (!customer._id) return ErrorToast("Pls Select a customer");
+    if (Orders.length === 0) return ErrorToast("Pls Select a order");
 
     await mutateAsync({ ...Data });
   };
@@ -99,7 +119,11 @@ export const PaymentModal = () => {
               <IoClose
                 size={22}
                 className="place-self-start align-top cursor-pointer text-gray-500"
-                onClick={() => togglePaymentModal(false)}
+                onClick={() => {
+                  togglePaymentModal(false);
+                  setDiscount(0);
+                  setCash(0);
+                }}
               />
             </div>
 
@@ -121,6 +145,7 @@ export const PaymentModal = () => {
                       placeholder=""
                       min={0}
                       defaultValue={0}
+                      value={discount}
                       onChange={(e) => {
                         const newValue = parseFloat(e.target.value);
                         if (isNaN(newValue)) {
@@ -148,6 +173,7 @@ export const PaymentModal = () => {
                       type="number"
                       placeholder=""
                       min={0}
+                      value={cash}
                       defaultValue={0}
                       onChange={(e) => {
                         const newValue = parseFloat(e.target.value);
