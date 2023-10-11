@@ -55,9 +55,11 @@ export function DataTableNameColumn<TData>({
                 </TooltipContent>
 
                 <MdLocationPin size={18} className="text-gray-600 " />
-                <TooltipTrigger className="max-w-xs w-max h-max inline-block text-sm items-center">
-                  <p>
-                    <span className="truncate text-ellipsis block">{addr}</span>
+                <TooltipTrigger>
+                  <p className=" w-max h-max text-sm items-center">
+                    <span className="max-w-xs inline-block truncate text-ellipsis">
+                      {addr}
+                    </span>
                   </p>
                 </TooltipTrigger>
               </Tooltip>
@@ -66,7 +68,7 @@ export function DataTableNameColumn<TData>({
         </div>
         <p className="flex gap-x-2 text-sm items-center pr-2   ">
           <MdContactEmergency size={18} className="text-slate-500" />
-          <span className="max-w-sm inline-block truncate text-ellipsis">
+          <span className="max-w-xs inline-block truncate text-ellipsis">
             {comment ? comment : "No comment"}
           </span>
         </p>
