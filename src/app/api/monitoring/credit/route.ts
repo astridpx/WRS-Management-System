@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Trans } from "@/lib/mongodb/model/Transaction.model";
+import { Items } from "@/lib/mongodb/model/Items.model";
 
 //  @desc GET  Credit
 export async function GET() {
@@ -8,6 +9,7 @@ export async function GET() {
     .populate({
       path: "orders.item",
       select: "img name",
+      model: Items,
     })
     .lean()
     .exec();

@@ -1,12 +1,29 @@
 import { NextResponse } from "next/server";
 import { Trans } from "@/lib/mongodb/model/Transaction.model";
 import { Customer } from "@/lib/mongodb/model/Customer.model";
+import { Items } from "@/lib/mongodb/model/Items.model";
 
 //  @desc GET All TRANSACTION
 export async function GET() {
-  const transactions = await Trans.find().populate("customer").lean().exec();
+  try {
+    const transactions = await Trans.find({ service: "Deliver" })
+      .populate("customer")
+      .populate({
+        path: "orders.item",
+        select: "img name",
+        model: Items,
+      })
+      .lean()
+      .exec();
 
-  return NextResponse.json({ data: transactions }, { status: 200 });
+    return NextResponse.json({ data: transactions }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Internal Server Error." },
+      { status: 500 }
+    );
+  }
 }
 
 //  @desc CREATE A TRANSAACTION
