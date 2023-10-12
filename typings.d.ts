@@ -195,3 +195,12 @@ export interface IStocksPageStore {
   setImg: (state: string) => void;
   setStockHistory: (state: any) => void;
 }
+
+export interface IOrderDeliveryStore {
+  order: any;
+
+  clearOrder: () => void;
+  insertOrderItem: (item: any) => void;
+  insertOneItem: (item: any) => void;
+  removeOrderItemById: (idToRemove: any) => void;
+}

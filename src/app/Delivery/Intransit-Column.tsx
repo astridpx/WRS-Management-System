@@ -1,20 +1,19 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-// import { DataTableRowActions } from "../Users/data-table-row-action";
 import { DataTableAddressColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Address-Column";
 import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableRowCheckBox } from "./Data-Table-Row-CheckBox";
 
-export const DeliveryColumns: ColumnDef<any>[] = [
+export const InTransitColumns: ColumnDef<any>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <DataTableRowCheckBox table={table} field={"ship"} />
+      <DataTableRowCheckBox table={table} field={"transit"} />
     ),
-    cell: ({ row }) => <DataTableRowCheckBox row={row} field={"ship"} />,
+    cell: ({ row }) => <DataTableRowCheckBox row={row} field={"transit"} />,
     enableSorting: false,
     enableHiding: false,
   },
@@ -44,6 +43,10 @@ export const DeliveryColumns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <DataTableGallonColumn borrowed_gal={row.original.new_order} />
     ),
+  },
+  {
+    header: "Transmit By",
+    accessorKey: "amount",
   },
   {
     header: "Amount",

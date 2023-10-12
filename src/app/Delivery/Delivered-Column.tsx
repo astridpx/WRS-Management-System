@@ -4,9 +4,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableAddressColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Address-Column";
 import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Undoaction } from "./Undo-action";
 
 export const DeliveredColumns: ColumnDef<any>[] = [
+  // {
+  //   id: "undo",
+  //   cell: ({ row }) => <Undoaction row={row} />,
+  // },
   {
     header: "No",
     accessorKey: "id",
