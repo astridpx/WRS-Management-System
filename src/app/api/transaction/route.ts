@@ -10,9 +10,10 @@ export async function GET() {
       .populate("customer")
       .populate({
         path: "orders.item",
-        select: "img name",
+        select: "img name category",
         model: Items,
       })
+      .sort({ date: -1 })
       .lean()
       .exec();
 

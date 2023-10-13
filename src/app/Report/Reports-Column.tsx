@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { IItems } from "../../../typings";
 import ModalBtnIcon from "./_components/Modal-Btn-Icon";
 
-export const ReportColumns: ColumnDef<IItems>[] = [
+export const ReportColumns: ColumnDef<any>[] = [
   {
     id: "view",
     header: "View",
@@ -12,11 +12,11 @@ export const ReportColumns: ColumnDef<IItems>[] = [
   },
   {
     header: "Date",
-    accessorKey: "Sep 09 2023",
+    accessorKey: "Date",
   },
   {
     header: "Profit",
-    accessorKey: "prod_code",
+    accessorKey: "tProfit",
   },
   {
     header: "Total Gallon",
@@ -28,11 +28,11 @@ export const ReportColumns: ColumnDef<IItems>[] = [
   },
   {
     header: "Discount",
-    accessorKey: "stock",
+    accessorKey: "tDiscount",
   },
   {
     header: "Unpaid",
-    accessorKey: "prod_import",
+    accessorKey: "tBalance",
   },
   {
     header: "Expenses",

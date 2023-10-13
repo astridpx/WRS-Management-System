@@ -1,0 +1,31 @@
+import axios from "axios";
+import { IUser } from "../../../../typings";
+import { format } from "date-fns";
+
+export const getTransactions = async () => {
+  const { data } = await axios.get("/api/transaction_history");
+
+  const Data = await data.data.map((d: any) => {
+    const addr = d.isVillage
+      ? ` P-${d.customer.phase} BLK-${d.customer.blk} L-${d.customer.lot}`
+      : ` ${d.customer.address}`;
+
+    const newData = {
+      ...d,
+      fullname: `${d.customer.first_name} ${d.customer.last_name}`,
+      customers: `${d.customer.first_name} ${d.customer.last_name} ${addr}`,
+      new_address: addr,
+      sort_date: format(new Date(d.date), "LLL dd, y"),
+      new_order: d.orders.map((d: any) => {
+        return {
+          ...d,
+          borrowed: d.qty,
+        };
+      }),
+    };
+
+    return newData;
+  });
+
+  return Data;
+};
