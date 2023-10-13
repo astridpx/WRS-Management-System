@@ -38,16 +38,13 @@ export const InTransitColumns: ColumnDef<any>[] = [
     ),
   },
   {
-    header: "Gallon",
-    accessorKey: "Alias",
+    header: "Order",
+    accessorKey: "new_order",
     cell: ({ row }) => (
       <DataTableGallonColumn borrowed_gal={row.original.new_order} />
     ),
   },
-  {
-    header: "Transmit By",
-    accessorKey: "amount",
-  },
+
   {
     header: "Amount",
     accessorKey: "amount",
@@ -63,5 +60,9 @@ export const InTransitColumns: ColumnDef<any>[] = [
   {
     header: "Time",
     accessorKey: "Alias",
+  },
+  {
+    header: "Carrier",
+    accessorKey: "deliverBy",
   },
 ];

@@ -4,9 +4,7 @@ import { create } from "zustand";
 export interface IOrderDeliveryStore {
   ship: any;
   transit: any;
-  resetCheckBox: boolean;
 
-  setResetCheckBox: (state: boolean) => void;
   clearOrder: (field: keyof IOrderDeliveryStore) => void;
   insertOrderItem: (field: keyof IOrderDeliveryStore, item: any) => void;
   insertOneItem: (field: keyof IOrderDeliveryStore, item: any) => void;
@@ -19,9 +17,6 @@ export interface IOrderDeliveryStore {
 const OrderDeliveryStore = create<IOrderDeliveryStore>((set) => ({
   ship: [],
   transit: [],
-  resetCheckBox: false,
-
-  setResetCheckBox: (state) => set({ resetCheckBox: state }),
 
   // Clear the order state
   clearOrder: (field) => set({ [field]: [] }),

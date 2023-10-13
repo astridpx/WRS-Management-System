@@ -3,7 +3,7 @@ import { Trans } from "@/lib/mongodb/model/Transaction.model";
 
 //  @desc MARK ORDER ON IN TRANSIT
 export async function POST(req: Request) {
-  const { orderId } = await req.json();
+  const { orderId, carrier } = await req.json();
 
   try {
     if (orderId.length === 0)
@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     const isValid = await orderId?.map(async (d: any) => {
       await Trans.findByIdAndUpdate(d.id, {
         status: "In Transit",
+        deliverBy: carrier,
       });
     });
 

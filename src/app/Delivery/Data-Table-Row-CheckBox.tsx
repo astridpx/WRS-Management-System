@@ -16,21 +16,14 @@ export function DataTableRowCheckBox<TData>({
   row,
   field,
 }: DataCheckBox<TData>) {
-  const {
-    clearOrder,
-    insertOrderItem,
-    removeOrderItemById,
-    insertOneItem,
-    resetCheckBox,
-  } = OrderDeliveryStore();
+  const { clearOrder, insertOrderItem, removeOrderItemById, insertOneItem } =
+    OrderDeliveryStore();
 
   return (
     <>
       <Checkbox
         checked={
-          resetCheckBox === true
-            ? false
-            : table
+          table
             ? table.getIsAllPageRowsSelected()
             : row
             ? row.getIsSelected()
@@ -38,8 +31,6 @@ export function DataTableRowCheckBox<TData>({
         }
         onCheckedChange={(value: any) => {
           if (table) {
-            if (resetCheckBox) return table.toggleAllPageRowsSelected(false);
-
             table.toggleAllPageRowsSelected(!!value);
             const item = table?.options.data.map((d) => {
               return { id: d._id };
@@ -50,8 +41,6 @@ export function DataTableRowCheckBox<TData>({
           }
 
           if (row) {
-            if (resetCheckBox) return row.toggleSelected(false);
-
             row.toggleSelected(!!value);
             const item = {
               id: row.original._id,

@@ -39,7 +39,7 @@ export const DeliveryColumns: ColumnDef<any>[] = [
     ),
   },
   {
-    header: "Gallon",
+    header: "Order",
     accessorKey: "Alias",
     cell: ({ row }) => (
       <DataTableGallonColumn borrowed_gal={row.original.new_order} />
