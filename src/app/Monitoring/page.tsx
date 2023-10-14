@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQueries } from "react-query";
 import Loader from "@/components/loader/Spinner";
 import { getAllCredits, getLastReturn } from "./services/Api";
+import { PayCreditModal } from "./_components/pay-credit-modal";
 
 const MonitoringPage = () => {
   const results = useQueries([
@@ -27,6 +28,8 @@ const MonitoringPage = () => {
 
   return (
     <>
+      <PayCreditModal />
+
       <PageWrapper>
         <div className="relative bg-white overflow-x-hidden">
           <Tabs defaultValue="last_return" className="">

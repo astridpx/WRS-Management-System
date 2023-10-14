@@ -1,10 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { IUser } from "../../../typings";
-import { DataTableRowActions } from "../Customer/data-table-row-action";
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
 import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
+import { MonitoringDataTableRowActions } from "./Data-Table-Row-Action";
 
 export const CreditsColumns: ColumnDef<any>[] = [
   {
@@ -49,9 +48,15 @@ export const CreditsColumns: ColumnDef<any>[] = [
   {
     header: "Date",
     accessorKey: "sort_date",
+    cell: ({ row }) => <p className="min-w-[5rem]">{row.original.sort_date}</p>,
   },
   {
     id: "action",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => (
+      <MonitoringDataTableRowActions
+        balance={row.original.balance}
+        id={row.original._id}
+      />
+    ),
   },
 ];

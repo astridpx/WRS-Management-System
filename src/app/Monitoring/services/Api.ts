@@ -50,3 +50,11 @@ export const getAllCredits = async () => {
 
   return Data;
 };
+
+export const payCredit = async (Data: any) => {
+  const { data } = await axios.put("/api/monitoring/credit", {
+    ...Data,
+  });
+
+  return data;
+};
