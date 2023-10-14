@@ -139,7 +139,10 @@ export interface IItems {
 
 export interface IReportpageModalStore {
   detailModal: boolean;
+  data: any;
   toggleDetailModal: (state: boolean) => void;
+  clearData: () => void;
+  setData: (state: any) => void;
 }
 
 // ? EXPENSES

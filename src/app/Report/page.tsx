@@ -96,6 +96,7 @@ const salesReport = async (dataHistory: any, expenseHistory: any) => {
       tGallon: GalQty,
       tBottle: BottleQty,
       tExpense: totalExpense,
+      sorted_data: filtered,
     };
 
     return newData;
@@ -127,8 +128,6 @@ export default function ReportPage() {
 
   useEffect(() => {
     if (historyIsLoading && expensesIsLoading) {
-      console.log(histoyData);
-      console.log(expensesData);
       salesReport(histoyData, expensesData)
         .then((SalesReport) => {
           setSaleData(SalesReport);

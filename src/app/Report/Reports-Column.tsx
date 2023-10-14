@@ -8,7 +8,8 @@ export const ReportColumns: ColumnDef<any>[] = [
   {
     id: "view",
     header: "View",
-    cell: ({ row }) => <ModalBtnIcon row={row} />,
+    cell: ({ row }) => <ModalBtnIcon data={row.original?.sorted_data} />,
+    // cell: ({ row }) => console.log(row),
   },
   {
     header: "Date",
