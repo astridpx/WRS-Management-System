@@ -20,11 +20,11 @@ export const ReportColumns: ColumnDef<any>[] = [
   },
   {
     header: "Total Gallon",
-    accessorKey: "prod_name",
+    accessorKey: "tGallon",
   },
   {
     header: "Total Bottle",
-    accessorKey: "prod_import",
+    accessorKey: "tBottle",
   },
   {
     header: "Discount",
@@ -36,6 +36,6 @@ export const ReportColumns: ColumnDef<any>[] = [
   },
   {
     header: "Expenses",
-    accessorKey: "prod_import",
+    accessorKey: "tExpense",
   },
 ];

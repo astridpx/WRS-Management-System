@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IUser } from "../../../../typings";
+import { IExpenses, IUser } from "../../../../typings";
 import { format } from "date-fns";
 
 export const getTransactions = async () => {
@@ -28,4 +28,18 @@ export const getTransactions = async () => {
   });
 
   return Data;
+};
+
+export const getAllExpenses = async () => {
+  const { data } = await axios.get("/api/expenses");
+
+  const newData = await data.data.map((d: IExpenses) => {
+    const Data = {
+      ...d,
+      sort_date: format(new Date(d.date), "LLL dd, y"),
+    };
+    return Data;
+  });
+
+  return newData;
 };

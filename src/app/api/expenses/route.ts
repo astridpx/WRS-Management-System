@@ -5,12 +5,9 @@ import { parseISO, format } from "date-fns";
 
 //  @desc GET All EXPENSES
 export async function GET() {
-  const expenses = await Exp.find().lean();
+  const expenses = await Exp.find().sort({ _id: -1, date: -1 }).lean().exec();
 
-  return NextResponse.json(
-    { data: expenses.sort((a, b) => b.date - a.date) },
-    { status: 200 }
-  );
+  return NextResponse.json({ data: expenses }, { status: 200 });
 }
 
 //  @desc CREATE A Expenses

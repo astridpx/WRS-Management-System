@@ -8,38 +8,83 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTableFilterDate } from "@/components/react-table/Main-Table-Date-Filter";
 import { monitoringHistoryColumns } from "./Monitoring-History-Column";
 import ReportModalDetail from "./_components/Modal-Details";
-import { useQuery } from "react-query";
-import { getTransactions } from "./services/Api";
+import { useQuery, useQueries } from "react-query";
+import { getTransactions, getAllExpenses } from "./services/Api";
 import Loader from "@/components/loader/Spinner";
 import { format } from "date-fns";
 
 // SALES REPORT DATA
-const salesReport = async (dataHistory: any) => {
+const salesReport = async (dataHistory: any, expenseHistory: any) => {
   // get alldates and format
   const formatDate = await dataHistory.map((data: any) => {
     const dates = format(new Date(data.date), "LLL dd, y");
     return dates;
   });
 
-  const uniqueDates = Array.from(new Set(formatDate)); // remove duplicates dates
+  const getExpDate = await expenseHistory.map((data: any) => {
+    return data.sort_date;
+  });
 
-  // mapp the all unique dates
+  // merge history dates and expenses dates
+  const mergedDates = [...formatDate, ...getExpDate];
+
+  const allDates = Array.from(new Set(mergedDates)); // remove duplicates dates from combine dates
+
+  // map the combine unique dates
   // the filter the dates that match
   // then compute the total of discount, profit or amount and balance
-  const salesData = await uniqueDates.map((udate: any) => {
-    const filter = dataHistory.filter(
+  const salesData = await allDates.map((udate: any) => {
+    const filtered = dataHistory.filter(
       (filDate: any) => format(new Date(filDate.date), "LLL dd, y") === udate
     );
-    const totalAmount = filter.reduce(
+    const filteredExp = expenseHistory.filter(
+      (filDate: any) => filDate.sort_date === udate
+    );
+
+    const totalAmount = filtered.reduce(
       (acc: any, transaction: any) => acc + transaction.amount,
       0
     );
-    const totalDiscount = filter.reduce(
+    const totalDiscount = filtered.reduce(
       (acc: any, transaction: any) => acc + transaction.discount,
       0
     );
-    const totalBalance = filter.reduce(
+    const totalBalance = filtered.reduce(
       (acc: any, transaction: any) => acc + transaction.balance,
+      0
+    );
+
+    // variable for total order gallon and bottle
+    let GalQty = 0;
+    let BottleQty = 0;
+
+    // Total Gallon computation
+    filtered.forEach((order: any) => {
+      // Iterate through each order in the "orders" array
+      order.orders.forEach((orderItem: any) => {
+        // Check if the orderItem's category is "container"
+        if (orderItem.item.category === "container") {
+          // Add the quantity to the totalQuantity
+          return (GalQty += orderItem.qty);
+        }
+      });
+    });
+
+    // Total Bottle computatiom
+    filtered.forEach((order: any) => {
+      // Iterate through each order in the "orders" array
+      order.orders.forEach((orderItem: any) => {
+        // Check if the orderItem's category is "container"
+        if (orderItem.item.category === "bottle") {
+          // Add the quantity to the totalQuantity
+          return (BottleQty += orderItem.qty);
+        }
+      });
+    });
+
+    // Total Expenses
+    const totalExpense = filteredExp.reduce(
+      (acc: any, exp: any) => acc + exp.amount,
       0
     );
 
@@ -48,6 +93,9 @@ const salesReport = async (dataHistory: any) => {
       tProfit: totalAmount,
       tDiscount: totalDiscount,
       tBalance: totalBalance,
+      tGallon: GalQty,
+      tBottle: BottleQty,
+      tExpense: totalExpense,
     };
 
     return newData;
@@ -57,19 +105,31 @@ const salesReport = async (dataHistory: any) => {
 };
 
 export default function ReportPage() {
-  const {
-    isLoading,
-    data: history,
-    isSuccess,
-  } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: getTransactions,
-  });
+  const results = useQueries([
+    {
+      queryKey: ["transactions"],
+      queryFn: getTransactions,
+      staleTime: 1000,
+    },
+    {
+      queryKey: ["expenses"],
+      queryFn: getAllExpenses,
+      staleTime: 1000,
+    },
+  ]);
   const [saleData, setSaleData] = useState<any>([]);
 
+  const histoyData = results[0]?.data;
+  const expensesData = results[1].data;
+
+  const historyIsLoading = results[0].isSuccess;
+  const expensesIsLoading = results[1].isSuccess;
+
   useEffect(() => {
-    if (isSuccess) {
-      salesReport(history)
+    if (historyIsLoading && expensesIsLoading) {
+      console.log(histoyData);
+      console.log(expensesData);
+      salesReport(histoyData, expensesData)
         .then((SalesReport) => {
           setSaleData(SalesReport);
         })
@@ -78,7 +138,7 @@ export default function ReportPage() {
           console.log(error);
         });
     }
-  }, [isSuccess, history]);
+  }, [expensesData, expensesIsLoading, historyIsLoading, histoyData]);
 
   return (
     <>
@@ -96,7 +156,7 @@ export default function ReportPage() {
               value="sales_report"
               className="relative overflow-x-hidden"
             >
-              {!isSuccess ? (
+              {!historyIsLoading ? (
                 <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
                   <Loader />
                   <p className="text-gray-400 ">Loading...</p>
@@ -106,7 +166,7 @@ export default function ReportPage() {
               )}
             </TabsContent>
             <TabsContent value="history" className="relative overflow-x-hidden">
-              {!isSuccess ? (
+              {!historyIsLoading ? (
                 <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
                   <Loader />
                   <p className="text-gray-400 ">Loading...</p>
@@ -114,7 +174,7 @@ export default function ReportPage() {
               ) : (
                 <DataTableFilterDate
                   columns={monitoringHistoryColumns}
-                  data={history}
+                  data={histoyData}
                 />
               )}
             </TabsContent>

@@ -9,7 +9,6 @@ export function DataTableGallonColumn({
 }: {
   borrowed_gal: IUser["borrowed_gal"];
 }) {
-  console.log(borrowed_gal);
   return (
     <>
       <div className="min-w-[20rem]">
@@ -19,7 +18,6 @@ export function DataTableGallonColumn({
         </header>
         {Array.isArray(borrowed_gal)
           ? borrowed_gal?.map((d) => {
-              console.log(d);
               return (
                 <>
                   {typeof d.item !== "string" ? (
