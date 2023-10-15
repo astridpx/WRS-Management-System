@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb/config/connect-db";
 import { NextResponse } from "next/server";
 import { Items } from "@/lib/mongodb/model/Items.model";
+import { Customer } from "@/lib/mongodb/model/Customer.model";
 
 // @desc UPDATE ITEMS
 
@@ -53,6 +54,17 @@ export async function DELETE(req: Request, { params }: any) {
     if (!isExist)
       return NextResponse.json(
         { message: "Unique Id not found." },
+        { status: 400 }
+      );
+
+    const isBorrowed = await Customer.findOne({
+      "borrowed_gal.item": itemId,
+      "borrowed_gal.borrowed": { $gt: 0 },
+    }).exec();
+
+    if (isBorrowed)
+      return NextResponse.json(
+        { message: "This item is currently borrowed." },
         { status: 400 }
       );
 
