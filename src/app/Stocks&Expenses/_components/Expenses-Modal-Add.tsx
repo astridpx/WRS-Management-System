@@ -38,6 +38,10 @@ const handleExpenseName = (name: string) => {
       return "Seal";
     case "filter":
       return "Filter";
+    case "electric":
+      return "Electric Bill";
+    case "house":
+      return "House Rent";
     default:
       return "";
   }
@@ -132,6 +136,8 @@ export const ExpensesModalAdd = () => {
                         </SelectItem>
                         <SelectItem value="seal">Seal</SelectItem>
                         <SelectItem value="filter">Filter</SelectItem>
+                        <SelectItem value="electric">Electric Bill</SelectItem>
+                        <SelectItem value="house">House Rent</SelectItem>
                         <SelectItem value="other">Others</SelectItem>
                       </SelectGroup>
                     </SelectContent>
@@ -196,9 +202,9 @@ export const ExpensesModalAdd = () => {
                     <Image
                       src={ExpenseImages[item]}
                       alt="image"
-                      height={150}
-                      width={150}
-                      className="w-full h-full"
+                      height={300}
+                      width={250}
+                      className="w-full h-full object-contain aspect-[4/3]"
                     />
                   </figure>
                 </div>

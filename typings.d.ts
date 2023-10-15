@@ -172,6 +172,8 @@ export interface IImages {
   employee: StaticImageData;
   seal: StaticImageData;
   filter: StaticImageData;
+  house: StaticImageData;
+  electric: StaticImageData;
 }
 
 // ? STOCKS
