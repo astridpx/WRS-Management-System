@@ -43,3 +43,9 @@ export const getAllExpenses = async () => {
 
   return newData;
 };
+
+export const deleteTransaction = async (id: any) => {
+  const { data } = await axios.delete(`/api/transaction/${id}`);
+
+  return data;
+};

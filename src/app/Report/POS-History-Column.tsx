@@ -66,6 +66,6 @@ export const monitoringHistoryColumns: ColumnDef<any>[] = [
   },
   {
     id: "action",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <DataTableRowActions id={row.original._id} />,
   },
 ];

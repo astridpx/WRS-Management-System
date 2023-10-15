@@ -3,7 +3,7 @@
 import { ReportPageModalStore } from "@/lib/zustand/ReportPage-store/Btn-Modal";
 import { DataTable } from "@/components/react-table/main-table";
 import { IoClose } from "react-icons/io5";
-import { monitoringHistoryColumns } from "../Monitoring-History-Column";
+import { monitoringHistoryColumns } from "../POS-History-Column";
 
 export default function ReportModalDetail() {
   const {

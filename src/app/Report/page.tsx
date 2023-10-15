@@ -6,7 +6,7 @@ import { DataTable } from "@/components/react-table/main-table";
 import { ReportColumns } from "./Reports-Column";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTableFilterDate } from "@/components/react-table/Main-Table-Date-Filter";
-import { monitoringHistoryColumns } from "./Monitoring-History-Column";
+import { monitoringHistoryColumns } from "./POS-History-Column";
 import ReportModalDetail from "./_components/Modal-Details";
 import { useQuery, useQueries } from "react-query";
 import { getTransactions, getAllExpenses } from "./services/Api";

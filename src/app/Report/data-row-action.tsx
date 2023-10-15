@@ -1,26 +1,14 @@
 "use client";
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { Row } from "@tanstack/react-table";
-import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { useMutation, useQueryClient } from "react-query";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUser } from "../../../typings";
 
 import {
   AlertDialog,
@@ -34,20 +22,42 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData & any>;
-}
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+import { deleteTransaction } from "./services/Api";
 
-export function DataTableRowActions<TData>({
-  row,
-}: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions({ id }: any) {
+  // const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const [userId, setUserId] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const notify = () => toast.loading("Loading...");
+
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteTransaction,
+    onMutate: () => {
+      LoadingToast("Deleting transaction...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({
+        queryKey: ["transactions"],
+      });
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const handleDelete = async () => {
+    await mutateAsync(id);
+  };
 
   return (
-    <AlertDialog open={isOpen}>
+    <AlertDialog>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -56,10 +66,8 @@ export function DataTableRowActions<TData>({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction>Delete</AlertDialogAction>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
 
@@ -75,16 +83,8 @@ export function DataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-
-          <AlertDialogTrigger
-            className="w-full"
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
+          <AlertDialogTrigger className="w-full">
             <DropdownMenuItem>Delete</DropdownMenuItem>
-            {/* <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut> */}
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
