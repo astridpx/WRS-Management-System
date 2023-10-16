@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { Acc } from "@/lib/mongodb/model/Accounts.model";
 
-// ? Password HAsher
+//  Password HAsher
 const hashPassword = async (pass: any) => {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -15,21 +15,22 @@ const hashPassword = async (pass: any) => {
   }
 };
 
-// ? GET All accounts
+//  GET All accounts
 export async function GET() {
-  await connectDB();
-  
-  const accounts = await Acc.find().select("-hash_password").lean();
+  const accounts = await Acc.find({
+    main: { $ne: true },
+  })
+    .select("-hash_password")
+    .lean();
 
   return NextResponse.json({ data: accounts }, { status: 200 });
 }
 
-// ? @desc POST req creating a new accounts
-
+//  @desc POST req creating a new accounts
 export async function POST(req: Request) {
   const { first_name, last_name, email, username, password } = await req.json();
 
-  // ? Confrim Data
+  //  Confrim Data
   if (!password || !first_name || !last_name || !email || !username)
     return NextResponse.json(
       { message: "All field is required." },
@@ -38,9 +39,7 @@ export async function POST(req: Request) {
 
   const hash_password = await hashPassword(password);
 
-  await connectDB();
-
-  // ? Check duplicate
+  //  Check duplicate
   const isEmail = await Acc.findOne({ email }).lean().exec();
   const isUsername = await Acc.findOne({ username }).lean().exec();
 

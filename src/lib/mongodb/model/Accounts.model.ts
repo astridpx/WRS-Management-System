@@ -17,7 +17,11 @@ const AccountSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Last name is required"],
     },
-
+    img: {
+      type: String,
+      required: false,
+      default: "https://github.com/shadcn.png",
+    },
     email: {
       type: String,
       unique: true,
@@ -38,11 +42,19 @@ const AccountSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "admin",
+      default: "staff",
     },
     login_freeze: {
       type: Number,
       default: 0,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    last_active: {
+      type: Date,
+      default: new Date(),
     },
   },
   {
