@@ -24,3 +24,16 @@ export const createNewAccount = async (Data: any) => {
 
   return data;
 };
+
+export const editAccessAccount = async (Data: any, id: any) => {
+  const { data } = await axios.put(`/api/accounts/${id}`, {
+    ...Data,
+  });
+
+  return data;
+};
+export const deleteAccount = async (id: any) => {
+  const { data } = await axios.delete(`/api/accounts/${id}`);
+
+  return data;
+};

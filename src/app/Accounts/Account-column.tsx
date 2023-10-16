@@ -54,6 +54,7 @@ export const AccountsColumns: ColumnDef<any>[] = [
       <AccountDataTableRowActions
         id={row.original._id}
         role={row.original.role}
+        status={row.original.active}
       />
     ),
   },

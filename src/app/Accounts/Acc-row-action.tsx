@@ -36,23 +36,77 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { BsTrash } from "react-icons/bs";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
+import { useMutation, useQueryClient } from "react-query";
+import { editAccessAccount, deleteAccount } from "./services/api";
 
 interface IChangeAccess {
   id: any;
   role: string;
+  status: boolean;
 }
 
-export function AccountDataTableRowActions({ id, role }: IChangeAccess) {
+export function AccountDataTableRowActions({
+  id,
+  role,
+  status,
+}: IChangeAccess) {
+  const queryClient = useQueryClient();
   const [newRole, setRole] = useState(role);
   const [pass, setPass] = useState("");
   const [cpass, setCPass] = useState("");
   const [showPass, setShowPass] = useState(false);
-  const [active, setActive] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(status);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: () =>
+      editAccessAccount(
+        {
+          role: newRole,
+          status: active,
+          password: pass,
+        },
+        id
+      ),
+    onMutate: () => {
+      LoadingToast("Add new customer is pending...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      setPass("");
+      setCPass("");
+      setShowPass(false);
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  // HANDLE EDIT ACCESS SUBMIT
+  const HandleSubmit = async () => {
+    if (pass !== cpass) return ErrorToast("Password didn't match.");
+
+    await mutateAsync();
+  };
 
   return (
     <>
       <div className="flex items-center gap-x-6">
-        <Sheet>
+        <Sheet
+          onOpenChange={(e) => {
+            setPass("");
+            setCPass("");
+            setShowPass(false);
+          }}
+        >
           <SheetTrigger asChild>
             <AiOutlineEdit size={20} className="cursor-pointer" />
           </SheetTrigger>
@@ -104,13 +158,25 @@ export function AccountDataTableRowActions({ id, role }: IChangeAccess) {
                 <Label htmlFor="pass" className="text-right">
                   Password
                 </Label>
-                <Input type="password" id="pass" className="col-span-3" />
+                <Input
+                  type={showPass ? "text" : "password"}
+                  id="pass"
+                  className="col-span-3"
+                  value={pass}
+                  onChange={(e) => setPass(e.target.value)}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="cpass" className="text-right">
                   Confirm
                 </Label>
-                <Input type="password" id="cpass" className="col-span-3" />
+                <Input
+                  type={showPass ? "text" : "password"}
+                  id="cpass"
+                  className="col-span-3"
+                  value={cpass}
+                  onChange={(e) => setCPass(e.target.value)}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="cpass" className="text-right invisible">
@@ -133,7 +199,9 @@ export function AccountDataTableRowActions({ id, role }: IChangeAccess) {
             </div>
             <SheetFooter>
               <SheetClose asChild>
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" onClick={HandleSubmit}>
+                  Save changes
+                </Button>
               </SheetClose>
             </SheetFooter>
           </SheetContent>
