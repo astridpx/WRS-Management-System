@@ -58,7 +58,7 @@ export async function PUT(req: Request, { params }: any) {
 }
 
 // @desc DELETE ACCOUNT
-export async function DELETE({ params }: any) {
+export async function DELETE(req: Request, { params }: any) {
   const { accId } = await params;
   const id = accId.trim();
 

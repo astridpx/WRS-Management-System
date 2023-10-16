@@ -63,7 +63,7 @@ export function AccountDataTableRowActions({
   const [showPass, setShowPass] = useState(false);
   const [active, setActive] = useState<boolean>(status);
 
-  const { mutateAsync } = useMutation({
+  const editAccessMutation = useMutation({
     mutationFn: () =>
       editAccessAccount(
         {
@@ -74,7 +74,26 @@ export function AccountDataTableRowActions({
         id
       ),
     onMutate: () => {
-      LoadingToast("Add new customer is pending...");
+      LoadingToast("Updating account acccess...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      setPass("");
+      setCPass("");
+      setShowPass(false);
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteAccount(id),
+    onMutate: () => {
+      LoadingToast("Deleting account...");
     },
     onSuccess: (data) => {
       DissmissToast();
@@ -94,7 +113,12 @@ export function AccountDataTableRowActions({
   const HandleSubmit = async () => {
     if (pass !== cpass) return ErrorToast("Password didn't match.");
 
-    await mutateAsync();
+    await editAccessMutation.mutateAsync();
+  };
+
+  // HANDLE ACCOUNT DELETE
+  const HandleDelete = async () => {
+    await deleteMutation.mutateAsync();
   };
 
   return (
@@ -221,7 +245,9 @@ export function AccountDataTableRowActions({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Continue</AlertDialogAction>
+              <AlertDialogAction onClick={HandleDelete}>
+                Continue
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
           -
