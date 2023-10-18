@@ -19,7 +19,9 @@ export const DashBoardCard = ({
           })}
         </div>
         <div className="space-y-1  ">
-          <h2 className="text-xl font-semibold">$ {amount.toLocaleString()}</h2>
+          <h2 className="text-xl font-semibold">
+            Php {amount.toLocaleString()}
+          </h2>
           <h2 className="text-sm">{title}</h2>
         </div>
       </div>

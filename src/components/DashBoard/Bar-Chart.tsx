@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -19,6 +19,24 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { months as labels } from "@/utils/Dashboard/Months-data";
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import { CiFilter } from "react-icons/ci";
+import { Button } from "@/components/ui/button";
+import { BsPrinter } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { format, getDaysInMonth, getWeeksInMonth, parse } from "date-fns";
 
 ChartJS.register(
   CategoryScale,
@@ -69,17 +87,44 @@ export const options = {
   },
 };
 
-const BarChart = () => {
+const years = ["2020", "2021", "2022", "2023"];
+const viewOption = ["Daily", "Weekly", "Monthly", "Yearly"];
+
+const BarChart = ({ monthly, daily }: any) => {
+  const [selected, setSelected] = useState("Monthly");
+  const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
+  const [YSelected, setYSelected] = useState<any>(format(new Date(), "y"));
+
+  const monthNumber = parse(MSelected, "MMM", new Date());
+
+  const day = getDaysInMonth(new Date(YSelected, monthNumber.getMonth()));
+
+  const DaysOfMonth = Array.from({ length: day }, (_, index) => {
+    return index + 1;
+  });
+
   const data = {
-    labels: labels,
+    labels:
+      selected === "Yearly"
+        ? years
+        : selected === "Daily"
+        ? DaysOfMonth.map(String)
+        : labels, // Ensure labels is an array of strings
+
     datasets: [
       {
         label: "Profit",
-        // data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 89, 90, 59],
-        data: Array.from(
-          { length: 12 },
-          () => Math.floor(Math.random() * 10000) + 1500
-        ),
+        data:
+          selected === "Monthly"
+            ? monthly
+            : selected === "Daily"
+            ? daily
+            : Array.from(
+                {
+                  length: selected === "Yearly" ? years.length : 12,
+                },
+                () => Math.floor(Math.random() * 10000) + 1500
+              ),
         backgroundColor: "#05C3FB",
         borderWidth: 1,
       },
@@ -88,26 +133,102 @@ const BarChart = () => {
 
   return (
     <>
-      <div className="p-1 rounded-lg w-full absolute z-10 flex justify-end items-center">
-        <Select defaultValue="2020">
-          <SelectTrigger className="min-w-[6rem] w-max h-max  text-sm">
-            <SelectValue placeholder="year" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Year</SelectLabel>
-              <SelectItem value="2020">2020</SelectItem>
-              <SelectItem value="2021">2021</SelectItem>
-              <SelectItem value="2022">2022</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <div className="relative">
+        <div className="p-2 rounded-lg w-full absolute z-[2] flex gap-x-2 justify-end items-center">
+          {/* <CiFilter size={20} className="text-slate-500 cursor-pointer" /> */}
+          <BsPrinter size={18} className="text-slate-400 cursor-pointer" />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+              >
+                <CiFilter
+                  size={20}
+                  className=" cursor-pointer text-slate-500"
+                />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[100px]">
+              {/* View options */}
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>View</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup
+                    value={selected}
+                    onValueChange={(e) => setSelected(e)}
+                  >
+                    {viewOption.map((d) => {
+                      return (
+                        <>
+                          <DropdownMenuRadioItem key={d} value={d}>
+                            {d}
+                          </DropdownMenuRadioItem>
+                        </>
+                      );
+                    })}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+
+              {/* monthly option */}
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Months</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup
+                    value={MSelected}
+                    onValueChange={(e) => setMSelected(e)}
+                  >
+                    {labels.map((d) => {
+                      return (
+                        <>
+                          <DropdownMenuRadioItem key={d} value={d}>
+                            {d}
+                          </DropdownMenuRadioItem>
+                        </>
+                      );
+                    })}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+
+              {/* yearly options */}
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Year</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup
+                    value={YSelected}
+                    onValueChange={(e) => setYSelected(e)}
+                  >
+                    {years.map((d) => {
+                      return (
+                        <>
+                          <DropdownMenuRadioItem key={d} value={d}>
+                            {d}
+                          </DropdownMenuRadioItem>
+                        </>
+                      );
+                    })}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <Bar
+          options={options}
+          data={data}
+          className="relative bg-white rounded-lg h-full w-full p-4 pt-6"
+        />
       </div>
-      <Bar
-        options={options}
-        data={data}
-        className="relative bg-white rounded-lg h-full w-full p-4"
-      />
     </>
   );
 };
