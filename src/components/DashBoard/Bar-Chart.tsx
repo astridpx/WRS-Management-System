@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -87,17 +87,27 @@ export const options = {
   },
 };
 
-const years = ["2020", "2021", "2022", "2023"];
+// const years = ["2020", "2021", "2022", "2023"];
 const viewOption = ["Daily", "Weekly", "Monthly", "Yearly"];
 
-const BarChart = ({ monthly, daily }: any) => {
+const BarChart = ({
+  monthly,
+  daily,
+  yearly,
+  setDay,
+  setYear,
+  setMonth,
+  allYears,
+}: any) => {
   const [selected, setSelected] = useState("Monthly");
   const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
-  const [YSelected, setYSelected] = useState<any>(format(new Date(), "y"));
+  const [YSelected, setYSelected] = useState(format(new Date(), "yyyy"));
 
   const monthNumber = parse(MSelected, "MMM", new Date());
 
-  const day = getDaysInMonth(new Date(YSelected, monthNumber.getMonth()));
+  const day = getDaysInMonth(
+    new Date(parseInt(YSelected), monthNumber.getMonth())
+  );
 
   const DaysOfMonth = Array.from({ length: day }, (_, index) => {
     return index + 1;
@@ -106,7 +116,7 @@ const BarChart = ({ monthly, daily }: any) => {
   const data = {
     labels:
       selected === "Yearly"
-        ? years
+        ? allYears
         : selected === "Daily"
         ? DaysOfMonth.map(String)
         : labels, // Ensure labels is an array of strings
@@ -119,9 +129,11 @@ const BarChart = ({ monthly, daily }: any) => {
             ? monthly
             : selected === "Daily"
             ? daily
+            : selected === "Yearly"
+            ? yearly
             : Array.from(
                 {
-                  length: selected === "Yearly" ? years.length : 12,
+                  length: 12,
                 },
                 () => Math.floor(Math.random() * 10000) + 1500
               ),
@@ -130,6 +142,12 @@ const BarChart = ({ monthly, daily }: any) => {
       },
     ],
   };
+
+  useEffect(() => {
+    setDay(day);
+    setMonth(MSelected);
+    setYear(YSelected);
+  }, [MSelected, YSelected, day, setDay, setMonth, setYear]);
 
   return (
     <>
@@ -178,11 +196,23 @@ const BarChart = ({ monthly, daily }: any) => {
               {/* monthly option */}
               <DropdownMenuSeparator />
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Months</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger
+                  disabled={selected === "Monthly" || selected === "Yearly"}
+                  className={`${
+                    selected === "Monthly" || selected === "Yearly"
+                      ? "cursor-not-allowed"
+                      : "cursor-auto"
+                  }`}
+                >
+                  Months
+                </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuRadioGroup
                     value={MSelected}
-                    onValueChange={(e) => setMSelected(e)}
+                    onValueChange={(e) => {
+                      setMSelected(e);
+                      // setMonth(MSelected);
+                    }}
                   >
                     {labels.map((d) => {
                       return (
@@ -201,13 +231,23 @@ const BarChart = ({ monthly, daily }: any) => {
               {/* yearly options */}
               <DropdownMenuSeparator />
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Year</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger
+                  disabled={selected === "Yearly"}
+                  className={`${
+                    selected === "Yearly" ? "cursor-not-allowed" : "cursor-auto"
+                  }`}
+                >
+                  Year
+                </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuRadioGroup
                     value={YSelected}
-                    onValueChange={(e) => setYSelected(e)}
+                    onValueChange={(e) => {
+                      setYSelected(e);
+                      // setYear(e);
+                    }}
                   >
-                    {years.map((d) => {
+                    {allYears.map((d: any) => {
                       return (
                         <>
                           <DropdownMenuRadioItem key={d} value={d}>

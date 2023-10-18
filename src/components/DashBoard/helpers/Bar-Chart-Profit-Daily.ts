@@ -13,26 +13,26 @@ const DayGetter = (date: Date) => {
 
 export const DailyBarChartProfit = async (
   dataHistory: any,
-  expenseHistory: any
+  expenseHistory: any,
+  dayLength: number,
+  year: string,
+  month: any
 ) => {
-  const MonthYear = "Oct 2023";
-
-  const month = 10;
-  const year = 2023;
-
-  const day = getDaysInMonth(new Date(year, month));
-
   const filteredSaleHistory = dataHistory.filter((filDate: any) => {
-    const months = MonthsGetter(filDate.date);
-    return months === MonthYear;
+    const filMonth = format(new Date(filDate.date), "MMM");
+    const filYear = format(new Date(filDate.date), "yyyy");
+
+    return filMonth === month && filYear === year;
   });
 
   const filteredExpenseHistory = expenseHistory.filter((filDate: any) => {
-    const months = MonthsGetter(filDate.date);
-    return months === MonthYear;
+    const filMonth = format(new Date(filDate.date), "MMM");
+    const filYear = format(new Date(filDate.date), "yyyy");
+
+    return filMonth === month && filYear === year;
   });
 
-  const ProfitData = await Array.from({ length: day }, (_, index) => {
+  const ProfitData = await Array.from({ length: dayLength }, (_, index) => {
     const filtered = filteredSaleHistory.filter((filDate: any) => {
       const Day = DayGetter(filDate.date);
       return parseInt(Day) === index + 1;
@@ -54,11 +54,6 @@ export const DailyBarChartProfit = async (
       0
     );
     const MonthlyProfit = totalMonthProfit - totalMonthExpense;
-
-    const i = index + 1;
-
-    console.log(i + ":" + totalMonthProfit);
-    console.log(i + ":" + MonthlyProfit);
 
     return MonthlyProfit;
   });

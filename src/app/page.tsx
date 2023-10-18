@@ -16,6 +16,9 @@ import {
 import { DashboardCardsData } from "@/components/DashBoard/helpers/Cards-data";
 import { MonthlyBarChartProfit } from "@/components/DashBoard/helpers/Bar-Chart-Profit-Monthly";
 import { DailyBarChartProfit } from "@/components/DashBoard/helpers/Bar-Chart-Profit-Daily";
+import { YearlyBarChartProfit } from "@/components/DashBoard/helpers/Bar-Chart-Profit-Yearly";
+import { GetAllYears } from "@/components/DashBoard/helpers/GetAllYears";
+import { format } from "date-fns";
 
 export default function Home() {
   const results = useQueries([
@@ -33,6 +36,11 @@ export default function Home() {
   const [cards, setCards] = useState<any>([]);
   const [daily, setDaily] = useState<any>([]);
   const [monthly, setMonthly] = useState<any>([]);
+  const [yearly, setYearly] = useState<any>([]);
+  const [day, setDay] = useState(30);
+  const [month, setMonth] = useState<any>(format(new Date(), "MMM"));
+  const [year, setYear] = useState<any>(format(new Date(), "yyyy"));
+  const [allYears, setAllYears] = useState<any>([]);
   const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   const historyData = results[0]?.data;
@@ -42,20 +50,53 @@ export default function Home() {
   const expenseIsSuccess = results[1].isSuccess;
 
   useEffect(() => {
-    if (historyIsSuccess && expenseIsSuccess) {
-      DashboardCardsData(historyData, expenseData)
-        .then((data) => setCards(data))
-        .catch((e) => console.log(e));
+    async function fetchData() {
+      try {
+        if (historyIsSuccess && expenseIsSuccess) {
+          const allYearsData = await GetAllYears(historyData);
+          setAllYears(allYearsData);
 
-      MonthlyBarChartProfit(historyData, expenseData)
-        .then((data) => setMonthly(data))
-        .catch((e) => console.log(e));
+          const cardsData = await DashboardCardsData(historyData, expenseData);
+          setCards(cardsData);
 
-      DailyBarChartProfit(historyData, expenseData)
-        .then((data) => setDaily(data))
-        .catch((e) => console.log(e));
+          const dailyData = await DailyBarChartProfit(
+            historyData,
+            expenseData,
+            day,
+            year,
+            month
+          );
+          setDaily(dailyData);
+
+          const monthlyData = await MonthlyBarChartProfit(
+            historyData,
+            expenseData,
+            year
+          );
+          setMonthly(monthlyData);
+
+          const yearlyData = await YearlyBarChartProfit(
+            historyData,
+            expenseData,
+            allYearsData
+          );
+          setYearly(yearlyData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }, [expenseData, expenseIsSuccess, historyData, historyIsSuccess]);
+
+    fetchData();
+  }, [
+    day,
+    expenseData,
+    expenseIsSuccess,
+    historyData,
+    historyIsSuccess,
+    month,
+    year,
+  ]);
 
   return (
     <>
@@ -81,7 +122,15 @@ export default function Home() {
           <div className="flex w-full gap-x-4 h-max ">
             <section className="w-[69%] relative space-y-2">
               <div className="h-[25rem]  w-full ">
-                <BarChart monthly={monthly} daily={daily} />
+                <BarChart
+                  allYears={allYears}
+                  daily={daily}
+                  monthly={monthly}
+                  yearly={yearly}
+                  setDay={setDay}
+                  setYear={setYear}
+                  setMonth={setMonth}
+                />
               </div>
               <div className="relative w-full h-[25rem]  ">
                 <ReLineChart />
