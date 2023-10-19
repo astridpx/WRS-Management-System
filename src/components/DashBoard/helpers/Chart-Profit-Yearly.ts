@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-export const YearlyBarChartProfit = async (
+export const YearlyChartProfit = async (
   dataHistory: any,
   expenseHistory: any,
   allYears: any
@@ -28,7 +28,16 @@ export const YearlyBarChartProfit = async (
 
     const Profit = totalProfit - totalExpense;
 
-    return Profit;
+    // return as array
+    const DataSet = {
+      Bar: Profit,
+      Line: {
+        sales: totalProfit,
+        expenses: totalExpense,
+      },
+    };
+
+    return DataSet;
   });
 
   return ProfitData;

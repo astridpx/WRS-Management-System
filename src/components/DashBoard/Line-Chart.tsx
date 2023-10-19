@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,15 +12,6 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { months as labels } from "@/utils/Dashboard/Months-data";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { CiFilter } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { BsPrinter } from "react-icons/bs";
@@ -86,10 +77,17 @@ export const options = {
   },
 };
 
-const years = ["2020", "2021", "2022"];
 const viewOption = ["Daily", "Weekly", "Monthly", "Yearly"];
 
-export default function ReLineChart() {
+export default function ReLineChart({
+  monthly,
+  daily,
+  yearly,
+  setDay,
+  setYear,
+  setMonth,
+  allYears,
+}: any) {
   const [selected, setSelected] = useState("Monthly");
   const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
   const [YSelected, setYSelected] = useState<any>(format(new Date(), "y"));
@@ -105,24 +103,26 @@ export default function ReLineChart() {
   const data = {
     labels:
       selected === "Yearly"
-        ? years
+        ? allYears
         : selected === "Daily"
         ? DaysOfMonth.map(String)
         : labels,
     datasets: [
       {
         label: "Sales",
-        data: Array.from(
-          {
-            length:
-              selected === "Yearly"
-                ? years.length
-                : selected === "Daily"
-                ? day
-                : 12,
-          },
-          () => Math.floor(Math.random() * 10000) + 2000
-        ),
+        data:
+          selected === "Monthly"
+            ? monthly.map((d: any) => d.sales)
+            : selected === "Daily"
+            ? daily.map((d: any) => d.sales)
+            : selected === "Yearly"
+            ? yearly.map((d: any) => d.sales)
+            : Array.from(
+                {
+                  length: 12,
+                },
+                () => Math.floor(Math.random() * 10000) + 1500
+              ),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
         tension: 0.4,
@@ -131,17 +131,19 @@ export default function ReLineChart() {
 
       {
         label: "Expenses",
-        data: Array.from(
-          {
-            length:
-              selected === "Yearly"
-                ? years.length
-                : selected === "Daily"
-                ? day
-                : 12,
-          },
-          () => Math.floor(Math.random() * 10000) + 2000
-        ),
+        data:
+          selected === "Monthly"
+            ? monthly.map((d: any) => d.expenses)
+            : selected === "Daily"
+            ? daily.map((d: any) => d.expenses)
+            : selected === "Yearly"
+            ? yearly.map((d: any) => d.expenses)
+            : Array.from(
+                {
+                  length: 12,
+                },
+                () => Math.floor(Math.random() * 10000) + 1500
+              ),
         borderColor: "rgb(108,95,252)",
         backgroundColor: "rgba(108,95,252,0.5)",
         tension: 0.5,
@@ -150,6 +152,12 @@ export default function ReLineChart() {
       },
     ],
   };
+
+  useEffect(() => {
+    setDay(day);
+    setMonth(MSelected);
+    setYear(YSelected);
+  }, [MSelected, YSelected, day, setDay, setMonth, setYear]);
 
   return (
     <>
@@ -202,7 +210,16 @@ export default function ReLineChart() {
               {/* monthly option */}
               <DropdownMenuSeparator />
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Months</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger
+                  disabled={selected === "Monthly" || selected === "Yearly"}
+                  className={`${
+                    selected === "Monthly" || selected === "Yearly"
+                      ? "cursor-not-allowed"
+                      : "cursor-auto"
+                  }`}
+                >
+                  Months
+                </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuRadioGroup
                     value={MSelected}
@@ -225,13 +242,20 @@ export default function ReLineChart() {
               {/* yearly options */}
               <DropdownMenuSeparator />
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Year</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger
+                  disabled={selected === "Yearly"}
+                  className={`${
+                    selected === "Yearly" ? "cursor-not-allowed" : "cursor-auto"
+                  }`}
+                >
+                  Year
+                </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuRadioGroup
                     value={YSelected}
                     onValueChange={(e) => setYSelected(e)}
                   >
-                    {years.map((d) => {
+                    {allYears.map((d: any) => {
                       return (
                         <>
                           <DropdownMenuRadioItem key={d} value={d}>

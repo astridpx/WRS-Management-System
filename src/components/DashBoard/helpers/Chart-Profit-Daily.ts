@@ -1,17 +1,11 @@
 import { format, getDaysInMonth } from "date-fns";
 
-// Months getter function
-const MonthsGetter = (date: Date) => {
-  const month = format(new Date(date), "MMM yyyy");
-  return month;
-};
-
 const DayGetter = (date: Date) => {
   const day = format(new Date(date), "dd");
   return day;
 };
 
-export const DailyBarChartProfit = async (
+export const DailyChartProfit = async (
   dataHistory: any,
   expenseHistory: any,
   dayLength: number,
@@ -44,18 +38,27 @@ export const DailyBarChartProfit = async (
       return parseInt(Day) === index + 1;
     });
 
-    const totalMonthProfit = filtered.reduce(
+    const totalhProfit = filtered.reduce(
       (acc: any, transaction: any) => acc + transaction.amount,
       0
     );
 
-    const totalMonthExpense = filteredExp.reduce(
+    const totalExpense = filteredExp.reduce(
       (acc: any, exp: any) => acc + exp.amount,
       0
     );
-    const MonthlyProfit = totalMonthProfit - totalMonthExpense;
+    const Profit = totalhProfit - totalExpense;
 
-    return MonthlyProfit;
+    // return as array
+    const DataSet = {
+      Bar: Profit,
+      Line: {
+        sales: totalhProfit,
+        expenses: totalExpense,
+      },
+    };
+
+    return DataSet;
   });
 
   return ProfitData;

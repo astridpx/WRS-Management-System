@@ -14,9 +14,9 @@ import {
   getAllExpenses,
 } from "@/components/DashBoard/services/api";
 import { DashboardCardsData } from "@/components/DashBoard/helpers/Cards-data";
-import { MonthlyBarChartProfit } from "@/components/DashBoard/helpers/Bar-Chart-Profit-Monthly";
-import { DailyBarChartProfit } from "@/components/DashBoard/helpers/Bar-Chart-Profit-Daily";
-import { YearlyBarChartProfit } from "@/components/DashBoard/helpers/Bar-Chart-Profit-Yearly";
+import { MonthlyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Monthly";
+import { DailyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Daily";
+import { YearlyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Yearly";
 import { GetAllYears } from "@/components/DashBoard/helpers/GetAllYears";
 import { format } from "date-fns";
 
@@ -59,7 +59,7 @@ export default function Home() {
           const cardsData = await DashboardCardsData(historyData, expenseData);
           setCards(cardsData);
 
-          const dailyData = await DailyBarChartProfit(
+          const dailyData = await DailyChartProfit(
             historyData,
             expenseData,
             day,
@@ -68,14 +68,14 @@ export default function Home() {
           );
           setDaily(dailyData);
 
-          const monthlyData = await MonthlyBarChartProfit(
+          const monthlyData = await MonthlyChartProfit(
             historyData,
             expenseData,
             year
           );
           setMonthly(monthlyData);
 
-          const yearlyData = await YearlyBarChartProfit(
+          const yearlyData = await YearlyChartProfit(
             historyData,
             expenseData,
             allYearsData
@@ -124,16 +124,24 @@ export default function Home() {
               <div className="h-[25rem]  w-full ">
                 <BarChart
                   allYears={allYears}
-                  daily={daily}
-                  monthly={monthly}
-                  yearly={yearly}
+                  daily={daily.map((d: any) => d.Bar)}
+                  monthly={monthly.map((d: any) => d.Bar)}
+                  yearly={yearly.map((d: any) => d.Bar)}
                   setDay={setDay}
                   setYear={setYear}
                   setMonth={setMonth}
                 />
               </div>
               <div className="relative w-full h-[25rem]  ">
-                <ReLineChart />
+                <ReLineChart
+                  allYears={allYears}
+                  daily={daily.map((d: any) => d.Line)}
+                  monthly={monthly.map((d: any) => d.Line)}
+                  yearly={yearly.map((d: any) => d.Line)}
+                  setDay={setDay}
+                  setYear={setYear}
+                  setMonth={setMonth}
+                />
               </div>
             </section>
 

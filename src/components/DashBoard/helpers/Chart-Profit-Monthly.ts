@@ -8,7 +8,7 @@ const MonthsGetter = (date: Date) => {
   return months;
 };
 
-export const MonthlyBarChartProfit = async (
+export const MonthlyChartProfit = async (
   dataHistory: any,
   expenseHistory: any,
   year: string
@@ -38,7 +38,16 @@ export const MonthlyBarChartProfit = async (
 
     const MonthlyProfit = totalMonthProfit - totalMonthExpense;
 
-    return MonthlyProfit;
+    // return as array
+    const DataSet = {
+      Bar: MonthlyProfit,
+      Line: {
+        sales: totalMonthProfit,
+        expenses: totalMonthExpense,
+      },
+    };
+
+    return DataSet;
   });
 
   return ProfitData;
