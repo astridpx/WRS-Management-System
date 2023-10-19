@@ -18,6 +18,7 @@ import { MonthlyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-
 import { DailyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Daily";
 import { YearlyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Yearly";
 import { GetAllYears } from "@/components/DashBoard/helpers/GetAllYears";
+import { TopCustomer } from "@/components/DashBoard/helpers/Top-Customer";
 import { format } from "date-fns";
 
 export default function Home() {
@@ -41,6 +42,7 @@ export default function Home() {
   const [month, setMonth] = useState<any>(format(new Date(), "MMM"));
   const [year, setYear] = useState<any>(format(new Date(), "yyyy"));
   const [allYears, setAllYears] = useState<any>([]);
+  const [topCustomers, setTopCustomers] = useState<any>([]);
   const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   const historyData = results[0]?.data;
@@ -81,6 +83,9 @@ export default function Home() {
             allYearsData
           );
           setYearly(yearlyData);
+
+          const top = await TopCustomer(historyData);
+          setTopCustomers(top);
         }
       } catch (error) {
         console.error(error);
@@ -153,21 +158,28 @@ export default function Home() {
               {/* TOP Customer */}
               <div className="h-full w-full p-4  bg-white space-y-2 rounded-lg">
                 <h1 className="font-semibold text-lg text-gray-600">
-                  Your Top 8 Customer
+                  Your Top 9 Customer
                 </h1>
                 <p className="text-sm text-slate-500  ">
                   Sales performance based by order
                 </p>
                 <div className=" pt-2">
-                  {numbers.map((number) => {
+                  {topCustomers.map((person: any, index: any) => {
                     return (
                       <>
                         <div
-                          key={number}
-                          className="flex justify-between text-sm p-2 border "
+                          key={index}
+                          className="flex justify-between text-sm p-2 border text-slate-500 "
                         >
-                          <h1 className="text-sm">Tandie O Canavan</h1>
-                          <p className="font-medium text-gray-900">₱ 10,000</p>
+                          <h1 className="text-sm ">
+                            <span className="font-medium mr-2">
+                              {index + 1}
+                            </span>
+                            {person.name}
+                          </h1>
+                          <p className="font-medium ">
+                            ₱ {person.totalAmount?.toLocaleString()}
+                          </p>
                         </div>
                       </>
                     );
