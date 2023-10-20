@@ -17,11 +17,20 @@ export default function POSReceipt() {
     order,
     payment,
     setDate: setterDate,
+    resetorder,
   } = POSPaymentModal();
 
   useEffect(() => {
     setterDate(newDate ? newDate : new Date());
   }, [newDate, setterDate]);
+
+  useEffect(() => {
+    if (resetorder) {
+      setDate(new Date());
+      setNewDate(new Date());
+      setterDate(new Date());
+    }
+  }, [resetorder, setterDate]);
 
   return (
     <>
