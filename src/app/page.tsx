@@ -19,6 +19,7 @@ import { DailyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Da
 import { YearlyChartProfit } from "@/components/DashBoard/helpers/Chart-Profit-Yearly";
 import { GetAllYears } from "@/components/DashBoard/helpers/GetAllYears";
 import { TopCustomer } from "@/components/DashBoard/helpers/Top-Customer";
+import { MonthlyDoughNutChart } from "@/components/DashBoard/helpers/Doughnut-Chart-Monthly";
 import { format } from "date-fns";
 
 export default function Home() {
@@ -43,7 +44,7 @@ export default function Home() {
   const [year, setYear] = useState<any>(format(new Date(), "yyyy"));
   const [allYears, setAllYears] = useState<any>([]);
   const [topCustomers, setTopCustomers] = useState<any>([]);
-  const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const [monthlyDoughnut, setMonthlyDoughnut] = useState<any>([]);
 
   const historyData = results[0]?.data;
   const historyIsSuccess = results[0].isSuccess;
@@ -86,6 +87,13 @@ export default function Home() {
 
           const top = await TopCustomer(historyData);
           setTopCustomers(top);
+
+          const DoughnutData = await MonthlyDoughNutChart(
+            historyData,
+            year,
+            month
+          );
+          setMonthlyDoughnut(DoughnutData);
         }
       } catch (error) {
         console.error(error);
@@ -152,7 +160,12 @@ export default function Home() {
 
             <section className="h-[27.5rem] w-[29%]  relative space-y-2">
               <div className=" p-2 pb-4  bg-white space-y-2 rounded-lg">
-                <DoughNutChart />
+                <DoughNutChart
+                  allYears={allYears}
+                  setYear={setYear}
+                  setMonth={setMonth}
+                  monthlyDoughnut={monthlyDoughnut}
+                />
               </div>
 
               {/* TOP Customer */}
