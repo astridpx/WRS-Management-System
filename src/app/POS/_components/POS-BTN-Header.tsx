@@ -6,7 +6,7 @@ import POSBTNHeaderStore from "@/lib/zustand/POSPage-store/BTN-header";
 import addCustomerModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
 
 export function POSBTNHeader() {
-  const { toggleShowSelect, toggleShowReturn } = POSBTNHeaderStore();
+  const { toggleShowSelect, toggleShowReturn, customer } = POSBTNHeaderStore();
   const { toggleShowCustomerForm } = addCustomerModalStore();
 
   return (

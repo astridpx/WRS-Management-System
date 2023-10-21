@@ -37,3 +37,12 @@ export const createTransaction = async (Data: any) => {
 
   return data;
 };
+//localhost:3000/api/gallons/651793b5fba28b68e5182463
+
+export const returnGallon = async (Data: any, id: any) => {
+  const { data } = await axios.put(`/api/gallons/${id}`, {
+    ...Data,
+  });
+
+  return data;
+};
