@@ -125,3 +125,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Selecting or highlighting animation */
+.select_center {
+  @apply relative after:block  after:h-[2px] after:bg-blue-500;
+}
+.select_center::after {
+  content: "";
+  position: absolute;
+  animation: my-custom-animation;
+  animation-fill-mode: forwards;
+  animation-duration: 300ms;
+  transform-origin: center;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+@keyframes my-custom-animation {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
