@@ -1,5 +1,4 @@
 import { connectDB } from "@/lib/mongodb/config/connect-db";
-import User from "@/lib/mongodb/model/User.model";
 import { Acc } from "@/lib/mongodb/model/Accounts.model";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
