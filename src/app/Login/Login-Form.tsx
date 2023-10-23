@@ -12,10 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import toast from "react-hot-toast";
 import { ILogin } from "../../../typings";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+} from "@/components/Toast/toast";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -32,15 +37,22 @@ export default function LoginForm() {
       ...data,
       redirect: false,
     });
+    if (!res) {
+      await LoadingToast("Verifying account...");
+    }
 
     console.log(res);
     if (!res?.error) {
-      toast.success("Login Success");
+      await DissmissToast();
+      await SuccessToast("Login Success");
+
+      await LoadingToast("Initializing data...");
 
       // router.push("/");
     }
     if (res?.error) {
-      toast.error(res?.error);
+      DissmissToast();
+      ErrorToast(res?.error);
     }
   };
 
