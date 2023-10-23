@@ -153,8 +153,17 @@ export default function SettingsPage() {
                     />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <div className="absolute bg-slate-200 bottom-3 right-0 rounded-full p-[6px] cursor-pointer shadow-sm">
-                    <AiOutlineCamera size={20} className="text-gray-500" />
+                  <div className="absolute bg-slate-200 bottom-2 right-0 rounded-full p-[6px]  shadow-sm">
+                    <Label htmlFor="file" className="cursor-pointer">
+                      <AiOutlineCamera size={20} className="text-gray-500" />
+                    </Label>
+                    <Input
+                      type="file"
+                      id="file"
+                      name="file"
+                      accept="image/*"
+                      className="hidden"
+                    />
                   </div>
                 </div>
               </div>
