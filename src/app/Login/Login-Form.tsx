@@ -19,8 +19,8 @@ import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const router = useRouter();
-  const [data, setData] = useState<ILogin>({
-    email: "",
+  const [data, setData] = useState<any>({
+    username: "",
     password: "",
     role: "",
   });
@@ -79,8 +79,8 @@ export default function LoginForm() {
             Email
           </label>
           <Input
-            type="email"
-            name="email"
+            type="text"
+            name="username"
             required
             placeholder="Enter your email"
             onChange={(e) =>

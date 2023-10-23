@@ -24,10 +24,14 @@ export async function POST(req: Request) {
         { status: 400 }
       );
 
+    // Create a new user object without the hash_password property
+    const sanitizedUser = { ...user.toObject() };
+    delete sanitizedUser.hash_password;
+
     return NextResponse.json({
       message: "Login Successfull",
       isAuth: true,
-      user,
+      user: sanitizedUser,
     });
   } catch (error) {
     console.log(error);

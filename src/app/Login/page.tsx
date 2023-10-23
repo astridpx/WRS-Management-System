@@ -9,6 +9,7 @@ import Link from "next/link";
 
 export default async function LoginPage() {
   const session = await getServerSession(options);
+  console.log(session);
 
   if (session) {
     return (

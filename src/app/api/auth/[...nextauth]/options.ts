@@ -5,7 +5,7 @@ import { ILogin } from "../../../../../typings";
 export const options: NextAuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 10 * 60 * 60,
+    // maxAge: 10 * 60 * 60,
   },
 
   providers: [
@@ -14,7 +14,7 @@ export const options: NextAuthOptions = {
       credentials: {
         email: {
           label: "Email:",
-          type: "email",
+          type: "text",
           placeholder: "your-cool-email",
         },
         password: {
@@ -27,7 +27,7 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const { email, password, role } = credentials as ILogin;
+        const { username, password, role } = credentials as ILogin;
 
         const res = await fetch("http://localhost:3000/api/login", {
           method: "POST",
@@ -36,7 +36,7 @@ export const options: NextAuthOptions = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
+            username,
             password,
             role,
           }),
@@ -73,13 +73,15 @@ export const options: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role;
+      if (user) {
+        return { ...token, ...user };
+      }
 
       return token;
     },
 
     async session({ session, token }) {
-      if (session.user) session.user.role = token.role;
+      if (session.user) session.user = token as any;
       return session;
     },
   },
