@@ -39,7 +39,7 @@ export default function Navbar() {
 
   const {
     isLoading,
-    data: User,
+    data: profile,
     isSuccess,
   } = useQuery({
     queryKey: ["myProfile"],
@@ -52,9 +52,9 @@ export default function Navbar() {
 
       return data.data;
     },
-    onSuccess: (data) => {
-      setUser(data);
-    },
+    // onSuccess: (data) => {
+    //   setUser(data);
+    // },
   });
 
   return (
@@ -149,17 +149,25 @@ export default function Navbar() {
             <DropdownMenuTrigger className="focus:outline-0 focus:outline-none">
               <div className="h-[10vh] flex items-center px-2 space-x-4 focus:outline-0 focus:outline-none border-none cursor-pointer">
                 <div className="flex flex-col justify-end text-right leading-6 ">
-                  <h1 className="text-gray-700 dark:text-gray-300">
-                    Joe Biden
+                  <h1 className="capitalize text-gray-700 dark:text-gray-300">
+                    {isSuccess
+                      ? `${profile.first_name} ${profile.last_name}`
+                      : "unknwon"}
                   </h1>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Admin
+                  <p className="capitalize text-xs text-gray-600 dark:text-gray-400">
+                    {isSuccess ? profile.role : "unknwon"}
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-4">
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarImage
+                      src={
+                        isSuccess
+                          ? profile?.img
+                          : "https://github.com/shadcn.png"
+                      }
+                    />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <IoIosArrowDown size={21} className="text-gray-400" />
@@ -171,9 +179,11 @@ export default function Navbar() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">shadcn</p>
+                  <p className="text-sm font-medium leading-none">
+                    {isSuccess ? profile.username : "unknown"}
+                  </p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    m@example.com
+                    {isSuccess ? profile.email : "unknown"}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -194,7 +204,12 @@ export default function Navbar() {
                 <DropdownMenuItem>New Team</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()}>
+              <DropdownMenuItem
+                onClick={() => {
+                  clearUser();
+                  signOut();
+                }}
+              >
                 Log out
                 {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
               </DropdownMenuItem>
