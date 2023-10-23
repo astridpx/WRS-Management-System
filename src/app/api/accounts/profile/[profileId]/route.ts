@@ -16,13 +16,13 @@ const hashPassword = async (pass: any) => {
 
 // @desc CHANGE PASSWORD
 export async function POST(req: Request, { params }: any) {
-  const { password, cpassword, accId } = await req.json();
+  const { currentPass, password, cpassword, accId } = await req.json();
 
   const id = accId?.trim();
 
-  if (!password || !cpassword)
+  if (!currentPass || !password || !cpassword)
     return NextResponse.json(
-      { message: "Password is required." },
+      { message: "All fields is required." },
       { status: 500 }
     );
 
@@ -41,7 +41,11 @@ export async function POST(req: Request, { params }: any) {
   try {
     const hash_password = await hashPassword(password);
 
-    const User = await Acc.findById(id).lean();
+    const User: any = await Acc.findById(id).lean();
+    const validPassword = await bcrypt.compare(
+      currentPass,
+      User?.hash_password
+    );
 
     if (!User)
       return NextResponse.json(
@@ -49,11 +53,17 @@ export async function POST(req: Request, { params }: any) {
         { status: 500 }
       );
 
+    if (!validPassword)
+      return NextResponse.json(
+        { message: "Current password didn't match." },
+        { status: 400 }
+      );
+
     await Acc.findByIdAndUpdate(id, {
       hash_password,
     });
 
-    return NextResponse.json({ data: "Password successfully changed." });
+    return NextResponse.json({ message: "Password successfully changed." });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -107,7 +117,7 @@ export async function PUT(req: Request, { params }: any) {
       email,
     });
 
-    return NextResponse.json({ data: "Profile successfully updated." });
+    return NextResponse.json({ message: "Profile successfully updated." });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -137,7 +147,9 @@ export async function DELETE(req: Request, { params }: any) {
       img,
     });
 
-    return NextResponse.json({ data: "Profile picture successfully updated." });
+    return NextResponse.json({
+      message: "Profile picture successfully updated.",
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

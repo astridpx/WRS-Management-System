@@ -28,17 +28,66 @@ import {
   DissmissToast,
 } from "@/components/Toast/toast";
 
-export default function ItemssPage() {
-  const {
-    isLoading,
-    data: profile,
-    isSuccess,
-  } = useQuery({
-    queryKey: ["accounts"],
-    queryFn: getMyProfile,
-  });
+export default function SettingsPage() {
+  const queryClient = useQueryClient();
+  // const {
+  //   isLoading,
+  //   data: profile,
+  //   isSuccess,
+  // } = useQuery({
+  //   queryKey: ["myProfile"],
+  //   queryFn: getMyProfile,
+  // });
   const [tab, setTab] = useState("details");
   const [edit, setEdit] = useState(false);
+  const [password, setPassword] = useState<any>({
+    accId: "6513906b0ccefccfaf391982",
+    currentPass: "",
+    password: "",
+    cpassword: "",
+  });
+
+  const PasswordChangeSubmit = useMutation({
+    mutationFn: changePassword,
+    onMutate: () => {
+      LoadingToast("Updating password...");
+    },
+    onSuccess: (data) => {
+      DissmissToast();
+      SuccessToast(data?.message);
+      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
+      setPassword({
+        accId: "6513906b0ccefccfaf391982",
+        currentPass: "",
+        password: "",
+        cpassword: "",
+      });
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const handleChangePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // if (!itemData.img.length) return ErrorToast("Item image is required");
+
+    await PasswordChangeSubmit.mutateAsync({ ...password });
+  };
+
+  const handleEditProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // if (!itemData.img.length) return ErrorToast("Item image is required");
+
+    // await mutateAsync({ ...itemData });
+  };
+
+  const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword({ ...password, [e.target.name]: e.target.value });
+  };
 
   return (
     <>
@@ -183,39 +232,54 @@ export default function ItemssPage() {
                 <form
                   action=""
                   className="grid grid-cols-3 p-4 gap-x-8 gap-y-4 "
+                  onSubmit={(e) => handleChangePassword(e)}
                 >
                   <div>
-                    <Label htmlFor="current_pass">Current Password</Label>
+                    <Label htmlFor="currentPass">Current Password</Label>
                     <Input
                       type="password"
-                      id="current_pass"
-                      name="current_pass"
+                      id="currentPass"
+                      name="currentPass"
+                      required
+                      value={password.currentPass}
                       placeholder="Current Password"
+                      onChange={(e) => handlePasswordInput(e)}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="current_pass">New Password</Label>
+                    <Label htmlFor="password">New Password</Label>
                     <Input
                       type="password"
-                      id="new_pass"
-                      name="new_pass"
+                      id="password"
+                      name="password"
+                      required
+                      value={password.password}
                       placeholder="New Password"
+                      onChange={(e) => handlePasswordInput(e)}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="current_pass">Confirm Password</Label>
+                    <Label htmlFor="cpassword">Confirm Password</Label>
                     <Input
                       type="password"
-                      id="confirm_pass"
-                      name="confirm_pass"
+                      id="cpassword"
+                      name="cpassword"
+                      required
+                      value={password.cpassword}
                       placeholder="Confirm Password"
+                      onChange={(e) => handlePasswordInput(e)}
                     />
                   </div>
                   <div className="col-span-full flex items- justify-end space-x-4 relative">
                     <p className="text-blue-500 underline cursor-pointer text-[.8rem] absolute left-0 top-0">
                       Forgot Password?
                     </p>
-                    <Button type="submit">Change Password</Button>
+                    <Button
+                      type="submit"
+                      disabled={PasswordChangeSubmit.isLoading}
+                    >
+                      Change Password
+                    </Button>
                   </div>
                 </form>
 
