@@ -100,6 +100,7 @@ export default function SettingsPage() {
   const EditProfileSubmit = useMutation({
     mutationFn: async () => await updateDetails({ ...data }, user._id),
     onMutate: () => {
+      setEdit(false);
       LoadingToast("Updating profile...");
     },
     onSuccess: (data) => {
@@ -181,6 +182,7 @@ export default function SettingsPage() {
               <Button
                 variant={edit ? "secondary" : "default"}
                 onClick={() => setEdit(true)}
+                disabled={EditProfileSubmit.isLoading}
               >
                 Edit Profile
               </Button>
@@ -236,6 +238,8 @@ export default function SettingsPage() {
                       value={data.fname}
                       placeholder="First Name"
                       onChange={(e) => handleProfileInput(e)}
+                      readOnly={!edit}
+                      className={`${!edit && "focus-visible:ring-transparent"}`}
                     />
                   </div>
                   <div className="">
@@ -247,6 +251,8 @@ export default function SettingsPage() {
                       value={data.lname}
                       placeholder="Last Name"
                       onChange={(e) => handleProfileInput(e)}
+                      readOnly={!edit}
+                      className={`${!edit && "focus-visible:ring-transparent"}`}
                     />
                   </div>
                   <div>
@@ -258,6 +264,8 @@ export default function SettingsPage() {
                       value={data.username}
                       placeholder="Username"
                       onChange={(e) => handleProfileInput(e)}
+                      readOnly={!edit}
+                      className={`${!edit && "focus-visible:ring-transparent"}`}
                     />
                   </div>
                   <div className="">
@@ -269,6 +277,8 @@ export default function SettingsPage() {
                       value={data.email}
                       placeholder="Email"
                       onChange={(e) => handleProfileInput(e)}
+                      readOnly={!edit}
+                      className={`${!edit && "focus-visible:ring-transparent"}`}
                     />
                   </div>
 
