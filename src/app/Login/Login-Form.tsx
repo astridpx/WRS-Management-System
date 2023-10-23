@@ -31,14 +31,13 @@ export default function LoginForm() {
     const res = await signIn("credentials", {
       ...data,
       redirect: false,
-      callbackUrl: "/",
     });
 
     console.log(res);
     if (!res?.error) {
       toast.success("Login Success");
 
-      router.push("/");
+      // router.push("/");
     }
     if (res?.error) {
       toast.error(res?.error);

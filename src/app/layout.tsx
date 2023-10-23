@@ -28,18 +28,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* // ? temporary remove auth */}
-      {/* <AuthProvider> */}
-      <ThemeProviderWrapper>
-        <body className={`${poppins.className} bg-[#ECF0FA]`} >
-          <ReactQueryProvider>
-            {children}
-            {/* <Toaster /> */}
-            <ToastContainer />
-            <Toaster position="bottom-right" reverseOrder={false} />
-          </ReactQueryProvider>
-        </body>
-      </ThemeProviderWrapper>
-      {/* </AuthProvider> */}
+      <AuthProvider>
+        <ThemeProviderWrapper>
+          <body className={`${poppins.className} bg-[#ECF0FA]`}>
+            <ReactQueryProvider>
+              {children}
+              {/* <Toaster /> */}
+              <ToastContainer />
+              <Toaster position="bottom-right" reverseOrder={false} />
+            </ReactQueryProvider>
+          </body>
+        </ThemeProviderWrapper>
+      </AuthProvider>
     </html>
   );
 }

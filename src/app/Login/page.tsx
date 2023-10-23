@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import peoples from "../../assets/people-cofee.svg";
 import bg from "../../assets/bg-login.jpg";
@@ -6,21 +8,22 @@ import LoginForm from "./Login-Form";
 import { getServerSession } from "next-auth/next";
 import { options } from "../api/auth/[...nextauth]/options";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { UserStore } from "@/lib/zustand/User/user.store";
+import { useRouter } from "next/navigation";
 
-export default async function LoginPage() {
-  const session = await getServerSession(options);
+export default function LoginPage() {
+  const { clearUser, setUser } = UserStore();
+  const router = useRouter();
+  const { data: session, status, update } = useSession();
+
   console.log(session);
 
   if (session) {
-    return (
-      <>
-        <div className="flex justify-center pt-12 h-screen  w-full">
-          <Link href="/" className="text-center text-blue-400 underline">
-            Back to Home
-          </Link>
-        </div>
-      </>
-    );
+    const User = session.user;
+    setUser({ ...User });
+
+    router.push("/");
   }
 
   return (

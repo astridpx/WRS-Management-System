@@ -21,20 +21,51 @@ import { Separator } from "@/components/ui/separator";
 import { signOut } from "next-auth/react";
 import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
 import { useTheme } from "next-themes";
+import { UserStore } from "@/lib/zustand/User/user.store";
+import { useSession } from "next-auth/react";
+import { useMutation, useQueryClient, useQuery } from "react-query";
+import axios from "axios";
 
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 );
 
 export default function Navbar() {
+  const queryClient = useQueryClient();
   const { toggleSidebar, isExpand } = useSidebarStore();
+  const { clearUser, setUser, user } = UserStore();
   const { theme, setTheme } = useTheme();
+  const { data: session, status } = useSession();
+
+  const {
+    isLoading,
+    data: User,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["myProfile"],
+    queryFn: async () => {
+      const accId = session?.user?._id;
+
+      const { data } = await axios.post("/api/accounts/profile", {
+        accId: user._id ? user._id : accId,
+      });
+
+      return data.data;
+    },
+    onSuccess: (data) => {
+      setUser(data);
+    },
+  });
 
   return (
     <>
       <nav className="h-[10vh] w-full px-4 bg-white border flex justify-between z-10 sticky top-0  dark:bg-dark_bg">
         <div className="flex items-center">
-          <Toggle onClick={() => toggleSidebar(!isExpand)}>
+          <Toggle
+            onClick={() => {
+              toggleSidebar(!isExpand);
+            }}
+          >
             <HiOutlineMenuAlt2
               size={26}
               className="cursor-pointer text-gray-500  dark:text-gray-300"
@@ -46,14 +77,18 @@ export default function Navbar() {
           {theme === "dark" ? (
             <Badge
               className="rounded-3xl cursor-pointer"
-              onClick={() => setTheme("light")}
+              onClick={() => {
+                setTheme("light");
+              }}
             >
               <BiSun size={23} />
             </Badge>
           ) : (
             <Badge
               className="rounded-3xl cursor-pointer"
-              onClick={() => setTheme("dark")}
+              onClick={() => {
+                setTheme("dark");
+              }}
             >
               <BiMoon size={23} />
             </Badge>
@@ -93,11 +128,11 @@ export default function Navbar() {
                 <Separator />
                 <ScrollArea className="h-80  w-full">
                   <div className="pb-1">
-                    {tags.map((tag) => (
+                    {tags.map((tag, index) => (
                       <>
                         <div
                           className="px-4 text-sm py-3 text-gray-600 "
-                          key={tag}
+                          key={index}
                         >
                           {tag}
                         </div>

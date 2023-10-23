@@ -29,7 +29,7 @@ export const options: NextAuthOptions = {
       async authorize(credentials) {
         const { username, password, role } = credentials as ILogin;
 
-        const res = await fetch("http://localhost:3000/api/login", {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
           method: "POST",
 
           headers: {
@@ -81,7 +81,10 @@ export const options: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      if (session.user) session.user = token as any;
+      if (session.user) {
+        session.user = token as any;
+        // setUser({ ...session.user });
+      }
       return session;
     },
   },

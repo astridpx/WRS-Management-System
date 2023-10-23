@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import Image from "next/image";
 import bg from "@/assets/bg-mountains.jpg";
@@ -27,37 +27,65 @@ import {
   LoadingToast,
   DissmissToast,
 } from "@/components/Toast/toast";
+import { UserStore } from "@/lib/zustand/User/user.store";
 
 export default function SettingsPage() {
+  const { user } = UserStore();
   const queryClient = useQueryClient();
-  // const {
-  //   isLoading,
-  //   data: profile,
-  //   isSuccess,
-  // } = useQuery({
-  //   queryKey: ["myProfile"],
-  //   queryFn: getMyProfile,
-  // });
+  const {
+    isLoading,
+    data: profile,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["myProfile"],
+    queryFn: () => getMyProfile({ accId: user._id }),
+  });
   const [tab, setTab] = useState("details");
   const [edit, setEdit] = useState(false);
+
   const [password, setPassword] = useState<any>({
-    accId: "6513906b0ccefccfaf391982",
+    accId: user._id,
     currentPass: "",
     password: "",
     cpassword: "",
   });
+  const [data, setData] = useState({
+    profileId: user._id,
+    fname: "",
+    lname: "",
+    username: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      setData((prevData) => ({
+        ...prevData, // Spread the previous state to keep profileId
+        fname: profile.first_name,
+        lname: profile.last_name,
+        username: profile.username,
+        email: profile?.email,
+      }));
+    }
+  }, [
+    isSuccess,
+    profile?.email,
+    profile?.first_name,
+    profile?.last_name,
+    profile?.username,
+  ]);
 
   const PasswordChangeSubmit = useMutation({
-    mutationFn: changePassword,
+    mutationFn: () => changePassword({ ...password }, user._id),
     onMutate: () => {
       LoadingToast("Updating password...");
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
       DissmissToast();
       SuccessToast(data?.message);
-      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
       setPassword({
-        accId: "6513906b0ccefccfaf391982",
+        accId: user._id,
         currentPass: "",
         password: "",
         cpassword: "",
@@ -69,24 +97,40 @@ export default function SettingsPage() {
     },
   });
 
+  const EditProfileSubmit = useMutation({
+    mutationFn: async () => await updateDetails({ ...data }, user._id),
+    onMutate: () => {
+      LoadingToast("Updating profile...");
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
+      DissmissToast();
+      SuccessToast(data?.message);
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
   const handleChangePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!itemData.img.length) return ErrorToast("Item image is required");
-
-    await PasswordChangeSubmit.mutateAsync({ ...password });
+    await PasswordChangeSubmit.mutateAsync();
   };
 
   const handleEditProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!itemData.img.length) return ErrorToast("Item image is required");
-
-    // await mutateAsync({ ...itemData });
+    await EditProfileSubmit.mutateAsync();
   };
 
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword({ ...password, [e.target.name]: e.target.value });
+  };
+
+  const handleProfileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   return (
@@ -99,7 +143,11 @@ export default function SettingsPage() {
                 <div className="relative h-max w-max bg-yellow-200 translate-y-[50%] rounded-full ">
                   <Avatar className="h-[7rem] w-[7rem] border-4  border-slate-200 shadow-sm ">
                     <AvatarImage
-                      src="https://github.com/shadcn.png"
+                      src={
+                        isSuccess
+                          ? profile.img
+                          : "https://github.com/shadcn.png"
+                      }
                       alt="@shadcn"
                     />
                     <AvatarFallback>CN</AvatarFallback>
@@ -119,11 +167,15 @@ export default function SettingsPage() {
             </figure>
 
             <div className="flex justify-between items-end h-[35%] p-4  ">
-              <div>
+              <div className="capitalize">
                 <h5 className="text-slate-800 font-medium text-xl">
-                  Joe Biden
+                  {isSuccess
+                    ? `${profile.first_name} ${profile.last_name}`
+                    : "Unknown"}
                 </h5>
-                <p className="text-slate-500 text-sm">Admin</p>
+                <p className="text-slate-500 text-sm">
+                  {isSuccess ? profile.role : "Unknown"}
+                </p>
               </div>
 
               <Button
@@ -173,6 +225,7 @@ export default function SettingsPage() {
                 <form
                   action=""
                   className="grid grid-cols-2 p-4 gap-x-8 gap-y-4 "
+                  onSubmit={(e) => handleEditProfile(e)}
                 >
                   <div>
                     <Label htmlFor="fname">First Name</Label>
@@ -180,7 +233,9 @@ export default function SettingsPage() {
                       type="text"
                       id="fname"
                       name="fname"
+                      value={data.fname}
                       placeholder="First Name"
+                      onChange={(e) => handleProfileInput(e)}
                     />
                   </div>
                   <div className="">
@@ -189,7 +244,9 @@ export default function SettingsPage() {
                       type="text"
                       id="lname"
                       name="lname"
+                      value={data.lname}
                       placeholder="Last Name"
+                      onChange={(e) => handleProfileInput(e)}
                     />
                   </div>
                   <div>
@@ -198,7 +255,9 @@ export default function SettingsPage() {
                       type="text"
                       id="username"
                       name="username"
+                      value={data.username}
                       placeholder="Username"
+                      onChange={(e) => handleProfileInput(e)}
                     />
                   </div>
                   <div className="">
@@ -207,7 +266,9 @@ export default function SettingsPage() {
                       type="email"
                       id="email"
                       name="email"
+                      value={data.email}
                       placeholder="Email"
+                      onChange={(e) => handleProfileInput(e)}
                     />
                   </div>
 
