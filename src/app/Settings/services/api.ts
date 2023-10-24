@@ -24,7 +24,6 @@ export const updateDetails = async (Data: any, id: any) => {
 };
 
 export const updateProfilePic = async (url: any, id: any) => {
-  console.log(id);
   const { data } = await axios.delete(`/api/accounts/profile/${id}`, {
     data: { img: url },
   });

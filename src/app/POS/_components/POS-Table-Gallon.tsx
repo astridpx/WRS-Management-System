@@ -21,8 +21,15 @@ export default function POSItems({
   buy_price,
   img,
 }: PosItemProps) {
-  const { setOrder, order, setPayment, resetorder, setIsBuy, isBuy } =
-    POSPaymentModal();
+  const {
+    setOrder,
+    order,
+    setPayment,
+    resetorder,
+    setIsBuy,
+    isBuy,
+    setIsBorrowed,
+  } = POSPaymentModal();
   const [total, setTotal] = useState<number>(0);
   const [clientGal, setClientGal] = useState<number>(0);
   const [WRSGal, setWRSGal] = useState<number>(0);
@@ -33,6 +40,10 @@ export default function POSItems({
 
     setTotal(newTotal);
     setOrder(id, { id, img, name, qty, price: total });
+
+    if (WRSGal > 0) {
+      setIsBorrowed(true);
+    }
   }, [
     clientGal,
     WRSGal,
@@ -44,6 +55,7 @@ export default function POSItems({
     name,
     isBuy,
     buy_price,
+    setIsBorrowed,
   ]);
 
   // reset input fields after submitting form

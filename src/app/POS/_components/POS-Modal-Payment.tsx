@@ -30,6 +30,8 @@ export const PaymentModal = () => {
     date,
     time,
     isBuy,
+    isBorrowed,
+    setIsBorrowed,
   } = POSPaymentModal();
   const { setCustomer, customer, setselectedCustomer } = POSBTNHeaderStore();
   const [discount, setDiscount] = useState<number>(0);
@@ -71,6 +73,7 @@ export const PaymentModal = () => {
       setDiscount(0);
       setCash(0);
       setIsBuy(false);
+      setIsBorrowed(false);
     },
     onError: (error: any) => {
       DissmissToast();
@@ -95,6 +98,7 @@ export const PaymentModal = () => {
       balance: credit < 0 ? Math.abs(credit) : credit,
       paid: credit !== 0 ? false : true,
       isBuy,
+      isBorrowed,
       orders: Orders,
     };
     if (!customer._id) return ErrorToast("Pls Select a customer");

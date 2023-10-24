@@ -10,7 +10,9 @@ export const POSPaymentModal = create<IPOSPaymentModal>((set) => ({
   date: new Date(),
   resetorder: false,
   isBuy: false,
+  isBorrowed: false,
 
+  setIsBorrowed: (state) => set({ isBorrowed: state }),
   togglePaymentModal: (state) => set({ paymentModal: state }),
   setPayment: (state) => set({ payment: state }),
   clearOrder: () => set((state) => ({ ...state, order: [] })),

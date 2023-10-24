@@ -103,6 +103,8 @@ export interface IPOSPaymentModal {
   date: Date | undefined;
   resetorder: boolean;
   isBuy: boolean;
+  isBorrowed: boolean;
+  setIsBorrowed: (state: boolean) => void;
   togglePaymentModal: (state: boolean) => void;
   setPayment: (state: number) => void;
   clearOrder: () => void;

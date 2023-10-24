@@ -41,6 +41,7 @@ export async function POST(req: Request) {
     orders,
     isBuy,
     time,
+    isBorrowed,
   } = await req.json();
 
   const customerId = customer?.trim();
@@ -63,30 +64,32 @@ export async function POST(req: Request) {
     await Trans.create(newTrans);
 
     // @desc Update the last_return of borrowed gallon
-    const customer = await Customer.findOneAndUpdate(
-      {
-        _id: customerId,
-        borrowed_gal: {
-          $elemMatch: {
-            item: { $in: orders.map((d: any) => d.item) },
-            borrowed: { $gt: 0 },
+    if (isBorrowed) {
+      const customer = await Customer.findOneAndUpdate(
+        {
+          _id: customerId,
+          borrowed_gal: {
+            $elemMatch: {
+              item: { $in: orders.map((d: any) => d.item) },
+              borrowed: { $gt: 0 },
+            },
           },
         },
-      },
-      {
-        $set: {
-          "borrowed_gal.$[elem].last_return": date,
-        },
-      },
-      {
-        arrayFilters: [
-          {
-            "elem.item": { $in: orders.map((d: any) => d.item) },
-            "elem.borrowed": { $gt: 0 },
+        {
+          $set: {
+            "borrowed_gal.$[elem].last_return": date,
           },
-        ],
-      }
-    );
+        },
+        {
+          arrayFilters: [
+            {
+              "elem.item": { $in: orders.map((d: any) => d.item) },
+              "elem.borrowed": { $gt: 0 },
+            },
+          ],
+        }
+      );
+    }
 
     return NextResponse.json({ message: "New transaction created." });
   } catch (error) {
