@@ -5,6 +5,13 @@ import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import type { FileWithPath } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { generateReactHelpers, useDropzone } from "@uploadthing/react/hooks";
+import {
+  SuccessToast,
+  ErrorToast,
+  LoadingToast,
+  DissmissToast,
+  InfoToast,
+} from "@/components/Toast/toast";
 
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
@@ -52,6 +59,16 @@ export default function ItemssPage() {
             </div>
             Drop files here!
           </div>
+
+          <button onClick={() => LoadingToast("Loading..")}>Toast</button>
+          <button
+            onClick={() => {
+              DissmissToast();
+              SuccessToast("success");
+            }}
+          >
+            Dissmiss
+          </button>
         </div>
       </PageWrapper>
     </>

@@ -48,7 +48,7 @@ export const LoadingToast = (message?: any) => {
 };
 
 export const DissmissToast = () => {
-  const { loading } = LoadingToast();
+  // const loading = LoadingToast();
 
-  toast.dismiss(loading);
+  toast.dismiss();
 };
