@@ -13,6 +13,19 @@ export const SuccessToast = (message: any) => {
     });
   }, 700);
 };
+export const InfoToast = (message: any) => {
+  setTimeout(() => {
+    toast.info(message, {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }, 700);
+};
 
 export const ErrorToast = (message: any) => {
   setTimeout(() => {
