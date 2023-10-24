@@ -58,6 +58,7 @@ export const monitoringHistoryColumns: ColumnDef<any>[] = [
   {
     header: "Status",
     accessorKey: "status",
+    cell: ({ row }) => <p className="min-w-[5rem]">{row.original.status}</p>,
   },
   {
     header: "Date",

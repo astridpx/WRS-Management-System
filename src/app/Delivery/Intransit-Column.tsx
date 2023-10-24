@@ -70,7 +70,7 @@ export const InTransitColumns: ColumnDef<any>[] = [
     header: "Date",
     accessorKey: "Alias",
     cell: ({ row }) => (
-      <p className="min-w-[8rem]">
+      <p className="min-w-[6rem]">
         {format(new Date(row.original?.date), "LLL dd, y")}
       </p>
     ),
