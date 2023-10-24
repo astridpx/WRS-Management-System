@@ -5,7 +5,7 @@ import { ILogin } from "../../../../../typings";
 export const options: NextAuthOptions = {
   session: {
     strategy: "jwt",
-    // maxAge: 10 * 60 * 60,
+    maxAge: 10 * 60 * 60,
   },
 
   providers: [
@@ -35,6 +35,7 @@ export const options: NextAuthOptions = {
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             username,
             password,
