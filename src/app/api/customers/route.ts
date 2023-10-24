@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb/config/connect-db";
 import { NextResponse } from "next/server";
 import { Customer } from "@/lib/mongodb/model/Customer.model";
+import { Items } from "@/lib/mongodb/model/Items.model";
 
 //  @desc GET All Customers
 export async function GET() {
@@ -8,6 +9,7 @@ export async function GET() {
     .populate({
       path: "borrowed_gal.item",
       select: "-stock_history",
+      model: Items,
     })
     .lean()
     .exec();
