@@ -47,6 +47,7 @@ export default function POSBottle({ id, name, price, img }: PosItemProps) {
             alt="Slim "
             height={30}
             width={30}
+            unoptimized
             className="object-contain aspect-[4/3]"
           />
           <p>{name}</p>

@@ -5,6 +5,7 @@ const nextConfig = {
   },
   images: {
     // domains: ["utfs.io"],
+    // disableStaticImages: true,
     remotePatterns: [
       {
         protocol: "https",

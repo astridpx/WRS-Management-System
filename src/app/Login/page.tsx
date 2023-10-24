@@ -40,12 +40,14 @@ export default function LoginPage() {
           <Image
             src={bg}
             alt="bg"
+            unoptimized
             className="absolute bg-cover bg-center bg-no-repeat h-screen w-full -z-10 opacity-90s blsur-sm "
           />
           <div className=" flex items-center  ">
             <Image
               src={peoples}
               alt="people"
+              unoptimized
               className="bg-cover bg-center bg-no-repeat  "
             />
           </div>
@@ -57,6 +59,7 @@ export default function LoginPage() {
               alt="blob"
               // height={300}
               // width={300}
+              unoptimized
               className="absolute bg-center h-[33rem] w-[33rem] -z-10 opacity-75 blur-sm "
             />
             <LoginForm />

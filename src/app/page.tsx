@@ -205,11 +205,16 @@
 // }
 
 import React from "react";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
     <>
-      <h1 className="text-3xl font-semibold">Home Page</h1>
+      <h1 className="text-3xl font-semibold">404</h1>
+      <h1 className="text-3xl font-semibold">
+        This Page Is Currently Unavailable
+      </h1>
+      <Link href="/Dashboard">Redirect to Login Page</Link>
     </>
   );
 }
