@@ -33,5 +33,16 @@ export default withAuth(
 // Applies next-auth only to matching routes - can be regex
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-  matcher: ["/", "/Products/:path*", "/Users/:path*"],
+  matcher: [
+    "/Dashboard/:path*",
+    "/POS/:path*",
+    "/Deliver/:path*",
+    "/Report/:path*",
+    "/Customer/:path*",
+    "/Items/:path*",
+    "/Monitoring/:path*",
+    "/Stocks&Expenses/:path*",
+    "/Accounts/:path*",
+    "/Settings/:path*",
+  ],
 };
