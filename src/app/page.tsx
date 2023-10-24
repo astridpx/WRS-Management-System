@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { CardsData } from "@/utils/Dashboard/DashboardCards-data";
-import { DashBoardCard } from "@/app/Dashboard/_component/DashBoard-Card";
-import BarChart from "@/app/Dashboard/_component/Bar-Chart";
-import DoughNutChart from "@/app/Dashboard/_component/Doughnut-Chart";
-import ReLineChart from "@/app/Dashboard/_component/Line-Chart";
+import { DashBoardCard } from "./Dashboard/_component/DashBoard-Card";
+import BarChart from "./Dashboard/_component/Bar-Chart";
+import DoughNutChart from "./Dashboard/_component/Doughnut-Chart";
+import ReLineChart from "./Dashboard/_component/Line-Chart";
 import { useQueries } from "react-query";
 import Loader from "@/components/loader/Spinner";
 import { getAllHistory, getAllExpenses } from "@/app/Dashboard/services/api";

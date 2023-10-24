@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { CardsData } from "@/utils/Dashboard/DashboardCards-data";
-import { DashBoardCard } from "@/app/Dashboard/_component/DashBoard-Card";
-import BarChart from "@/app/Dashboard/_component/Bar-Chart";
-import DoughNutChart from "@/app/Dashboard/_component/Doughnut-Chart";
-import ReLineChart from "@/app/Dashboard/_component/Line-Chart";
+import { DashBoardCard } from "./_component/DashBoard-Card";
+import BarChart from "./_component/Bar-Chart";
+import DoughNutChart from "./_component/Doughnut-Chart";
+import ReLineChart from "./_component/Line-Chart";
 import { useQueries } from "react-query";
 import Loader from "@/components/loader/Spinner";
 import { getAllHistory, getAllExpenses } from "@/app/Dashboard/services/api";
@@ -39,9 +39,23 @@ export default function DashboardPage() {
   const [day, setDay] = useState(30);
   const [month, setMonth] = useState<any>(format(new Date(), "MMM"));
   const [year, setYear] = useState<any>(format(new Date(), "yyyy"));
+  // LINE CHART
+  const [dailyLine, setDailyLine] = useState<any>([]);
+  const [monthlyLine, setMonthlyLine] = useState<any>([]);
+  const [yearlyLine, setYearlyLine] = useState<any>([]);
+  const [dayLine, setDayLine] = useState(30);
+  const [monthLine, setMonthLine] = useState<any>(format(new Date(), "MMM"));
+  const [yearLine, setYearLine] = useState<any>(format(new Date(), "yyyy"));
   const [allYears, setAllYears] = useState<any>([]);
   const [topCustomers, setTopCustomers] = useState<any>([]);
+  // DOUGHNUTDoughNut
   const [monthlyDoughnut, setMonthlyDoughnut] = useState<any>([]);
+  const [monthDoughNut, setMonthDoughNut] = useState<any>(
+    format(new Date(), "MMM")
+  );
+  const [yearDoughNut, setYearDoughNut] = useState<any>(
+    format(new Date(), "yyyy")
+  );
 
   const historyData = results[0]?.data;
   const historyIsSuccess = results[0].isSuccess;
@@ -59,6 +73,7 @@ export default function DashboardPage() {
           const cardsData = await DashboardCardsData(historyData, expenseData);
           setCards(cardsData);
 
+          // BAR CHART DATA
           const dailyData = await DailyChartProfit(
             historyData,
             expenseData,
@@ -82,13 +97,37 @@ export default function DashboardPage() {
           );
           setYearly(yearlyData);
 
+          // LINE CHART DATA
+          const dailyDataLine = await DailyChartProfit(
+            historyData,
+            expenseData,
+            dayLine,
+            yearLine,
+            monthLine
+          );
+          setDailyLine(dailyDataLine);
+
+          const monthlyDataLine = await MonthlyChartProfit(
+            historyData,
+            expenseData,
+            yearLine
+          );
+          setMonthlyLine(monthlyDataLine);
+
+          const yearlyDataLine = await YearlyChartProfit(
+            historyData,
+            expenseData,
+            allYearsData
+          );
+          setYearlyLine(yearlyDataLine);
+
           const top = await TopCustomer(historyData);
           setTopCustomers(top);
 
           const DoughnutData = await MonthlyDoughNutChart(
             historyData,
-            year,
-            month
+            yearDoughNut,
+            monthDoughNut
           );
           setMonthlyDoughnut(DoughnutData);
         }
@@ -100,12 +139,17 @@ export default function DashboardPage() {
     fetchData();
   }, [
     day,
+    dayLine,
     expenseData,
     expenseIsSuccess,
     historyData,
     historyIsSuccess,
     month,
+    monthDoughNut,
+    monthLine,
     year,
+    yearDoughNut,
+    yearLine,
   ]);
 
   return (
@@ -145,12 +189,12 @@ export default function DashboardPage() {
               <div className="relative w-full h-[25rem]  ">
                 <ReLineChart
                   allYears={allYears}
-                  daily={daily.map((d: any) => d.Line)}
-                  monthly={monthly.map((d: any) => d.Line)}
-                  yearly={yearly.map((d: any) => d.Line)}
-                  setDay={setDay}
-                  setYear={setYear}
-                  setMonth={setMonth}
+                  daily={dailyLine.map((d: any) => d.Line)}
+                  monthly={monthlyLine.map((d: any) => d.Line)}
+                  yearly={yearlyLine.map((d: any) => d.Line)}
+                  setDay={setDayLine}
+                  setYear={setYearLine}
+                  setMonth={setMonthLine}
                 />
               </div>
             </section>
@@ -159,8 +203,8 @@ export default function DashboardPage() {
               <div className=" p-2 pb-4  bg-white space-y-2 rounded-lg">
                 <DoughNutChart
                   allYears={allYears}
-                  setYear={setYear}
-                  setMonth={setMonth}
+                  setYear={setYearDoughNut}
+                  setMonth={setMonthDoughNut}
                   monthlyDoughnut={monthlyDoughnut}
                 />
               </div>
