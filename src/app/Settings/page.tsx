@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import Image from "next/image";
 import bg from "@/assets/bg-mountains.jpg";
@@ -26,8 +26,13 @@ import {
   ErrorToast,
   LoadingToast,
   DissmissToast,
+  InfoToast,
 } from "@/components/Toast/toast";
 import { UserStore } from "@/lib/zustand/User/user.store";
+import type { FileWithPath } from "@uploadthing/react";
+import { useDropzone } from "@uploadthing/react/hooks";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useUploadThing } from "@/utils/Uploadthing/useUploadthing";
 
 export default function SettingsPage() {
   const { user } = UserStore();
@@ -56,6 +61,10 @@ export default function SettingsPage() {
     username: "",
     email: "",
   });
+  const [files, setFiles] = useState<File[]>([]);
+  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
+    setFiles(acceptedFiles);
+  }, []);
 
   useEffect(() => {
     if (isSuccess) {
@@ -97,6 +106,22 @@ export default function SettingsPage() {
     },
   });
 
+  const UploadProfilePicSubmit = useMutation({
+    mutationFn: (data) => updateProfilePic(data, user._id),
+    onMutate: () => {
+      setEdit(false);
+      LoadingToast("Updating profile picture...");
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
+      DissmissToast();
+      SuccessToast(data?.message);
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
   const EditProfileSubmit = useMutation({
     mutationFn: async () => await updateDetails({ ...data }, user._id),
     onMutate: () => {
@@ -134,6 +159,43 @@ export default function SettingsPage() {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  // PRROFILE PIC UPLOAD
+  const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
+    onUploadError: (x) => {
+      console.log("Error: ", x);
+      ErrorToast("error occurred while uploading");
+    },
+    onUploadBegin: (x) => {
+      setFiles([]);
+    },
+    onClientUploadComplete: async (x) => {
+      console.log("File: ", x);
+      // SuccessToast("Uploaded successfully!");
+
+      const url = x ? x[0].url : profile.img;
+
+      await UploadProfilePicSubmit.mutateAsync(url);
+    },
+  });
+
+  const fileTypes = permittedFileInfo?.config
+    ? Object.keys(permittedFileInfo?.config)
+    : [];
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+
+    accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
+  });
+
+  // FILE UPLOAD BEGIN
+  useEffect(() => {
+    if (files.length > 0) {
+      startUpload(files);
+      InfoToast("Image uploading start");
+    }
+  }, [files, startUpload]);
+
   return (
     <>
       <PageWrapper>
@@ -143,27 +205,24 @@ export default function SettingsPage() {
               <div className="absolute  h-full w-full bg-blue-500/40 z-[1] px-4 flex items-end">
                 <div className="relative h-max w-max bg-yellow-200 translate-y-[50%] rounded-full ">
                   <Avatar className="h-[7rem] w-[7rem] border-4  border-slate-200 shadow-sm ">
-                    <AvatarImage
-                      src={
-                        isSuccess
-                          ? profile.img
-                          : "https://github.com/shadcn.png"
-                      }
-                      alt="@shadcn"
-                    />
+                    <AvatarImage src={isSuccess && profile.img} alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <div className="absolute bg-slate-200 bottom-2 right-0 rounded-full p-[6px]  shadow-sm">
+                  <div
+                    {...getRootProps()}
+                    className="absolute bg-slate-200 bottom-2 right-0 rounded-full p-[6px]  shadow-sm"
+                  >
                     <Label htmlFor="file" className="cursor-pointer">
                       <AiOutlineCamera size={20} className="text-gray-500" />
+                      <Input
+                        {...getInputProps()}
+                        // type="file"
+                        // id="file"
+                        // name="file"
+                        // accept="image/*"
+                        className="hidden"
+                      />
                     </Label>
-                    <Input
-                      type="file"
-                      id="file"
-                      name="file"
-                      accept="image/*"
-                      className="hidden"
-                    />
                   </div>
                 </div>
               </div>

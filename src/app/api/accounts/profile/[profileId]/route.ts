@@ -133,6 +133,8 @@ export async function DELETE(req: Request, { params }: any) {
   const { img } = await req.json();
 
   const id = profileId?.trim();
+  console.log(img);
+  console.log(id);
 
   try {
     const User = await Acc.findById(id).lean();

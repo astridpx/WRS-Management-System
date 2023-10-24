@@ -23,10 +23,19 @@ export const updateDetails = async (Data: any, id: any) => {
   return data;
 };
 
-export const updateProfilePic = async (Data: any, id: any) => {
+export const updateProfilePic = async (url: any, id: any) => {
+  console.log(id);
   const { data } = await axios.delete(`/api/accounts/profile/${id}`, {
-    ...Data,
+    data: { img: url },
   });
 
   return data;
 };
+// axios({
+//   method: 'post',
+//   url: '/user/12345',
+//   data: {
+//     firstName: 'Fred',
+//     lastName: 'Flintstone'
+//   }
+// })
