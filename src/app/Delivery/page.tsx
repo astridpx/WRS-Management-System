@@ -21,15 +21,6 @@ import {
 import OrderDeliveryStore from "@/lib/zustand/DeliveryPage-store/Orders-store";
 import { useRouter } from "next/navigation";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -37,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { format } from "date-fns";
 
 // remove duplicates in zustand store array
 function removeDuplicates(arr: any) {
@@ -81,7 +73,12 @@ const Deliverypage = () => {
   // FILTERING DATA
   const ToShip = data?.filter((item: any) => item.status === "To Ship");
   const InTransit = data?.filter((item: any) => item.status === "In Transit");
-  const Delivered = data?.filter((item: any) => item.status === "Delivered");
+  const Delivered = data?.filter(
+    (item: any) =>
+      item.status === "Delivered" &&
+      format(new Date(item?.date), "MMM dd yyyy") ===
+        format(new Date(), "MMM dd yyyy")
+  );
 
   // THIS FILL MARK THE ORDER AS INTRANSIT
   const setOrderIntransit = async () => {

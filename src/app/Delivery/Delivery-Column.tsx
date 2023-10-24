@@ -7,6 +7,7 @@ import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Colum
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableRowCheckBox } from "./Data-Table-Row-CheckBox";
+import { format } from "date-fns";
 
 export const DeliveryColumns: ColumnDef<any>[] = [
   {
@@ -60,5 +61,14 @@ export const DeliveryColumns: ColumnDef<any>[] = [
   {
     header: "Time",
     accessorKey: "Alias",
+  },
+  {
+    header: "Date",
+    accessorKey: "Alias",
+    cell: ({ row }) => (
+      <p className="min-w-[8rem]">
+        {format(new Date(row.original?.date), "LLL dd, y")}
+      </p>
+    ),
   },
 ];

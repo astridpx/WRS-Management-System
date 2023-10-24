@@ -6,6 +6,7 @@ import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Colum
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableRowCheckBox } from "./Data-Table-Row-CheckBox";
+import { format } from "date-fns";
 
 export const InTransitColumns: ColumnDef<any>[] = [
   {
@@ -58,11 +59,20 @@ export const InTransitColumns: ColumnDef<any>[] = [
     accessorKey: "balance",
   },
   {
+    header: "Carrier",
+    accessorKey: "deliverBy",
+  },
+  {
     header: "Time",
     accessorKey: "Alias",
   },
   {
-    header: "Carrier",
-    accessorKey: "deliverBy",
+    header: "Date",
+    accessorKey: "Alias",
+    cell: ({ row }) => (
+      <p className="min-w-[8rem]">
+        {format(new Date(row.original?.date), "LLL dd, y")}
+      </p>
+    ),
   },
 ];
