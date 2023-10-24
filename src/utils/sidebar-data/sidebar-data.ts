@@ -18,7 +18,7 @@ export const sidebarItems: ISidebar[] = [
         id: 101,
         icon: RxDashboard,
         name: "Dashboard",
-        path: "/",
+        path: "/Dashboard",
       },
       {
         id: 102,
