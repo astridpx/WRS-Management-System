@@ -204,6 +204,7 @@ export const ExpensesModalAdd = () => {
                       alt="image"
                       height={300}
                       width={250}
+                      unoptimized
                       className="w-full h-full object-contain aspect-[4/3]"
                     />
                   </figure>

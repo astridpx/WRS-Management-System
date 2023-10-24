@@ -106,6 +106,7 @@ export default function POSModalReturnGallon() {
                                 alt="Container"
                                 height={30}
                                 width={30}
+                                unoptimized
                                 className="object-contain aspect-[4/3]"
                               />
                               <p>{gal.item.name}</p>

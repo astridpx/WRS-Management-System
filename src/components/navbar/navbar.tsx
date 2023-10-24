@@ -161,13 +161,7 @@ export default function Navbar() {
 
                 <div className="flex items-center space-x-4">
                   <Avatar>
-                    <AvatarImage
-                      src={
-                        isSuccess
-                          ? profile?.img
-                          : "https://github.com/shadcn.png"
-                      }
-                    />
+                    <AvatarImage src={isSuccess && profile?.img} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <IoIosArrowDown size={21} className="text-gray-400" />

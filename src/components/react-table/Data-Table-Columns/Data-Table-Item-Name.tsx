@@ -19,6 +19,7 @@ export function DataTableItemName({ img, item, image }: IItemsNameColumn) {
           alt="Item"
           height={100}
           width={50}
+          unoptimized
           className="h-7 w-auto aspect-[4/3] object-contain"
         />
         <p>{item}</p>

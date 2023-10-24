@@ -282,6 +282,7 @@ export const ItemsModalEdit = () => {
                       alt="NoImage"
                       height={100}
                       width={100}
+                      unoptimized
                       className="w-full h-full object-contain"
                     />
                   </div>

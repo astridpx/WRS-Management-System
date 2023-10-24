@@ -278,6 +278,7 @@ export const ItemsModalAdd = () => {
                       alt="NoImage"
                       height={100}
                       width={50}
+                      unoptimized
                       className="w-full h-full object-contain"
                     />
                   </div>

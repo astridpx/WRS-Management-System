@@ -26,6 +26,7 @@ export default function Sidebar() {
           <Image
             src={WaterDrop}
             alt="Logo Image"
+            unoptimized
             className={`${
               isExpand ? "h-14 w-max" : "h-10 w-max"
             } ml-2 cursor-pointer`}

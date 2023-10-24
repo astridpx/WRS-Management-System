@@ -254,6 +254,7 @@ export const StockModal = () => {
                       alt="NoImage"
                       height={100}
                       width={100}
+                      unoptimized
                       className="h-full w-full object-contain aspect-[4/3]"
                     />
                   </div>

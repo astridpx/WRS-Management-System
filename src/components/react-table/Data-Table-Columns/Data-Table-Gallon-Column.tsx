@@ -31,6 +31,7 @@ export function DataTableGallonColumn({
                           alt="Slim"
                           height={30}
                           width={30}
+                          unoptimized
                           className="object-contain aspect-[4/3]"
                         />
 

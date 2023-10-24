@@ -209,6 +209,7 @@ export const ExpensesModalEdit = () => {
                       alt="image"
                       height={150}
                       width={150}
+                      unoptimized
                       className="w-full h-full"
                     />
                   </figure>

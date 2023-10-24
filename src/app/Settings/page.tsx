@@ -231,6 +231,7 @@ export default function SettingsPage() {
                 height={500}
                 width={500}
                 alt="bg"
+                unoptimized
                 className="h-full w-full absolute object-cover aspect-[16/9]"
               />
             </figure>

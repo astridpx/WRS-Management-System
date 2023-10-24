@@ -53,6 +53,7 @@ export const StockHistoryModal = () => {
                     alt="Image"
                     height={100}
                     width={100}
+                    unoptimized
                     className="h-full w-full object-contain aspect-[4/3]"
                   />
                 </div>
