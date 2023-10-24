@@ -14,6 +14,7 @@ import {
   ErrorToast,
   LoadingToast,
   DissmissToast,
+  InfoToast,
 } from "@/components/Toast/toast";
 
 export default function LoginPage() {
@@ -28,8 +29,8 @@ export default function LoginPage() {
     setUser({ ...User });
 
     DissmissToast();
-    SuccessToast("Data Successfully Nitialized.");
-    router.push("/");
+    InfoToast("Data Successfully Initialized.");
+    router.push("/Dashboard");
   }
 
   return (
