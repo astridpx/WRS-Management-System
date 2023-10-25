@@ -24,12 +24,12 @@ export default function DashboardPage() {
     {
       queryKey: ["transactions, sales, expenses, dashboard"],
       queryFn: getAllHistory,
-      staleTime: 1000,
+      staleTime: 10,
     },
     {
       queryKey: ["expenses, dashboard"],
       queryFn: getAllExpenses,
-      staleTime: 1000,
+      staleTime: 10,
     },
   ]);
   const [cards, setCards] = useState<any>([]);

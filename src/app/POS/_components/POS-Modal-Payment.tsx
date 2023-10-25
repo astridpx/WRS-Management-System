@@ -53,10 +53,19 @@ export const PaymentModal = () => {
       togglePaymentModal(false);
       LoadingToast("Creating new transaction...");
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       DissmissToast();
       SuccessToast(data?.message);
-      queryClient.invalidateQueries({
+
+      setCustomer([]);
+      setselectedCustomer(false);
+      clearOrder();
+      setResetOrder(!resetorder);
+      setDiscount(0);
+      setCash(0);
+      setIsBuy(false);
+      setIsBorrowed(false);
+      return await queryClient.invalidateQueries({
         queryKey: [
           "dashboard, transactions, sales, , report, credits, last_return, delivery",
         ],
@@ -67,15 +76,6 @@ export const PaymentModal = () => {
       // queryClient.invalidateQueries({
       //   queryKey: ["credits"],
       // });
-
-      setCustomer([]);
-      setselectedCustomer(false);
-      clearOrder();
-      setResetOrder(!resetorder);
-      setDiscount(0);
-      setCash(0);
-      setIsBuy(false);
-      setIsBorrowed(false);
     },
     onError: (error: any) => {
       DissmissToast();
