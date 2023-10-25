@@ -66,17 +66,14 @@ export const PaymentModal = () => {
       setIsBuy(false);
       setIsBorrowed(false);
       queryClient.invalidateQueries({
-        queryKey: [
-          "history, transactions, delivery, sales, credits, last_return",
-        ],
+        queryKey: ["history"],
       });
-      // "dashboard, transactions, sales, credits, last_return, delivery",
-      // queryClient.invalidateQueries({
-      //   queryKey: ["last_return"],
-      // });
-      // queryClient.invalidateQueries({
-      //   queryKey: ["credits"],
-      // });
+      queryClient.invalidateQueries({
+        queryKey: ["sales"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["transactions, delivery, credits, last_return"],
+      });
     },
     onError: (error: any) => {
       DissmissToast();
