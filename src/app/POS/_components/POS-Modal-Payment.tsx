@@ -58,7 +58,7 @@ export const PaymentModal = () => {
       SuccessToast(data?.message);
       queryClient.invalidateQueries({
         queryKey: [
-          "transactions, sales, dashboard, report, credits, last_return, delivery",
+          "dashboard, transactions, sales, , report, credits, last_return, delivery",
         ],
       });
       // queryClient.invalidateQueries({
