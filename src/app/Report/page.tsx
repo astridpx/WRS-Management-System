@@ -18,7 +18,7 @@ import { MonthlySalesReport } from "./helpers/Monthly";
 export default function ReportPage() {
   const results = useQueries([
     {
-      queryKey: ["transactions, sales, report"],
+      queryKey: ["sales, report"],
       queryFn: getTransactions,
       staleTime: 1000,
     },

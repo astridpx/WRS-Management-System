@@ -43,10 +43,10 @@ export const PayCreditModal = () => {
       DissmissToast();
       SuccessToast(data?.message);
       queryClient.invalidateQueries({
-        queryKey: ["transactions"],
+        queryKey: ["credits"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["credits"],
+        queryKey: ["transactions"],
       });
 
       setCash(0);

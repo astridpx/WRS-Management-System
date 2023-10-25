@@ -53,7 +53,7 @@ export const PaymentModal = () => {
       togglePaymentModal(false);
       LoadingToast("Creating new transaction...");
     },
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
       DissmissToast();
       SuccessToast(data?.message);
 
@@ -65,8 +65,10 @@ export const PaymentModal = () => {
       setCash(0);
       setIsBuy(false);
       setIsBorrowed(false);
-      return await queryClient.invalidateQueries({
-        queryKey: ["transactions, delivery, credits, last_return"],
+      queryClient.invalidateQueries({
+        queryKey: [
+          "history, transactions, delivery, sales, credits, last_return",
+        ],
       });
       // "dashboard, transactions, sales, credits, last_return, delivery",
       // queryClient.invalidateQueries({
