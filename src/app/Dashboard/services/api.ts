@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export const revalidate = 10;
+
 export const getAllHistory = async () => {
   const { data } = await axios.get("/api/transaction_history");
 

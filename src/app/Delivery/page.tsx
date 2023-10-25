@@ -41,7 +41,7 @@ const Deliverypage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isLoading, data, isSuccess } = useQuery({
-    queryKey: ["transactions"],
+    queryKey: ["transactions, sales, delivery"],
     queryFn: getTransactions,
   });
   const { ship, transit, clearOrder } = OrderDeliveryStore();

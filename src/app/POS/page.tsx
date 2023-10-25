@@ -28,8 +28,8 @@ export interface PosItemProps {
 export default function POS_Page() {
   const { clearOrder } = POSPaymentModal();
   const results = useQueries([
-    { queryKey: ["items1"], queryFn: getGallons },
-    { queryKey: ["items"], queryFn: getBottles },
+    { queryKey: ["items, itemGal"], queryFn: getGallons },
+    { queryKey: ["items, itemBottle"], queryFn: getBottles },
   ]);
 
   const gallons = results[0]?.data;

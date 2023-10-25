@@ -57,14 +57,16 @@ export const PaymentModal = () => {
       DissmissToast();
       SuccessToast(data?.message);
       queryClient.invalidateQueries({
-        queryKey: ["transactions"],
+        queryKey: [
+          "transactions, sales, dashboard, report, credits, last_return, delivery",
+        ],
       });
-      queryClient.invalidateQueries({
-        queryKey: ["last_return"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["credits"],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["last_return"],
+      // });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["credits"],
+      // });
 
       setCustomer([]);
       setselectedCustomer(false);
