@@ -22,7 +22,7 @@ import { format } from "date-fns";
 export default function DashboardPage() {
   const results = useQueries([
     {
-      queryKey: ["history, sales, dashboard"],
+      queryKey: ["transactions, sales, dashboard"],
       queryFn: getAllHistory,
       staleTime: 10,
     },

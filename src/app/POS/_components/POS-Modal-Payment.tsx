@@ -55,6 +55,9 @@ export const PaymentModal = () => {
     },
     onSuccess: (data) => {
       DissmissToast();
+      queryClient.invalidateQueries({
+        queryKey: ["transactions, delivery, credits, last_return"],
+      });
       SuccessToast(data?.message);
 
       setCustomer([]);
@@ -65,15 +68,6 @@ export const PaymentModal = () => {
       setCash(0);
       setIsBuy(false);
       setIsBorrowed(false);
-      queryClient.invalidateQueries({
-        queryKey: ["history"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["sales"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["transactions, delivery, credits, last_return"],
-      });
     },
     onError: (error: any) => {
       DissmissToast();
