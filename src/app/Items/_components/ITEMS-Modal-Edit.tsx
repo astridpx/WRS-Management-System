@@ -68,11 +68,13 @@ export const ItemsModalEdit = () => {
 
       LoadingToast("Update pending...");
     },
-    onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-
+    onSuccess: async (data: any) => {
       DissmissToast();
       SuccessToast(data?.message);
+
+      return await queryClient.invalidateQueries({
+        queryKey: ["items"],
+      });
     },
     onError: (error: any) => {
       DissmissToast();

@@ -3,7 +3,8 @@ import { IExpenses, IUser } from "../../../../typings";
 import { format } from "date-fns";
 
 export const getTransactions = async () => {
-  const { data } = await axios.get("/api/transaction_history");
+  // const { data } = await axios.get("/api/transaction_history");
+  const { data } = await axios.get("/api/transaction");
 
   const Data = await data.data.map((d: any) => {
     const addr = d.isVillage

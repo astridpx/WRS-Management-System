@@ -13,16 +13,6 @@ import { getAllItems } from "./services/Item-Api";
 import { useQuery } from "react-query";
 import Loader from "@/components/loader/Spinner";
 
-async function getData() {
-  const Data = fakeProductsData.map((d) => {
-    return d;
-  });
-
-  return Data;
-}
-
-const DataGet = getData();
-
 export default function ItemsPage() {
   const {
     isLoading,
@@ -32,7 +22,7 @@ export default function ItemsPage() {
     queryKey: ["items"],
     queryFn: getAllItems,
   });
-  const prodData = use(DataGet);
+
   const { toggleAddItemModal } = ItemsPageModalStore();
 
   return (

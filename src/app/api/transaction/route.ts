@@ -6,8 +6,12 @@ import { Items } from "@/lib/mongodb/model/Items.model";
 //  @desc GET All TRANSACTION
 export async function GET() {
   try {
-    const transactions = await Trans.find({ service: "Deliver" })
-      .populate("customer")
+    // const transactions = await Trans.find({ service: "Deliver" })
+    const transactions = await Trans.find()
+      .populate({
+        path: "customer",
+        model: Customer,
+      })
       .populate({
         path: "orders.item",
         select: "img name category",

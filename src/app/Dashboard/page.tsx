@@ -22,14 +22,14 @@ import { format } from "date-fns";
 export default function DashboardPage() {
   const results = useQueries([
     {
-      queryKey: ["transactions, sales, expenses, dashboard"],
+      queryKey: ["transactions"],
       queryFn: getAllHistory,
-      staleTime: 1000,
+      staleTime: 10,
     },
     {
-      queryKey: ["expenses, dashboard"],
+      queryKey: ["expenses"],
       queryFn: getAllExpenses,
-      staleTime: 1000,
+      staleTime: 10,
     },
   ]);
   const [cards, setCards] = useState<any>([]);

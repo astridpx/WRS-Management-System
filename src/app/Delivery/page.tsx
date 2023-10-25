@@ -41,7 +41,7 @@ const Deliverypage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isLoading, data, isSuccess } = useQuery({
-    queryKey: ["transactions, sales, delivery"],
+    queryKey: ["transactions, delivery"],
     queryFn: getTransactions,
   });
   const { ship, transit, clearOrder } = OrderDeliveryStore();
@@ -58,7 +58,7 @@ const Deliverypage = () => {
       DissmissToast();
       SuccessToast(data?.message);
       queryClient.invalidateQueries({
-        queryKey: ["transactions"],
+        queryKey: ["transactions, delivery"],
       });
       clearOrder(isDelivered ? "transit" : "ship");
       setTab(isDelivered === true ? "delivered" : "inTransit");
@@ -71,10 +71,15 @@ const Deliverypage = () => {
   });
 
   // FILTERING DATA
-  const ToShip = data?.filter((item: any) => item.status === "To Ship");
-  const InTransit = data?.filter((item: any) => item.status === "In Transit");
+  const ToShip = data?.filter(
+    (item: any) => item.service === "Deliver" && item.status === "To Ship"
+  );
+  const InTransit = data?.filter(
+    (item: any) => item.service === "Deliver" && item.status === "In Transit"
+  );
   const Delivered = data?.filter(
     (item: any) =>
+      item.service === "Deliver" &&
       item.status === "Delivered" &&
       format(new Date(item?.date), "MMM dd yyyy") ===
         format(new Date(), "MMM dd yyyy")

@@ -17,14 +17,8 @@ export const getAllCustomers = async () => {
   return newCustomer;
 };
 
-export const getGallons = async () => {
-  const { data } = await axios.get("/api/pos/gallons");
-
-  return data.data;
-};
-
-export const getBottles = async () => {
-  const { data } = await axios.get("/api/pos/bottles");
+export const getAllItems = async () => {
+  const { data } = await axios.get("/api/items");
 
   return data.data;
 };

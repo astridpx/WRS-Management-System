@@ -14,7 +14,7 @@ import { PayCreditModal } from "./_components/pay-credit-modal";
 
 const MonitoringPage = () => {
   const results = useQueries([
-    { queryKey: ["last_return"], queryFn: getLastReturn },
+    { queryKey: ["customers"], queryFn: getLastReturn },
     { queryKey: ["credits"], queryFn: getAllCredits },
   ]);
 
@@ -49,6 +49,7 @@ const MonitoringPage = () => {
                   <DataTable
                     columns={LastGallonReturnColumns}
                     data={lastReturnData}
+                    // data={LastReturnGallon}
                   />
                 </div>
               )}

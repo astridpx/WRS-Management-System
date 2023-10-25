@@ -14,8 +14,8 @@ import AddNewCustomerModal from "@/components/Add-Customer/Add-Customer-Modal";
 import { PaymentModal } from "./_components/POS-Modal-Payment";
 import { StaticImageData } from "next/image";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
-import { useQueries } from "react-query";
-import { getGallons, getBottles } from "./services/Apis";
+import { useQueries, useQuery } from "react-query";
+import { getAllItems } from "./services/Apis";
 
 export interface PosItemProps {
   _id?: string;
@@ -27,16 +27,22 @@ export interface PosItemProps {
 
 export default function POS_Page() {
   const { clearOrder } = POSPaymentModal();
-  const results = useQueries([
-    { queryKey: ["items, itemGal"], queryFn: getGallons },
-    { queryKey: ["items, itemBottle"], queryFn: getBottles },
-  ]);
 
-  const gallons = results[0]?.data;
-  const bottles = results[1]?.data;
+  const {
+    isLoading,
+    isError,
+    data: allItems,
+  } = useQuery({
+    queryKey: ["items"],
+    queryFn: getAllItems,
+  });
 
-  const gallonsIsLoading = results[0].isLoading;
-  const bottlesIsLoading = results[1].isLoading;
+  const gallons = allItems?.filter(
+    (item: any) => item.category === "container" && item.pos_item === true
+  );
+  const bottles = allItems?.filter(
+    (item: any) => item.category === "bottle" && item.pos_item === true
+  );
 
   return (
     <>
@@ -84,7 +90,7 @@ export default function POS_Page() {
                         <h4 className="text-sm">TOTAL</h4>
                         <h4 className="text-sm ">BUY</h4>
                       </header>
-                      {gallonsIsLoading
+                      {isLoading
                         ? "Loading..."
                         : gallons.map((item: any) => {
                             return (
@@ -112,7 +118,7 @@ export default function POS_Page() {
                         {/* <h4 className="text-sm">FREE</h4> */}
                         <h4 className="text-sm">TOTAL</h4>
                       </header>
-                      {bottlesIsLoading
+                      {isLoading
                         ? "Loading..."
                         : bottles.map((item: any) => {
                             return (
