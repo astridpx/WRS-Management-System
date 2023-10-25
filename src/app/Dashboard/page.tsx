@@ -18,16 +18,18 @@ import { GetAllYears } from "@/app/Dashboard/helpers/GetAllYears";
 import { TopCustomer } from "@/app/Dashboard/helpers/Top-Customer";
 import { MonthlyDoughNutChart } from "@/app/Dashboard/helpers/Doughnut-Chart-Monthly";
 import { format } from "date-fns";
+import { getTransactions } from "../Report/services/Api";
 
 export default function DashboardPage() {
   const results = useQueries([
     {
-      queryKey: ["transactions, sales, dashboard"],
-      queryFn: getAllHistory,
+      queryKey: ["transactions"],
+      // queryFn: getAllHistory,
+      queryFn: getTransactions,
       staleTime: 10,
     },
     {
-      queryKey: ["expenses, dashboard"],
+      queryKey: ["expenses"],
       queryFn: getAllExpenses,
       staleTime: 10,
     },

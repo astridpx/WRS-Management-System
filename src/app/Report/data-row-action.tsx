@@ -43,7 +43,7 @@ export function DataTableRowActions({ id }: any) {
       DissmissToast();
       SuccessToast(data?.message);
       queryClient.invalidateQueries({
-        queryKey: ["report, transactions, history"],
+        queryKey: ["transactions"],
       });
     },
     onError: (error: any) => {

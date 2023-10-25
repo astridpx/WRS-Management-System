@@ -73,7 +73,7 @@ export const ItemsModalEdit = () => {
       SuccessToast(data?.message);
 
       return await queryClient.invalidateQueries({
-        queryKey: ["items, itemGal, itemBottle"],
+        queryKey: ["items, itemGal"],
       });
     },
     onError: (error: any) => {
