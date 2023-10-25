@@ -71,10 +71,15 @@ const Deliverypage = () => {
   });
 
   // FILTERING DATA
-  const ToShip = data?.filter((item: any) => item.status === "To Ship");
-  const InTransit = data?.filter((item: any) => item.status === "In Transit");
+  const ToShip = data?.filter(
+    (item: any) => item.service === "Deliver" && item.status === "To Ship"
+  );
+  const InTransit = data?.filter(
+    (item: any) => item.service === "Deliver" && item.status === "In Transit"
+  );
   const Delivered = data?.filter(
     (item: any) =>
+      item.service === "Deliver" &&
       item.status === "Delivered" &&
       format(new Date(item?.date), "MMM dd yyyy") ===
         format(new Date(), "MMM dd yyyy")

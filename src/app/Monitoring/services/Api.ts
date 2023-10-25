@@ -3,7 +3,9 @@ import { IUser } from "../../../../typings";
 import { format } from "date-fns";
 
 export const getLastReturn = async () => {
-  const { data } = await axios.get("/api/monitoring/last_return");
+  // const { data } = await axios.get("/api/monitoring/last_return");
+  const { data } = await axios.get("/api/customers");
+  console.log(data);
 
   const Data = await data.data.map((d: IUser) => {
     const addr = d.isVillage

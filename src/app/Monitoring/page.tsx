@@ -14,7 +14,7 @@ import { PayCreditModal } from "./_components/pay-credit-modal";
 
 const MonitoringPage = () => {
   const results = useQueries([
-    { queryKey: ["last_return"], queryFn: getLastReturn },
+    { queryKey: ["customers"], queryFn: getLastReturn },
     { queryKey: ["credits"], queryFn: getAllCredits },
   ]);
 
@@ -25,6 +25,14 @@ const MonitoringPage = () => {
   const lastReturnSuccess = results[0].isSuccess;
   const creditsIsLoading = results[1].isLoading;
   const creditsIsSuccess = results[1].isSuccess;
+
+  const LastReturnGallon = lastReturnData?.map((data: any) =>
+    data?.borrowed_gal?.filter((item: any) => item.borrowed > 0)
+  );
+
+  if (lastReturnSuccess) {
+    console.log(LastReturnGallon);
+  }
 
   return (
     <>
@@ -48,7 +56,8 @@ const MonitoringPage = () => {
                 <div className="relative">
                   <DataTable
                     columns={LastGallonReturnColumns}
-                    data={lastReturnData}
+                    // data={lastReturnData}
+                    data={LastReturnGallon}
                   />
                 </div>
               )}
