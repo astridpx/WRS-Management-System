@@ -66,10 +66,9 @@ export const PaymentModal = () => {
       setIsBuy(false);
       setIsBorrowed(false);
       return await queryClient.invalidateQueries({
-        queryKey: [
-          "dashboard, transactions, sales, , report, credits, last_return, delivery",
-        ],
+        queryKey: ["transactions, delivery, credits, last_return"],
       });
+      // "dashboard, transactions, sales, credits, last_return, delivery",
       // queryClient.invalidateQueries({
       //   queryKey: ["last_return"],
       // });

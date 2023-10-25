@@ -214,7 +214,7 @@ export default function HomePage() {
       <h1 className="text-3xl font-semibold">
         This Page Is Currently Unavailable
       </h1>
-      <Link href="/Dashboard" className="text-blue-500">
+      <Link href="/Dashboard" className="text-blue-500 underline">
         Redirect to Login Page
       </Link>
     </>

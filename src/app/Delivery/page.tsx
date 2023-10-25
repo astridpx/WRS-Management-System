@@ -41,7 +41,7 @@ const Deliverypage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isLoading, data, isSuccess } = useQuery({
-    queryKey: ["transactions, sales, delivery"],
+    queryKey: ["transactions, delivery"],
     queryFn: getTransactions,
   });
   const { ship, transit, clearOrder } = OrderDeliveryStore();
@@ -58,7 +58,7 @@ const Deliverypage = () => {
       DissmissToast();
       SuccessToast(data?.message);
       queryClient.invalidateQueries({
-        queryKey: ["transactions"],
+        queryKey: ["transactions, delivery"],
       });
       clearOrder(isDelivered ? "transit" : "ship");
       setTab(isDelivered === true ? "delivered" : "inTransit");
