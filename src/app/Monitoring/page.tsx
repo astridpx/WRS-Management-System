@@ -26,14 +26,6 @@ const MonitoringPage = () => {
   const creditsIsLoading = results[1].isLoading;
   const creditsIsSuccess = results[1].isSuccess;
 
-  const LastReturnGallon = lastReturnData?.map((data: any) =>
-    data?.borrowed_gal?.filter((item: any) => item.borrowed > 0)
-  );
-
-  if (lastReturnSuccess) {
-    console.log(LastReturnGallon);
-  }
-
   return (
     <>
       <PayCreditModal />
@@ -56,8 +48,8 @@ const MonitoringPage = () => {
                 <div className="relative">
                   <DataTable
                     columns={LastGallonReturnColumns}
-                    // data={lastReturnData}
-                    data={LastReturnGallon}
+                    data={lastReturnData}
+                    // data={LastReturnGallon}
                   />
                 </div>
               )}
