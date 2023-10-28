@@ -16,8 +16,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Admin Dashboard Template",
+  title: "Morning Breeze",
+  description:
+    "Morning Breeze Water Refilling Station in Sta Rosa Laguna | Sta Rosa Laguna.",
+  icons: {
+    icon: "/src/assets/logo2.png",
+  },
 };
 
 export default function RootLayout({

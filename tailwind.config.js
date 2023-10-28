@@ -55,6 +55,9 @@ module.exports = {
         dark_text: "#999999",
         dark_bg: "#111111",
         dark_bg_main: "#1E293B",
+        dark_blue: "#081F46",
+        light_blue: "#379EFF",
+        text_gray_blue: "#647591",
       },
       borderRadius: {
         lg: "var(--radius)",

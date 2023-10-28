@@ -149,3 +149,8 @@
     transform: scaleX(1);
   }
 }
+
+/* BUTTON GRADIENT */
+.btn-gradient {
+  @apply bg-gradient-to-r from-light_blue to-[#4786fa];
+}
