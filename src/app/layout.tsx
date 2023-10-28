@@ -18,7 +18,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Morning Breeze",
   description:
-    "Morning Breeze Water Refilling Station in Sta Rosa Laguna | Sta Rosa Laguna.",
+    "Welcome to Morning Breeze Water Refilling Station in Santa Rosa, Laguna. Enjoy pure, clean, and safe drinking water with our state-of-the-art filtration systems. Our commitment to water quality, sustainability, and convenience sets us apart. Explore our services today!",
   icons: {
     icon: "/src/assets/logo2.png",
   },
