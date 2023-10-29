@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import peoples from "../../assets/people-cofee.svg";
 import bg from "../../assets/bg-login.jpg";
@@ -21,17 +22,20 @@ export default function LoginPage() {
   const { clearUser, setUser } = UserStore();
   const router = useRouter();
   const { data: session, status, update } = useSession();
+  const [loading, setLoading] = useState(false);
 
   console.log(session);
 
-  if (session) {
-    const User = session.user;
-    setUser({ ...User });
-
-    DissmissToast();
-    InfoToast("Data Successfully Initialized.");
-    router.push("/Dashboard");
-  }
+  useEffect(() => {
+    if (session) {
+      const User = session.user;
+      setUser({ ...User });
+      setLoading(false);
+      DissmissToast();
+      InfoToast("Data Successfully Initialized.");
+      router.push("/Dashboard");
+    }
+  }, [router, session, setUser]);
 
   return (
     <>
@@ -62,7 +66,7 @@ export default function LoginPage() {
               unoptimized
               className="absolute bg-center h-[33rem] w-[33rem] -z-10 opacity-75 blur-sm "
             />
-            <LoginForm />
+            <LoginForm loading={loading} setLoading={setLoading} />
           </div>
         </section>
       </main>

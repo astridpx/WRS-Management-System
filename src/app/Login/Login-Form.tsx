@@ -22,11 +22,13 @@ import {
   DissmissToast,
 } from "@/components/Toast/toast";
 import { UAParser } from "ua-parser-js";
+import { useQueryClient } from "react-query";
 
-export default function LoginForm() {
+export default function LoginForm({ loading, setLoading }: any) {
   const parser = new UAParser();
+  const queryClient = useQueryClient();
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [data, setData] = useState<any>({
     username: "",
@@ -63,7 +65,8 @@ export default function LoginForm() {
     console.log(res);
     if (!res?.error) {
       await DissmissToast();
-      setLoading(false);
+
+      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
       await SuccessToast("Login Success");
       await LoadingToast("Initializing data...");
 
