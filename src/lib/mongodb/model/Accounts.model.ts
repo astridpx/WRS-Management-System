@@ -62,6 +62,7 @@ const AccountSchema = new mongoose.Schema(
         deviceName: String,
         ip: String,
         date: Date,
+        time: String,
         address: String,
       },
     ],

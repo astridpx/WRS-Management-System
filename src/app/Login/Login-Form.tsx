@@ -23,6 +23,8 @@ import {
 } from "@/components/Toast/toast";
 import { UAParser } from "ua-parser-js";
 import { useQueryClient } from "react-query";
+import axios from "axios";
+import { format } from "date-fns";
 
 export default function LoginForm({ loading, setLoading }: any) {
   const parser = new UAParser();
@@ -48,11 +50,39 @@ export default function LoginForm({ loading, setLoading }: any) {
       ? `${vendor} ${model} | ${browserName ? browserName : "Unknown"}`
       : `${browserName} - ${browserV} | ${osName} ${version}`;
 
+    // const x = await axios.get("https://api.ipify.org/?format=json");
+    // console.log(x.data.ip);
+
+    // ABSTRACT API
+    const ipData = await axios
+      .get(
+        "https://ipgeolocation.abstractapi.com/v1/?api_key=8fa7278f039e4c828bc7311219715d0a"
+      )
+      .then((res) => res.data)
+      .catch((err) => {
+        console.log(err);
+        ErrorToast("Error while tracking the location.");
+      });
+
+    // IPFIND API
+    // const { data: ip2 } = await axios.get(
+    //   `https://api.ipfind.com?ip=${x.data.ip}&auth=8bfec4d9-c47d-425e-8d11-569f93a0dc54`
+    // );
+    // console.log(ip2);
+
+    console.log(ipData);
+
     const newData = {
       ...data,
       isDesktop,
       deviceName: Device,
+      ip: ipData.ip_address,
+      date: new Date(),
+      time: new Date().toLocaleTimeString("PST"),
+      address: `${ipData.city}, ${ipData.region} - ${ipData.country_code}`,
     };
+
+    console.log(newData);
 
     setLoading(true);
     await LoadingToast("Verifying account...");

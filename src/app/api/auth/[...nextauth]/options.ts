@@ -27,8 +27,16 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const { username, password, isDesktop, deviceName } =
-          credentials as any;
+        const {
+          username,
+          password,
+          isDesktop,
+          deviceName,
+          time,
+          date,
+          ip,
+          address,
+        } = credentials as any;
 
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
           method: "POST",
@@ -42,6 +50,10 @@ export const options: NextAuthOptions = {
             password,
             isDesktop,
             deviceName,
+            time,
+            date,
+            ip,
+            address,
           }),
         });
 
