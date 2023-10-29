@@ -39,9 +39,9 @@ export async function POST(req: Request) {
 
     // ABSTRACT API
     const { data: ipData } = await axios.get(
-      `https://ipgeolocation.abstractapi.com/v1/?api_key=${process.env.ABSTRACTAPI_KEY}`
+      "https://ipgeolocation.abstractapi.com/v1/?api_key=8fa7278f039e4c828bc7311219715d0a"
     );
-    // console.log(ipData);
+    console.log(ipData);
 
     await Acc.findOneAndUpdate(
       { username },
