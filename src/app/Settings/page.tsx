@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BsLaptop } from "react-icons/bs";
+import { HiOutlineDevicePhoneMobile } from "react-icons/hi2";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import {
   getMyProfile,
@@ -33,6 +34,8 @@ import type { FileWithPath } from "@uploadthing/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useUploadThing } from "@/utils/Uploadthing/useUploadthing";
+import { format } from "date-fns";
+import Loader from "@/components/loader/Spinner";
 
 export default function SettingsPage() {
   const { user } = UserStore();
@@ -426,42 +429,59 @@ export default function SettingsPage() {
                 <div className="mt-2 h-max w-full p-4">
                   <div className="flex justify-between items-center">
                     <h3 className="font-medium">Login History</h3>
-                    <h3 className="">Logout</h3>
+                    {/* <h3 className="">Clear Logs</h3> */}
+                    <Button variant={"outline"}>Clear Logs</Button>
                   </div>
 
                   <Separator className="my-4" />
 
-                  <header className="grid grid-cols-7 bg-slate-200 font-semibold px-2 py-3">
-                    <h2 className="col-span-2">Device</h2>
+                  <header className="grid grid-cols-8 bg-slate-200 font-semibold px-2 py-3">
+                    <h2 className="col-span-3">Device</h2>
                     <h2>IP Address</h2>
-                    <h2>Date</h2>
+                    <h2 className="col-span-">Date</h2>
+                    <h2 className="col-span-">Time</h2>
                     <h2 className="col-span-2">Address</h2>
-                    <h2>Logout</h2>
+                    {/* <h2>Logout</h2> */}
                   </header>
 
                   <ScrollArea className="h-[17rem] ">
-                    {Array.from(
-                      {
-                        length: 12,
-                      },
-                      () => {
-                        return (
-                          <>
-                            <div className="grid grid-cols-7 p-2 text-slate-500">
-                              <div className="flex items-center col-span-2 space-x-2">
-                                <BsLaptop size={18} />
-                                <p>Dell Inspiron 14</p>
+                    {!isSuccess && isLoading ? (
+                      <div className="relative w-full h-full flex items-center justify-center flex-col space-y-2">
+                        <Loader />
+                        <p className="text-gray-400 ">Loading...</p>
+                      </div>
+                    ) : (
+                      profile?.login_history
+                        ?.sort((a: any, b: any) => {
+                          const dateA = new Date(a.date) as any;
+                          const dateB = new Date(b.date) as any;
+                          return dateB - dateA;
+                        })
+                        .map((data: any) => {
+                          return (
+                            <>
+                              <div className="grid grid-cols-8 p-2 text-slate-500">
+                                <div className="flex items-center col-span-3 space-x-2">
+                                  {data.isDesktop ? (
+                                    <BsLaptop size={18} />
+                                  ) : (
+                                    <HiOutlineDevicePhoneMobile size={18} />
+                                  )}
+                                  <p>{data.deviceName}</p>
+                                </div>
+                                <p>{data.ip}</p>
+                                <p className="col-span-">
+                                  {format(new Date(data.date), "dd MMM, yyyy")}
+                                </p>
+                                <p className="col-span-">
+                                  {format(new Date(data.date), "pp")}
+                                </p>
+                                <p className="col-span-2">{data.address}</p>
+                                {/* <p className="text-blue-500">Logout</p> */}
                               </div>
-                              <p>192.44.234.723</p>
-                              <p>18 Dec, 2023</p>
-                              <p className="col-span-2">
-                                Los Angeles, United States
-                              </p>
-                              <p className="text-blue-500">Logout</p>
-                            </div>
-                          </>
-                        );
-                      }
+                            </>
+                          );
+                        })
                     )}
                   </ScrollArea>
                 </div>

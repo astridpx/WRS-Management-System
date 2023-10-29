@@ -21,37 +21,57 @@ import {
   LoadingToast,
   DissmissToast,
 } from "@/components/Toast/toast";
+import { UAParser } from "ua-parser-js";
 
 export default function LoginForm() {
+  const parser = new UAParser();
+
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [data, setData] = useState<any>({
     username: "",
     password: "",
-    role: "",
   });
 
   const HandleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const res = await signIn("credentials", {
+    // GET DEVICE INFO
+    const { type, vendor, model } = await parser.getDevice(); // { model: '', type: '', vendor: '' }
+    const { name: browserName, version: browserV } = await parser.getBrowser(); //{ name: '', version: '' }
+    const { name: osName, version } = await parser.getOS(); //{ name: '', version: '' }
+
+    const isDesktop = type ? false : true;
+    const Device = type
+      ? `${vendor} ${model} | ${browserName ? browserName : "Unknown"}`
+      : `${browserName} - ${browserV} | ${osName} ${version}`;
+
+    const newData = {
       ...data,
+      isDesktop,
+      deviceName: Device,
+    };
+
+    setLoading(true);
+    await LoadingToast("Verifying account...");
+
+    const res = await signIn("credentials", {
+      ...newData,
       redirect: false,
     });
-    if (!res) {
-      await LoadingToast("Verifying account...");
-    }
 
     console.log(res);
     if (!res?.error) {
       await DissmissToast();
+      setLoading(false);
       await SuccessToast("Login Success");
-
       await LoadingToast("Initializing data...");
 
       // router.push("/");
     }
     if (res?.error) {
       DissmissToast();
+      setLoading(false);
       ErrorToast(res?.error);
     }
   };
@@ -116,7 +136,7 @@ export default function LoginForm() {
             // className="input input-bordered input-info w-full max-w-xs logininput"
           />
         </div>
-        <Button className="w-full" type="submit">
+        <Button className="w-full" disabled={loading} type="submit">
           Login
         </Button>
       </form>

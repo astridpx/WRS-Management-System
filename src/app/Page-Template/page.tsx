@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useCallback, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import type { FileWithPath } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -16,8 +16,23 @@ import {
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 const { useUploadThing, uploadFiles } = generateReactHelpers<OurFileRouter>();
+import { UAParser } from "ua-parser-js";
 
 export default function ItemssPage() {
+  const parser = new UAParser();
+
+  const { type, vendor } = parser.getDevice(); // { model: '', type: '', vendor: '' }
+  const { name } = parser.getBrowser(); //{ name: '', version: '' }
+  const { name: osName, version } = parser.getOS(); //{ name: '', version: '' }
+
+  const deviceName = type ? vendor : name;
+  const deviceType = type ? false : true;
+  const Device = type ? vendor : `${deviceName} - ${osName} ${version}`;
+
+  console.log(deviceName);
+  console.log(deviceType);
+  console.log(Device);
+
   const [files, setFiles] = useState<File[]>([]);
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     setFiles(acceptedFiles);

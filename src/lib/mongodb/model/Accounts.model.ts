@@ -56,6 +56,15 @@ const AccountSchema = new mongoose.Schema(
       type: Date,
       default: new Date(),
     },
+    login_history: [
+      {
+        isDesktop: Boolean,
+        deviceName: String,
+        ip: String,
+        date: Date,
+        address: String,
+      },
+    ],
   },
   {
     timestamps: true,

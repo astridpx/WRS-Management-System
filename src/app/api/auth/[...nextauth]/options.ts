@@ -27,7 +27,8 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const { username, password, role } = credentials as ILogin;
+        const { username, password, isDesktop, deviceName } =
+          credentials as any;
 
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
           method: "POST",
@@ -39,7 +40,8 @@ export const options: NextAuthOptions = {
           body: JSON.stringify({
             username,
             password,
-            role,
+            isDesktop,
+            deviceName,
           }),
         });
 
