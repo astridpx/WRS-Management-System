@@ -49,8 +49,6 @@ export default function LoginForm() {
   const HandleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    ErrorToast("Error while tracking the location.");
-
     // GET DEVICE INFO
     const { type, vendor, model } = await parser.getDevice();
     const { name: browserName, version: browserV } = await parser.getBrowser();
