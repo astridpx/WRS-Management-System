@@ -70,6 +70,7 @@ export default function LoginForm() {
         "https://ipgeolocation.abstractapi.com/v1/?api_key=8fa7278f039e4c828bc7311219715d0a"
       )
       .then((res) => res.data)
+
       .catch((err: any) => {
         console.log("GEOLOCATION ERROR: ", err);
         // ErrorToast("Error while tracking the location.");
