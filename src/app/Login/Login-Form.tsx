@@ -105,6 +105,10 @@ export default function LoginForm() {
     console.log(res);
     if (!res?.error) {
       await DissmissToast();
+      setData({
+        username: "",
+        password: "",
+      });
 
       queryClient.invalidateQueries({ queryKey: ["myProfile"] });
       await SuccessToast("Login Success");
