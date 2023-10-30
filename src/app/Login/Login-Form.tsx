@@ -121,8 +121,12 @@ export default function LoginForm() {
 
   return (
     <>
-      <form action="" className=" space-y-4 " onSubmit={(e) => HandleLogin(e)}>
-        <div className="">
+      <form
+        action=""
+        className="mx-auto md:mx-0 max-w-[25.1rem] md:max-w-none  space-y-4 "
+        onSubmit={(e) => HandleLogin(e)}
+      >
+        <div className=" w-full h-max ">
           <Input
             placeholder="Username"
             required
@@ -132,7 +136,7 @@ export default function LoginForm() {
             }
           />
         </div>
-        <div className="relative w-full h-max flex items-center">
+        <div className="relative w-full h-max  flex items-center">
           <Input
             type={showPass ? "text" : "password"}
             placeholder="Password"

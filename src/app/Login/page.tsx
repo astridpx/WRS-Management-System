@@ -8,8 +8,8 @@ import LoginForm from "./Login-Form";
 export default function LoginPage() {
   return (
     <>
-      <main className="h-screen w-full grid grid-cols-5">
-        <section className="col-span-3 relative">
+      <main className="h-screen w-full grid md:grid-cols-5">
+        <section className="hidden md:block md:col-span-3 relative">
           <Image
             // src={falls}
             // src={waterbottles}
@@ -34,9 +34,9 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <section className="col-span-2  bg-white flex justify-center items-center ">
-          <div className="p-4 w-[80%] space-y-28">
-            <header className="text-4xl font-semibold">
+        <section className="md:col-span-2 bg-white flex justify-center md:justify-normal items-center ">
+          <div className=" p-4 w-[80%] space-y-28">
+            <header className="text-4xl font-semibold mx-auto md:mx-0 max-w-[25.1rem] md:max-w-none">
               <h2 className=" text-dark_blue">Hello,</h2>
               <h2 className=" text-light_blue">Welcome Back :)</h2>
             </header>
