@@ -1,18 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ILogin } from "../../../typings";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -20,30 +11,50 @@ import {
   ErrorToast,
   LoadingToast,
   DissmissToast,
+  InfoToast,
 } from "@/components/Toast/toast";
 import { UAParser } from "ua-parser-js";
 import { useQueryClient } from "react-query";
 import axios from "axios";
-import { format } from "date-fns";
+import { VscEyeClosed, VscEye } from "react-icons/vsc";
+import { useSession } from "next-auth/react";
+import { UserStore } from "@/lib/zustand/User/user.store";
 
-export default function LoginForm({ loading, setLoading }: any) {
+export default function LoginForm() {
+  const { clearUser, setUser } = UserStore();
   const parser = new UAParser();
   const queryClient = useQueryClient();
-
-  // const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data: session, status, update } = useSession();
   const [data, setData] = useState<any>({
     username: "",
     password: "",
   });
+  const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  // CHECK IF THERE IS A SESSION
+  useEffect(() => {
+    if (session) {
+      const User = session.user;
+      setUser({ ...User });
+      setLoading(false);
+      DissmissToast();
+      InfoToast("Data Successfully Initialized.");
+      router.push("/Dashboard");
+    }
+  }, [router, session, setUser]);
+
+  // LOGIN SUBMIT
   const HandleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    ErrorToast("Error while tracking the location.");
+
     // GET DEVICE INFO
-    const { type, vendor, model } = await parser.getDevice(); // { model: '', type: '', vendor: '' }
-    const { name: browserName, version: browserV } = await parser.getBrowser(); //{ name: '', version: '' }
-    const { name: osName, version } = await parser.getOS(); //{ name: '', version: '' }
+    const { type, vendor, model } = await parser.getDevice();
+    const { name: browserName, version: browserV } = await parser.getBrowser();
+    const { name: osName, version } = await parser.getOS();
 
     const isDesktop = type ? false : true;
     const Device = type
@@ -60,8 +71,8 @@ export default function LoginForm({ loading, setLoading }: any) {
       )
       .then((res) => res.data)
       .catch((err) => {
-        console.log(err);
-        ErrorToast("Error while tracking the location.");
+        console.log("GEOLOCATION ERROR: ", err);
+        // ErrorToast("Error while tracking the location.");
       });
 
     // IPFIND API
@@ -111,66 +122,54 @@ export default function LoginForm({ loading, setLoading }: any) {
 
   return (
     <>
-      <form
-        className="w-3/5  p-4 space-y-4 relative bg-blue-200 rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-50 border border-gray-100"
-        onSubmit={(e) => HandleLogin(e)}
-      >
-        <h1 className="text-center font-semibold text-3xl mb-12">Login</h1>
-
-        <Select
-          name="role"
-          required
-          onValueChange={(e) => {
-            setData({ ...data, role: e });
-          }}
-        >
-          <SelectTrigger className="text-center bg-white">
-            <SelectValue placeholder="Select your role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Roles</SelectLabel>
-              <SelectItem value="user">User</SelectItem>
-              <SelectItem value="employee">Employee</SelectItem>
-              <SelectItem value="manager">Manager</SelectItem>
-              <SelectItem value="admin">Admin</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <div className="space-y-2">
-          <label htmlFor="uname" className="ml-2">
-            Email
-          </label>
+      <form action="" className=" space-y-4 " onSubmit={(e) => HandleLogin(e)}>
+        <div className="">
           <Input
-            type="text"
+            placeholder="Username"
+            required
             name="username"
-            required
-            placeholder="Enter your email"
             onChange={(e) =>
               setData({ ...data, [e.target.name]: e.target.value })
             }
-            // className="input input-bordered input-info w-full max-w-xs logininput "
           />
         </div>
-
-        <div className="space-y-2">
-          <label htmlFor="password" className="ml-2">
-            Password
-          </label>
+        <div className="relative w-full h-max flex items-center">
           <Input
-            type="password"
-            name="password"
+            type={showPass ? "text" : "password"}
+            placeholder="Password"
+            className=""
             required
-            placeholder="Enter your password"
+            name="password"
             onChange={(e) =>
               setData({ ...data, [e.target.name]: e.target.value })
             }
-            // className="input input-bordered input-info w-full max-w-xs logininput"
           />
+          {showPass ? (
+            <VscEye
+              size={20}
+              className="absolute right-4 text-slate-500 cursor-pointer"
+              onClick={() => setShowPass(false)}
+            />
+          ) : (
+            <VscEyeClosed
+              size={20}
+              className={`${
+                data.password.length > 0 ? "block" : "hidden"
+              } absolute right-4 text-slate-500 cursor-pointer`}
+              onClick={() => setShowPass(true)}
+            />
+          )}
         </div>
-        <Button className="w-full" disabled={loading} type="submit">
-          Login
+        <div className="text-end">
+          <Link
+            href={`/Login/${data.username ? data.username : "forgotpassword"}`}
+            className="text-blue-400 underline text-sm"
+          >
+            Forgot Password
+          </Link>
+        </div>
+        <Button disabled={loading} type="submit" className="w-full">
+          Sign In
         </Button>
       </form>
     </>

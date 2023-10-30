@@ -473,9 +473,7 @@ export default function SettingsPage() {
                                 <p className="col-span-">
                                   {format(new Date(data.date), "dd MMM, yyyy")}
                                 </p>
-                                <p className="col-span-">
-                                  {format(new Date(data.date), "pp")}
-                                </p>
+                                <p className="col-span-">{data.time}</p>
                                 <p className="col-span-2">{data.address}</p>
                                 {/* <p className="text-blue-500">Logout</p> */}
                               </div>
