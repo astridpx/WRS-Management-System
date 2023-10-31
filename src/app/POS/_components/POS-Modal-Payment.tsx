@@ -22,6 +22,7 @@ export const PaymentModal = () => {
     togglePaymentModal,
     setIsBuy,
     setResetOrder,
+    setService,
     resetorder,
     clearOrder,
     payment,
@@ -67,6 +68,7 @@ export const PaymentModal = () => {
       setDiscount(0);
       setCash(0);
       setIsBuy(false);
+      setService("Deliver");
       setIsBorrowed(false);
     },
     onError: (error: any) => {
