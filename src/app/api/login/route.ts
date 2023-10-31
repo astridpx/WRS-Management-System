@@ -4,22 +4,12 @@ import bcrypt from "bcrypt";
 import axios from "axios";
 
 export async function POST(req: Request) {
-  const { username, password, isDesktop, deviceName, time, date, ip, address } =
-    await req.json();
-
-  console.log({
-    username,
-    password,
-    isDesktop,
-    deviceName,
-    time,
-    date,
-    ip,
-    address,
-  });
+  const { username, password } = await req.json();
 
   try {
-    const user = await Acc.findOne({ username }).exec();
+    const user = await Acc.findOne({ username })
+      .select("-login_history")
+      .exec();
 
     if (!user)
       return NextResponse.json(
@@ -41,66 +31,6 @@ export async function POST(req: Request) {
         { message: "Sorry, this account is deactivated." },
         { status: 404 }
       );
-
-    // GET IP ADDRESS
-    // const res = await axios.get("https://api.ipify.org/?format=json");
-    // console.log(res.data.ip);
-
-    // IPFIND
-    // const { data: ipData } = await axios.get(
-    //   "https://api.ipfind.com?ip=8.8.8.8&auth=8bfec4d9-c47d-425e-8d11-569f93a0dc54"
-    //   );
-    //   console.log(ipData);
-
-    // ABSTRACT API
-    // await axios
-    //   .get(
-    //     "https://ipgeolocation.abstractapi.com/v1/?api_key=8fa7278f039e4c828bc7311219715d0a"
-    //   )
-    //   .then(async (ipData: any) => {
-    //     console.log(ipData.data);
-
-    //     const x = await Acc.findOneAndUpdate(
-    //       { username },
-    //       {
-    //         last_active: new Date(),
-    //         $push: {
-    //           login_history: {
-    //             isDesktop: isDesktop ? isDesktop : "Unknown",
-    //             deviceName: deviceName ? deviceName : "Unknown",
-    //             ip: ipData.data.ip_address,
-    //             date: new Date(),
-    //             time: new Date().toLocaleTimeString("PST"),
-    //             address: `${ipData.data.city}, ${ipData.data.region} - ${ipData.data.country_code}`,
-    //           },
-    //         },
-    //       }
-    //     );
-
-    //     if (x) {
-    //       console.log("login logged");
-    //     }
-    //   })
-    //   .catch((err) => console.log(err));
-
-    // console.log(ipData);
-
-    await Acc.findOneAndUpdate(
-      { username },
-      {
-        last_active: new Date(),
-        $push: {
-          login_history: {
-            isDesktop,
-            deviceName: deviceName ? deviceName : "Unknown",
-            ip,
-            date,
-            time,
-            address,
-          },
-        },
-      }
-    );
 
     // Create a new user object without the hash_password property
     const sanitizedUser = { ...user.toObject() };

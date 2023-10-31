@@ -35,7 +35,7 @@ export default function LoginForm() {
 
   // CHECK IF THERE IS A SESSION
   useEffect(() => {
-    if (session) {
+    if (session && loading === false) {
       const User = session.user;
       setUser({ ...User });
       setLoading(false);
@@ -43,7 +43,7 @@ export default function LoginForm() {
       InfoToast("Data Successfully Initialized.");
       router.push("/Dashboard");
     }
-  }, [router, session, setUser]);
+  }, [loading, router, session, setUser]);
 
   // LOGIN SUBMIT
   const HandleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,63 +59,75 @@ export default function LoginForm() {
       ? `${vendor} ${model} | ${browserName ? browserName : "Unknown"}`
       : `${browserName} - ${browserV} | ${osName} ${version}`;
 
-    // const x = await axios.get("https://api.ipify.org/?format=json");
-    // console.log(x.data.ip);
-
-    // ABSTRACT API
-    const ipData = await axios
-      .get(
-        "https://ipgeolocation.abstractapi.com/v1/?api_key=8fa7278f039e4c828bc7311219715d0a"
-      )
-      .then((res) => res.data)
-
-      .catch((err: any) => {
-        console.log("GEOLOCATION ERROR: ", err);
-        // ErrorToast("Error while tracking the location.");
-      });
-
-    // IPFIND API
-    // const { data: ip2 } = await axios.get(
-    //   `https://api.ipfind.com?ip=${x.data.ip}&auth=8bfec4d9-c47d-425e-8d11-569f93a0dc54`
-    // );
-    // console.log(ip2);
-
-    console.log(ipData);
-
-    const newData = {
-      ...data,
-      isDesktop,
-      deviceName: Device,
-      ip: ipData.ip_address,
-      date: new Date(),
-      time: new Date().toLocaleTimeString("PST"),
-      address: `${ipData.city}, ${ipData.region} - ${ipData.country_code}`,
-    };
-
-    console.log(newData);
-
     setLoading(true);
     await LoadingToast("Verifying account...");
 
     const res = await signIn("credentials", {
-      ...newData,
+      ...data,
       redirect: false,
     });
 
     console.log(res);
+
     if (!res?.error) {
       await DissmissToast();
-      setData({
-        username: "",
-        password: "",
-      });
 
-      queryClient.invalidateQueries({ queryKey: ["myProfile"] });
-      await SuccessToast("Login Success");
-      await LoadingToast("Initializing data...");
+      await LoadingToast("Tracking Data...");
+      // const x = await axios.get("https://api.ipify.org/?format=json");
+      // console.log(x.data.ip);
 
-      // router.push("/");
+      // ABSTRACT API
+      const ipData = await axios
+        .get(
+          "https://ipgeolocation.abstractapi.com/v1/?api_key=8fa7278f039e4c828bc7311219715d0a"
+        )
+        .then((res) => res.data)
+
+        .catch((err: any) => {
+          console.log("GEOLOCATION ERROR: ", err);
+          ErrorToast("Error while tracking the location.");
+        });
+
+      // IPFIND API
+      // const { data: ip2 } = await axios.get(
+      //   `https://api.ipfind.com?ip=${x.data.ip}&auth=8bfec4d9-c47d-425e-8d11-569f93a0dc54`
+      // );
+      // console.log(ip2);
+
+      console.log(ipData);
+
+      const newData = {
+        ...data,
+        isDesktop,
+        deviceName: Device,
+        ip: ipData.ip_address,
+        date: new Date(),
+        time: new Date().toLocaleTimeString("PST"),
+        address: `${ipData.city}, ${ipData.region} - ${ipData.country_code}`,
+      };
+
+      console.log(newData);
+
+      try {
+        const { data: res } = await axios.put(
+          "/api/login/6513906b0ccefccfaf391982",
+          { ...newData }
+        );
+        await DissmissToast();
+
+        console.log(res.message);
+        await queryClient.invalidateQueries({ queryKey: ["myProfile"] });
+
+        setLoading(false);
+        DissmissToast();
+        await SuccessToast("Login Success");
+        InfoToast("Data Successfully Initialized.");
+        // router.push("/Dashboard");
+      } catch (error) {
+        console.log("IPGEOLOCATION ERROR: ", error);
+      }
     }
+
     if (res?.error) {
       DissmissToast();
       setLoading(false);
