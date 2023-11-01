@@ -63,7 +63,12 @@ export const StockModal = () => {
       LoadingToast("Modifying stocks...");
     },
     onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ["stocks"] });
+      queryClient.invalidateQueries({
+        queryKey: ["notifications"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["stocks, items"],
+      });
       DissmissToast();
       SuccessToast(data?.message);
     },

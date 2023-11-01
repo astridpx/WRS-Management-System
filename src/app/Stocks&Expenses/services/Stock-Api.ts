@@ -6,7 +6,7 @@ import { IStocks } from "../../../../typings";
 // });
 
 export const getAllStocks = async () => {
-  const { data } = await axios.get("/api/stocks");
+  const { data } = await axios.get("/api/items");
 
   return data;
 };

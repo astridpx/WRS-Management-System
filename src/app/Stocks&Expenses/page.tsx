@@ -20,7 +20,7 @@ import { IItems, IStocks } from "../../../typings";
 
 const StockAndExpensesPage = () => {
   const results = useQueries([
-    { queryKey: ["stocks"], queryFn: getAllStocks },
+    { queryKey: ["stocks, items"], queryFn: getAllStocks },
     { queryKey: ["expenses"], queryFn: getAllExpenses },
   ]);
   const { toggleAddExpensesModal } = ExpensesModalStore();

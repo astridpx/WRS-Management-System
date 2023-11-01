@@ -34,7 +34,7 @@ export async function PUT(req: Request, { params }: any) {
     };
 
     await Items.findByIdAndUpdate(Id, {
-      $inc: { stock: item.stock ? item.stock + qty : qty },
+      $inc: { stock: qty },
       $push: { stock_history: history },
     });
 

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Unknown from "@/assets/question_mark.png";

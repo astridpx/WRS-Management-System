@@ -36,9 +36,9 @@ export function DataRowDeleteHistoryAction({ ID, id }: IDs) {
       LoadingToast("Deleting history...");
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["stocks, items"] });
       DissmissToast();
       SuccessToast(data?.message);
-      queryClient.invalidateQueries({ queryKey: ["stocks"] });
     },
     onError: (error: any) => {
       DissmissToast();

@@ -10,7 +10,6 @@ import Loader from "@/components/loader/Spinner";
 import { parse } from "date-fns";
 
 export default function NotificationPage() {
-  const queryClient = useQueryClient();
   const { isLoading, data, isSuccess } = useQuery({
     queryKey: ["notifications"],
     queryFn: getAllNotifications,
