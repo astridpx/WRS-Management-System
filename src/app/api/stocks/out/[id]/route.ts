@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb/config/connect-db";
 import { NextResponse } from "next/server";
 import { Items } from "@/lib/mongodb/model/Items.model";
+import { CreateItemStockNotif } from "@/app/api/Helper/Create-Notif";
 
 // @desc STOCK OUT
 
@@ -25,6 +26,12 @@ export async function PUT(req: Request, { params }: any) {
         { status: 400 }
       );
 
+    if (item.stock < qty)
+      return NextResponse.json(
+        { message: "You have insufficient stock." },
+        { status: 400 }
+      );
+
     const history = {
       worth,
       qty,
@@ -33,13 +40,19 @@ export async function PUT(req: Request, { params }: any) {
       date,
     };
 
-    const decStock = item.stock ? (item.stock <= 0 ? 0 : item.stock - qty) : 0;
-    console.log(qty);
-    console.log(decStock);
-    await Items.findByIdAndUpdate(Id, {
-      stock: decStock,
-      $push: { stock_history: history },
-    });
+    const newItem = await Items.findByIdAndUpdate(
+      Id,
+      {
+        $inc: {
+          stock: -qty,
+        },
+        $push: { stock_history: history },
+      },
+      { new: true }
+    );
+
+    // CREATING NOTIFICATION
+    await CreateItemStockNotif(newItem);
 
     return NextResponse.json({ message: "Stocks updated successfully." });
   } catch (error) {

@@ -23,12 +23,10 @@ import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
 import { useTheme } from "next-themes";
 import { UserStore } from "@/lib/zustand/User/user.store";
 import { useSession } from "next-auth/react";
-import { useMutation, useQueryClient, useQuery } from "react-query";
+import { useMutation, useQueryClient, useQueries } from "react-query";
 import axios from "axios";
-
-const tags = Array.from({ length: 50 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-);
+import Notification from "./Notification";
+import Link from "next/link";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
@@ -37,25 +35,34 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { data: session, status } = useSession();
 
-  const {
-    isLoading,
-    data: profile,
-    isSuccess,
-  } = useQuery({
-    queryKey: ["myProfile"],
-    queryFn: async () => {
-      const accId = session?.user?._id;
+  const result = useQueries([
+    {
+      queryKey: ["myProfile"],
+      queryFn: async () => {
+        const accId = session?.user?._id;
 
-      const { data } = await axios.post("/api/accounts/profile", {
-        accId: user._id ? user._id : accId,
-      });
+        const { data } = await axios.post("/api/accounts/profile", {
+          accId: user._id ? user._id : accId,
+        });
 
-      return data.data;
+        return data.data;
+      },
     },
-    // onSuccess: (data) => {
-    //   setUser(data);
-    // },
-  });
+    {
+      queryKey: ["notifications"],
+      queryFn: async () => {
+        const { data } = await axios.get("/api/notifications");
+
+        return data.data;
+      },
+    },
+  ]);
+
+  const profile = result[0]?.data;
+  const notif = result[1]?.data;
+
+  const profileIsLoading = result[0].isSuccess;
+  const notifIsLoading = result[1].isSuccess;
 
   return (
     <>
@@ -113,7 +120,7 @@ export default function Navbar() {
 
               {/* NOTIFICATION DROPDOWN */}
               <DropdownMenuContent
-                className="h-96 w-72 "
+                className="h-max w-[25rem]  "
                 align="end"
                 forceMount
               >
@@ -125,22 +132,38 @@ export default function Navbar() {
                     10 Unread
                   </p>
                 </DropdownMenuLabel>
+
                 <Separator />
+
                 <ScrollArea className="h-80  w-full">
-                  <div className="pb-1">
-                    {tags.map((tag, index) => (
-                      <>
-                        <div
-                          className="px-4 text-sm py-3 text-gray-600 "
-                          key={index}
-                        >
-                          {tag}
-                        </div>
-                        <Separator />
-                      </>
-                    ))}
+                  <div className="pb-1 ">
+                    {notifIsLoading
+                      ? notif.map((i: any) => {
+                          return (
+                            <>
+                              <Notification
+                                img={i.img}
+                                title={i.title}
+                                body={i.body}
+                                time={i.time}
+                                date={i.date}
+                              />
+                              <Separator />
+                            </>
+                          );
+                        })
+                      : "Loading..."}
+                    {/* <Notification />/ */}
                   </div>
                 </ScrollArea>
+                <div className="flex p-2 shadow  justify-end">
+                  <Link
+                    href={"/Notifications"}
+                    className="text-right underline text-blue-400"
+                  >
+                    View All
+                  </Link>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -150,18 +173,18 @@ export default function Navbar() {
               <div className="h-[10vh] flex items-center px-2 space-x-4 focus:outline-0 focus:outline-none border-none cursor-pointer">
                 <div className="flex flex-col justify-end text-right leading-6 ">
                   <h1 className="capitalize text-gray-700 dark:text-gray-300">
-                    {isSuccess
-                      ? `${profile.first_name} ${profile.last_name}`
+                    {profileIsLoading
+                      ? `${profile?.first_name} ${profile?.last_name}`
                       : "unknwon"}
                   </h1>
                   <p className="capitalize text-xs text-gray-600 dark:text-gray-400">
-                    {isSuccess ? profile.role : "unknwon"}
+                    {profileIsLoading ? profile?.role : "unknwon"}
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-4">
                   <Avatar>
-                    <AvatarImage src={isSuccess && profile?.img} />
+                    <AvatarImage src={profileIsLoading && profile?.img} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <IoIosArrowDown size={21} className="text-gray-400" />
@@ -174,10 +197,10 @@ export default function Navbar() {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    {isSuccess ? profile.username : "unknown"}
+                    {profileIsLoading ? profile?.username : "unknown"}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {isSuccess ? profile.email : "unknown"}
+                    {profileIsLoading ? profile?.email : "unknown"}
                   </p>
                 </div>
               </DropdownMenuLabel>
