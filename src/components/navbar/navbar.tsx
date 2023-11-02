@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoMdNotificationsOutline, IoIosArrowDown } from "react-icons/io";
 import { BiMoon, BiSun } from "react-icons/bi";
