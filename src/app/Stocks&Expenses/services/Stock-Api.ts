@@ -40,3 +40,9 @@ export const stockOut = async (Data: IStocks, id: any) => {
 
   return data;
 };
+
+export const CreateNotif = async (Data: any) => {
+  const { data } = await axios.post("/api/notifications", { ...Data });
+
+  return data;
+};

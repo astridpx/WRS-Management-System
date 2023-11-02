@@ -24,8 +24,9 @@ import {
   ErrorToast,
   LoadingToast,
   DissmissToast,
+  InfoToast,
 } from "@/components/Toast/toast";
-import { stockIn, stockOut } from "../services/Stock-Api";
+import { stockIn, stockOut, CreateNotif } from "../services/Stock-Api";
 
 export const StockModal = () => {
   const queryClient = useQueryClient();
@@ -48,6 +49,24 @@ export const StockModal = () => {
     });
   };
 
+  const NotifMutate = useMutation({
+    mutationFn: async (notifData) => {
+      CreateNotif({ data: notifData });
+    },
+    onMutate: () => {
+      console.log("Checking notif...");
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({
+        queryKey: ["notifications"],
+      });
+      InfoToast(data?.message);
+    },
+    onError: (error: any) => {
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
   const { mutateAsync } = useMutation({
     mutationFn: async () => {
       const res =
@@ -63,10 +82,12 @@ export const StockModal = () => {
       LoadingToast("Modifying stocks...");
     },
     onSuccess: (data: any) => {
-      queryClient.invalidateQueries();
-      // queryClient.invalidateQueries({
-      //   queryKey: ["stocks, items"],
-      // });
+      // queryClient.invalidateQueries();
+      queryClient.invalidateQueries({
+        queryKey: ["stocks, items"],
+      });
+
+      NotifMutate.mutateAsync(data?.notifData);
       DissmissToast();
       SuccessToast(data?.message);
     },

@@ -1,7 +1,6 @@
 import { connectDB } from "@/lib/mongodb/config/connect-db";
 import { NextResponse } from "next/server";
 import { Items } from "@/lib/mongodb/model/Items.model";
-import { CreateItemStockNotif } from "@/app/api/Helper/Create-Notif";
 
 // @desc STOCK OUT
 
@@ -51,10 +50,10 @@ export async function PUT(req: Request, { params }: any) {
       { new: true }
     );
 
-    // CREATING NOTIFICATION
-    await CreateItemStockNotif(newItem);
-
-    return NextResponse.json({ message: "Stocks updated successfully." });
+    return NextResponse.json({
+      message: "Stocks updated successfully.",
+      notifData: newItem,
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
