@@ -11,9 +11,10 @@ import {
   SuccessToast,
   ErrorToast,
   LoadingToast,
+  InfoToast,
   DissmissToast,
 } from "@/components/Toast/toast";
-import { createTransaction } from "../services/Apis";
+import { createTransaction, CreateNotif, stockOut } from "../services/Apis";
 
 export const PaymentModal = () => {
   const queryClient = useQueryClient();
@@ -48,6 +49,46 @@ export const PaymentModal = () => {
     setTotal(total_due);
   }, [cash, payment, discount, total]);
 
+  // CREATE NOTIFICATION MUTATION
+  const NotifMutate = useMutation({
+    mutationFn: async (notifData) => {
+      CreateNotif({ data: notifData });
+    },
+    onMutate: () => {
+      console.log("Checking notif...");
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({
+        queryKey: ["notifications"],
+      });
+      InfoToast(data?.message);
+    },
+    onError: (error: any) => {
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const StockMutation = useMutation({
+    mutationFn: async ({ data, itemId }: any) => {
+      const response = await stockOut({ ...data }, itemId);
+      return response;
+    },
+    onMutate: () => {
+      console.log("Stock Out mutating...");
+    },
+    onSuccess: (data: any) => {
+      // queryClient.invalidateQueries();
+      NotifMutate.mutateAsync(data?.notifData);
+      queryClient.invalidateQueries({
+        queryKey: ["stocks, items"],
+      });
+    },
+    onError: (error: any) => {
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  // CREATE TRANSACTION MUTATION
   const { mutateAsync } = useMutation({
     mutationFn: createTransaction,
     onMutate: () => {
@@ -101,6 +142,18 @@ export const PaymentModal = () => {
     if (Orders.length === 0) return ErrorToast("Pls Select a order");
 
     await mutateAsync({ ...Data });
+
+    // CREATED A STOCK OUT DATA PAYLOAD
+    await Orders.map(async (s: any) => {
+      const stockOutData = {
+        worth: s.price,
+        qty: s.qty,
+        transaction: "buy",
+        date,
+      };
+
+      await StockMutation.mutateAsync({ data: stockOutData, itemId: s.id });
+    });
   };
 
   return (

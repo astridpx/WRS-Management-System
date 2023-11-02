@@ -40,3 +40,23 @@ export const returnGallon = async (Data: any, id: any) => {
 
   return data;
 };
+
+// CREATE NOTIFICATION API
+export const CreateNotif = async (Data: any) => {
+  const { data } = await axios.post("/api/notifications", { ...Data });
+
+  return data;
+};
+
+// LESSEN POS ITEM STOCK IF BUYED
+export const stockOut = async (Data: any, id: any) => {
+  const { data } = await axios.put(
+    `/api/stocks/out/
+    ${id}`,
+    {
+      ...Data,
+    }
+  );
+
+  return data;
+};
