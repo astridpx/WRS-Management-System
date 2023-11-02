@@ -12,6 +12,7 @@ import { getAllCustomers } from "./services/api";
 import Loader from "@/components/loader/Spinner";
 import EditUserModal from "./Edit-User-Modal";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function UsersPage() {
   const { toggleShowCustomerForm } = addUserModalStore();
@@ -25,18 +26,25 @@ export default function UsersPage() {
     queryKey: ["customers"],
     queryFn: getAllCustomers,
   });
+  const [customer, setCustomer] = useState<any>([]);
 
-  const newCustomer = users?.data?.map((user: any) => {
-    console.log(user);
-    const User = {
-      fullname: `${user.first_name} ${user.last_name}`,
-      new_address: user.isVillage
-        ? `P-${user.phase} BLK-${user.blk} L-${user.lot}`
-        : user.address,
-      ...user,
-    };
-    return User;
-  });
+  useEffect(() => {
+    if (isSuccess) {
+      const newCustomer = users?.map((user: any) => {
+        console.log(user);
+        const User = {
+          fullname: `${user.first_name} ${user.last_name}`,
+          new_address: user.isVillage
+            ? `P-${user.phase} BLK-${user.blk} L-${user.lot}`
+            : user.address,
+          ...user,
+        };
+        return User;
+      });
+
+      setCustomer(newCustomer);
+    }
+  }, [isSuccess, users]);
 
   return (
     <>
@@ -59,7 +67,7 @@ export default function UsersPage() {
               <p className="text-gray-400 ">Loading...</p>
             </div>
           ) : (
-            <DataTable columns={userColumns} data={newCustomer} />
+            <DataTable columns={userColumns} data={customer} />
           )}
         </div>
       </PageWrapper>

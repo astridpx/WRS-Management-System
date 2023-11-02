@@ -18,7 +18,7 @@ export const addNewUser = async (Data: IUser) => {
 export const getAllCustomers = async () => {
   const { data } = await axios.get("/api/customers");
 
-  return data;
+  return data.data;
 };
 
 export const UpdateCustomer = async (Data: IUserWithGallon, id: any) => {
