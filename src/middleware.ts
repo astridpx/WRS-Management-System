@@ -55,5 +55,7 @@ export const config = {
     "/Stocks&Expenses/:path*",
     "/Accounts/:path*",
     "/Settings/:path*",
+    "/Notifications/:path*",
+    "/Page-Template/:path*",
   ],
 };
