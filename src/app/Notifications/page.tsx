@@ -8,9 +8,8 @@ import { getAllNotifications } from "./services/api";
 import { useQuery, useQueryClient } from "react-query";
 import Loader from "@/components/loader/Spinner";
 import { parse } from "date-fns";
-import { MdOutlineKeyboardArrowUp } from "react-icons/md";
-import { Button } from "@/components/ui/button";
 import { SlArrowUp } from "react-icons/sl";
+import { motion } from "framer-motion";
 
 export default function NotificationPage() {
   const { isLoading, data, isSuccess } = useQuery({
@@ -56,14 +55,17 @@ export default function NotificationPage() {
   return (
     <>
       <PageWrapper>
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: showButton ? 1 : 0 }}
+          transition={{ duration: 1 }}
           onClick={scrollToTop}
           className={`${
             showButton ? "block" : "hidden"
           } p-4 cursor-pointer z-10 bg-blue-600 rounded-xl shadow-xl absolute bottom-4 right-8`}
         >
           <SlArrowUp size={20} className="text-white font-bold" />
-        </div>
+        </motion.div>
 
         <main className="relative h-max msin-h-screen flex flex-col justify-center  ">
           <header className="flex justify-between p-4 " ref={topElementRef}>
