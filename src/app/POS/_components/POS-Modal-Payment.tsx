@@ -152,7 +152,9 @@ export const PaymentModal = () => {
         date,
       };
 
-      await StockMutation.mutateAsync({ data: stockOutData, itemId: s.id });
+      if (isBuy) {
+        await StockMutation.mutateAsync({ data: stockOutData, itemId: s.id });
+      }
     });
   };
 

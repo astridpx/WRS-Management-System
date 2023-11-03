@@ -68,22 +68,23 @@ export async function POST(req: Request) {
     let insufficientStock = false;
     let insufficientItem = "";
 
-    for (const item of orders) {
-      const itemStock: any = await Items.findById(item.id).lean().exec();
+    if (isBuy) {
+      for (const item of orders) {
+        const itemStock: any = await Items.findById(item.id).lean().exec();
 
-      if (itemStock?.stock < item.qty) {
-        insufficientItem = itemStock?.name;
-        insufficientStock = true;
-        break; // Exit the loop if the condition is met
+        if (itemStock?.stock < item.qty) {
+          insufficientItem = itemStock?.name;
+          insufficientStock = true;
+          break; // Exit the loop if the condition is met
+        }
       }
-    }
-
-    // STOP THE TRANSACTION IF THE ITEM HAS INSUFFICIENT STOCK
-    if (insufficientStock) {
-      return NextResponse.json(
-        { message: `${insufficientItem} have insufficient stock.` },
-        { status: 400 }
-      );
+      // STOP THE TRANSACTION IF THE ITEM HAS INSUFFICIENT STOCK
+      if (insufficientStock) {
+        return NextResponse.json(
+          { message: `${insufficientItem} have insufficient stock.` },
+          { status: 400 }
+        );
+      }
     }
 
     // SAVE THE NEW TRANSACTION
