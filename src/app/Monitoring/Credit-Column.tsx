@@ -48,7 +48,7 @@ export const CreditsColumns: ColumnDef<any>[] = [
   {
     header: "Date",
     accessorKey: "sort_date",
-    cell: ({ row }) => <p className="min-w-[5rem]">{row.original.sort_date}</p>,
+    cell: ({ row }) => <p className="min-w-[7rem]">{row.original.sort_date}</p>,
   },
   {
     id: "action",
