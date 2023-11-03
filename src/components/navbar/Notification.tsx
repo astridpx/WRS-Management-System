@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Unknown from "@/assets/question_mark.png";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Notification({ img, title, body, time, date }: any) {
   return (
@@ -15,7 +16,12 @@ export default function Notification({ img, title, body, time, date }: any) {
           <p>
             <span className="font-semibold">{title}</span> {body}
           </p>
-          <p className="text-">10hrs ago</p>
+          <p className="text-sm">
+            {formatDistanceToNow(new Date(date), {
+              includeSeconds: true,
+              // addSuffix: true,
+            })}
+          </p>
         </article>
       </div>
     </>

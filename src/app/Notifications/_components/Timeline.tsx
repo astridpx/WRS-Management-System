@@ -5,6 +5,7 @@ import { IBM_Plex_Sans } from "next/font/google";
 import Anonymous from "@/assets/anonymous.png";
 import { format } from "date-fns";
 import Unknown from "@/assets/question_mark.png";
+import { formatDistanceToNow } from "date-fns";
 
 // "IBM Plex Sans"
 const ibm = IBM_Plex_Sans({
@@ -45,7 +46,12 @@ export default function Timeline({ title, img, body, date, time }: any) {
               <div className="flex-grow">
                 <h5 className="flex justify-between items-center font-semibold">
                   {title}
-                  <span className="text-xs font-normal">2 Hrs ago</span>
+                  <span className="text-xs font-normal">
+                    {formatDistanceToNow(new Date(date), {
+                      includeSeconds: true,
+                      // addSuffix: true,
+                    })}
+                  </span>
                 </h5>
                 <p className="text-sm">{body}</p>
               </div>

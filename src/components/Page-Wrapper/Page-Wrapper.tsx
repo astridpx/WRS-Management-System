@@ -10,7 +10,7 @@ export default function PageWrapper({
     <>
       <main className="h-screen  min-h-screen w-full overflow-hidden flex">
         <Sidebar />
-        <section className="h-full w-full   overflow-y-auto ">
+        <section className="h-full w-full   overflow-y-auto " id="container">
           <Navbar />
           <div className="h-max p-4 dark:bg-dark_bg">{children}</div>
         </section>

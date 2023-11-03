@@ -138,7 +138,7 @@ export default function Navbar() {
                 <ScrollArea className="h-80  w-full">
                   <div className="pb-1 ">
                     {notifIsLoading
-                      ? notif.map((i: any) => {
+                      ? notif.slice(0, 10).map((i: any) => {
                           return (
                             <>
                               <Notification
