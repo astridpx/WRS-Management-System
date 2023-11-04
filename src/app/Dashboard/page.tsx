@@ -17,6 +17,7 @@ import { YearlyChartProfit } from "@/app/Dashboard/helpers/Chart-Profit-Yearly";
 import { GetAllYears } from "@/app/Dashboard/helpers/GetAllYears";
 import { TopCustomer } from "@/app/Dashboard/helpers/Top-Customer";
 import { MonthlyDoughNutChart } from "@/app/Dashboard/helpers/Doughnut-Chart-Monthly";
+import { YearlyDoughNutChart } from "./helpers/Doughnut-Chart-Yearly";
 import { format } from "date-fns";
 
 export default function DashboardPage() {
@@ -50,6 +51,7 @@ export default function DashboardPage() {
   const [topCustomers, setTopCustomers] = useState<any>([]);
   // DOUGHNUTDoughNut
   const [monthlyDoughnut, setMonthlyDoughnut] = useState<any>([]);
+  const [yearlyDoughnut, setYearlyDoughnut] = useState<any>([]);
   const [monthDoughNut, setMonthDoughNut] = useState<any>(
     format(new Date(), "MMM")
   );
@@ -130,6 +132,12 @@ export default function DashboardPage() {
             monthDoughNut
           );
           setMonthlyDoughnut(DoughnutData);
+
+          const YearlyDoughnutData = await YearlyDoughNutChart(
+            historyData,
+            yearDoughNut
+          );
+          setYearlyDoughnut(YearlyDoughnutData);
         }
       } catch (error) {
         console.error(error);
@@ -206,6 +214,7 @@ export default function DashboardPage() {
                   setYear={setYearDoughNut}
                   setMonth={setMonthDoughNut}
                   monthlyDoughnut={monthlyDoughnut}
+                  yearlyDoughnut={yearlyDoughnut}
                 />
               </div>
 

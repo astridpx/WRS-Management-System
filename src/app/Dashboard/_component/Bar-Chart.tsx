@@ -79,7 +79,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Monthly Profit",
+      text: "Total Profit",
       font: {
         size: 19,
       },
