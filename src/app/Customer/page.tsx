@@ -2,7 +2,6 @@
 
 import { userColumns } from "./users-column";
 import { DataTable } from "../../components/react-table/main-table";
-import UserfakeData from "@/utils/table-data/MOCK_USERS_DATA .json";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import AddNewCustomerModal from "@/components/Add-Customer/Add-Customer-Modal";
 import addUserModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
@@ -11,7 +10,6 @@ import { useQuery } from "react-query";
 import { getAllCustomers } from "./services/api";
 import Loader from "@/components/loader/Spinner";
 import EditUserModal from "./Edit-User-Modal";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export default function UsersPage() {

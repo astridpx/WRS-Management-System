@@ -16,7 +16,7 @@ export const ReportColumns: ColumnDef<any>[] = [
     accessorKey: "Date",
   },
   {
-    header: "Profit",
+    header: "Sales",
     accessorKey: "tProfit",
   },
   {

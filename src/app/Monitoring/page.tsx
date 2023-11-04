@@ -5,7 +5,6 @@ import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { DataTable } from "@/components/react-table/main-table";
 import { LastGallonReturnColumns } from "./Last-Gallon-Return-Column";
 import { CreditsColumns } from "./Credit-Column";
-import fakeCustomer from "@/utils/table-data/MOCK_DATA_CUSTOMER_SEARCH.json";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQueries } from "react-query";
 import Loader from "@/components/loader/Spinner";

@@ -27,7 +27,6 @@ import { useMutation, useQueryClient, useQueries } from "react-query";
 import axios from "axios";
 import Notification from "./Notification";
 import Link from "next/link";
-import { Notif } from "@/lib/mongodb/model/Notifications.model";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
@@ -250,18 +249,8 @@ export default function Navbar() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  Profile
-                  {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                  <Link href={"/Settings"}>Settings</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Billing
-                  {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Settings
-                  {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
-                </DropdownMenuItem>
-                <DropdownMenuItem>New Team</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem
