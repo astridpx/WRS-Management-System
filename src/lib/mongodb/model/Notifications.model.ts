@@ -13,6 +13,10 @@ const NotifSchema = new mongoose.Schema(
     stock: Number,
     time: String,
     date: Date,
+    isView: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

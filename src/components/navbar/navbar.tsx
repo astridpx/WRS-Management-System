@@ -27,6 +27,7 @@ import { useMutation, useQueryClient, useQueries } from "react-query";
 import axios from "axios";
 import Notification from "./Notification";
 import Link from "next/link";
+import { Notif } from "@/lib/mongodb/model/Notifications.model";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
@@ -63,6 +64,22 @@ export default function Navbar() {
 
   const profileIsLoading = result[0].isSuccess;
   const notifIsLoading = result[1].isSuccess;
+
+  // UPDATE NOTIFICATION VIEWED
+  const { mutateAsync } = useMutation({
+    mutationFn: async () => {
+      const { data: response } = await axios.post("/api/notifications/viewed");
+
+      return response;
+    },
+    onError: (error: any) => {
+      console.log(error?.response?.data?.message);
+    },
+  });
+
+  const HandleNotifViewed = async () => {
+    await mutateAsync();
+  };
 
   return (
     <>
@@ -102,7 +119,17 @@ export default function Navbar() {
           )}
 
           <div>
-            <DropdownMenu>
+            <DropdownMenu
+              onOpenChange={(value) => {
+                if (value) {
+                  HandleNotifViewed();
+                } else {
+                  queryClient.invalidateQueries({
+                    queryKey: ["notifications"],
+                  });
+                }
+              }}
+            >
               <DropdownMenuTrigger className="focus:outline-0 focus:outline-none">
                 <Badge
                   // variant="secondary"
@@ -112,8 +139,16 @@ export default function Navbar() {
                     size={23}
                     className="relative cursor-pointer"
                   />
-                  <span className="px-1 absolute z-10  text-[10px] bg-red-400 rounded-full -top-1 right-1">
-                    10
+                  <span
+                    className={`${
+                      notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length ===
+                        0 &&
+                      "hidden"
+                    } px-1 absolute z-10  text-[10px] bg-red-400 rounded-full -top-1 right-1`}
+                  >
+                    {notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length}
                   </span>
                 </Badge>
               </DropdownMenuTrigger>
@@ -128,8 +163,17 @@ export default function Navbar() {
                   <h4 className="text-base font-medium leading-none">
                     Notifications
                   </h4>
-                  <p className="text-xs bg-sky-100 text-sky-500 dark:bg-[#1B2C32]  px-2 py-1 rounded-full">
-                    10 Unread
+                  <p
+                    className={`${
+                      notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length ===
+                        0 &&
+                      "hidden"
+                    } text-xs bg-sky-100 text-sky-500 dark:bg-[#1B2C32]  px-2 py-1 rounded-full`}
+                  >
+                    {notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length}{" "}
+                    Unread
                   </p>
                 </DropdownMenuLabel>
 
@@ -153,7 +197,6 @@ export default function Navbar() {
                           );
                         })
                       : "Loading..."}
-                    {/* <Notification />/ */}
                   </div>
                 </ScrollArea>
                 <div className="flex p-2 shadow  justify-end">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
 import { CardsData } from "@/utils/Dashboard/DashboardCards-data";
 import { DashBoardCard } from "./_component/DashBoard-Card";
@@ -18,7 +18,6 @@ import { GetAllYears } from "@/app/Dashboard/helpers/GetAllYears";
 import { TopCustomer } from "@/app/Dashboard/helpers/Top-Customer";
 import { MonthlyDoughNutChart } from "@/app/Dashboard/helpers/Doughnut-Chart-Monthly";
 import { format } from "date-fns";
-import { useInView, useMotionValue, useSpring } from "framer-motion";
 
 export default function DashboardPage() {
   const results = useQueries([
