@@ -1,5 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
 import { ICard } from "@/utils/Dashboard/DashboardCards-data";
+import { animate } from "framer-motion";
+import { useAnimatedCounter } from "@/hooks/UseAnimateCounter";
 
 export const DashBoardCard = ({
   icon,
@@ -8,6 +12,8 @@ export const DashBoardCard = ({
   amount,
   title,
 }: ICard) => {
+  const counter = useAnimatedCounter(amount);
+
   return (
     <>
       <div className="relative h-30 rounded-xl p-4 border bg-white flex items-center gap-x-4">
@@ -20,7 +26,7 @@ export const DashBoardCard = ({
         </div>
         <div className="space-y-1  ">
           <h2 className="text-xl font-semibold">
-            Php {amount.toLocaleString()}
+            Php {counter.toLocaleString()}
           </h2>
           <h2 className="text-sm">{title}</h2>
         </div>

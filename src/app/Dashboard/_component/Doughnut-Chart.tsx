@@ -50,7 +50,7 @@ const options = {
     // },
     title: {
       display: true,
-      text: "Monthly Sales From Customer",
+      text: "Sales From Customer",
       font: {
         size: 16,
       },
@@ -62,6 +62,7 @@ const viewOption = ["Monthly", "Yearly"];
 
 const DoughNutChart = ({
   monthlyDoughnut,
+  yearlyDoughnut,
   allYears,
   setYear,
   setMonth,
@@ -80,8 +81,22 @@ const DoughNutChart = ({
       {
         label: "sale",
         // data: [12, 19, 8, 15],
-        data: monthlyDoughnut.map((d: any) => d.sale),
-        backgroundColor: ["Red", "Orange", "Yellow", "Blue", "Gray", "Pink"],
+        data:
+          selected === "Yearly"
+            ? yearlyDoughnut.map((d: any) => d.sale)
+            : monthlyDoughnut.map((d: any) => d.sale),
+        backgroundColor: [
+          "Red",
+          "Orange",
+          "Yellow",
+          "Blue",
+          "Gray",
+          "Pink",
+          "Green",
+          "#7743DB",
+          "#86A789",
+          "#FFEECC",
+        ],
         borderWidth: 1,
       },
     ],
@@ -135,7 +150,14 @@ const DoughNutChart = ({
             {/* monthly option */}
             <DropdownMenuSeparator />
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Months</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger
+                disabled={selected === "Yearly"}
+                className={`${
+                  selected === "Yearly" ? "cursor-not-allowed" : "cursor-auto"
+                }`}
+              >
+                Months
+              </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup
                   value={MSelected}

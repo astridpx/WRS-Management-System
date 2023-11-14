@@ -56,6 +56,8 @@ const AccountSchema = new mongoose.Schema(
       type: Date,
       default: new Date(),
     },
+    pass_reset_code: String,
+    pass_reset_token: String,
     login_history: [
       {
         isDesktop: Boolean,

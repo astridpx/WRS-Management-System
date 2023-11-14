@@ -64,6 +64,22 @@ export default function Navbar() {
   const profileIsLoading = result[0].isSuccess;
   const notifIsLoading = result[1].isSuccess;
 
+  // UPDATE NOTIFICATION VIEWED
+  const { mutateAsync } = useMutation({
+    mutationFn: async () => {
+      const { data: response } = await axios.post("/api/notifications/viewed");
+
+      return response;
+    },
+    onError: (error: any) => {
+      console.log(error?.response?.data?.message);
+    },
+  });
+
+  const HandleNotifViewed = async () => {
+    await mutateAsync();
+  };
+
   return (
     <>
       <nav className="h-[10vh] w-full px-4 bg-white border flex justify-between z-10 sticky top-0  dark:bg-dark_bg">
@@ -102,7 +118,17 @@ export default function Navbar() {
           )}
 
           <div>
-            <DropdownMenu>
+            <DropdownMenu
+              onOpenChange={(value) => {
+                if (value) {
+                  HandleNotifViewed();
+                } else {
+                  queryClient.invalidateQueries({
+                    queryKey: ["notifications"],
+                  });
+                }
+              }}
+            >
               <DropdownMenuTrigger className="focus:outline-0 focus:outline-none">
                 <Badge
                   // variant="secondary"
@@ -112,8 +138,16 @@ export default function Navbar() {
                     size={23}
                     className="relative cursor-pointer"
                   />
-                  <span className="px-1 absolute z-10  text-[10px] bg-red-400 rounded-full -top-1 right-1">
-                    10
+                  <span
+                    className={`${
+                      notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length ===
+                        0 &&
+                      "hidden"
+                    } px-1 absolute z-10  text-[10px] bg-red-400 rounded-full -top-1 right-1`}
+                  >
+                    {notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length}
                   </span>
                 </Badge>
               </DropdownMenuTrigger>
@@ -128,8 +162,17 @@ export default function Navbar() {
                   <h4 className="text-base font-medium leading-none">
                     Notifications
                   </h4>
-                  <p className="text-xs bg-sky-100 text-sky-500 dark:bg-[#1B2C32]  px-2 py-1 rounded-full">
-                    10 Unread
+                  <p
+                    className={`${
+                      notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length ===
+                        0 &&
+                      "hidden"
+                    } text-xs bg-sky-100 text-sky-500 dark:bg-[#1B2C32]  px-2 py-1 rounded-full`}
+                  >
+                    {notifIsLoading &&
+                      notif.filter((n: any) => n.isView === false).length}{" "}
+                    Unread
                   </p>
                 </DropdownMenuLabel>
 
@@ -153,7 +196,6 @@ export default function Navbar() {
                           );
                         })
                       : "Loading..."}
-                    {/* <Notification />/ */}
                   </div>
                 </ScrollArea>
                 <div className="flex p-2 shadow  justify-end">
@@ -207,18 +249,8 @@ export default function Navbar() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  Profile
-                  {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                  <Link href={"/Settings"}>Settings</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Billing
-                  {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Settings
-                  {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
-                </DropdownMenuItem>
-                <DropdownMenuItem>New Team</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem

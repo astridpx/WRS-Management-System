@@ -5,15 +5,23 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { sidebarItems } from "@/utils/sidebar-data/sidebar-data";
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "@/assets/Water-Drop.svg";
 import WaterDrop from "@/assets/morning-breeze-water-drop.png";
 import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import { UserStore } from "@/lib/zustand/User/user.store";
 
 export default function Sidebar() {
   const { isExpand } = useSidebarStore();
   const currentRoute = usePathname();
+  const { clearUser, setUser, user } = UserStore();
+  const forbiddenPath = [
+    "/Report",
+    "/Customer",
+    "/Items",
+    "/Stocks&Expenses",
+    "/Accounts",
+  ];
 
   return (
     <>
@@ -60,30 +68,36 @@ export default function Sidebar() {
                   </h1>
 
                   {/* Items */}
-                  {items.items.map((list) => {
-                    return (
-                      <>
-                        <Link
-                          key={list.id}
-                          href={list.path}
-                          className={`${
-                            currentRoute === list.path
-                              ? "dark:bg-[#1E293B] text-blue-500 "
-                              : "text-gray-500"
-                          } relative flex items-center px-3 py-3 cursor-pointer rounded-xl  hover:text-blue-500 `}
-                        >
-                          {React.createElement(list.icon, {
-                            size: `${isExpand ? 20 : 22}`,
-                            className: "mr-4  ",
-                          })}
-                          {/* //? IT WILL BE HIDDEn IF THE SIDEBAR IS MINIMIZE */}
-                          <h1 className={`  ${!isExpand && "hidden"}`}>
-                            {list.name}
-                          </h1>
-                        </Link>
-                      </>
-                    );
-                  })}
+                  {items.items
+                    .filter((url: any) =>
+                      user && user.role !== "admin"
+                        ? !forbiddenPath.includes(url.path)
+                        : url
+                    )
+                    .map((list) => {
+                      return (
+                        <>
+                          <Link
+                            key={list.id}
+                            href={list.path}
+                            className={`${
+                              currentRoute === list.path
+                                ? "dark:bg-[#1E293B] text-blue-500 "
+                                : "text-gray-500"
+                            }  relative flex items-center px-3 py-3 cursor-pointer rounded-xl  hover:text-blue-500 `}
+                          >
+                            {React.createElement(list.icon, {
+                              size: `${isExpand ? 20 : 22}`,
+                              className: "mr-4  ",
+                            })}
+                            {/* //? IT WILL BE HIDDEn IF THE SIDEBAR IS MINIMIZE */}
+                            <h1 className={`  ${!isExpand && "hidden"}`}>
+                              {list.name}
+                            </h1>
+                          </Link>
+                        </>
+                      );
+                    })}
                 </>
               );
             })}

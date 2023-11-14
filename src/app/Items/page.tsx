@@ -2,7 +2,6 @@
 
 import React, { use } from "react";
 import PageWrapper from "@/components/Page-Wrapper/Page-Wrapper";
-import fakeProductsData from "@/utils/table-data/MOCK_PRODUCTS_DATA .json";
 import { DataTable } from "@/components/react-table/main-table";
 import { productColumns } from "./ITEMS-column";
 import { Button } from "@/components/ui/button";
