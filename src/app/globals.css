@@ -155,6 +155,12 @@
   @apply bg-gradient-to-r from-light_blue to-[#4786fa];
 }
 
+/* Box Shadow */
+.tech-shadow {
+  box-shadow: 0px 8px 44px 0px
+    rgba(41.00000000000001, 112.00000000000016, 250, 0.15);
+}
+
 /*======================
     404 page
 =======================*/
