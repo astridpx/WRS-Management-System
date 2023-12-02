@@ -206,8 +206,8 @@ export default function HomePage() {
           style={nunito.style}
           className="h-max w-full bg-gradient-to-r from-[#F9FCFF] to-[#FAFAFF] pt-[1rem] "
         >
-          <header className="w-[75%] mx-auto grid grid-cols-2 items-center">
-            <div className="space-y-4 ">
+          <header className="w-[75%] mx-auto grid lg:grid-cols-2 gap-y-8  items-center">
+            <div className="space-y-4 text-center text-lg lg:text-base">
               <h3
                 style={dosis.style}
                 className="text-5xl font-bold text-light_blue "
@@ -217,23 +217,25 @@ export default function HomePage() {
               <h4 className="tracking-[1.5px] font-medium">OUR PROCESS</h4>
             </div>
 
-            <div className="space-y-3 w-[90%]">
+            <div className="space-y-3 w-[90%] text-center">
               <p>
                 Our refreshing purified bottled water can now be delivered
                 directly to your door with our water delivery service.
               </p>
 
-              <Link
-                href={"/"}
-                className="flex items-center gap-x-2 text-xl text-light_blue font-bold hover:text-dark_blue duration-150 transition-colors"
-              >
-                Read more
-                <FaLongArrowAltRight size={22} />
-              </Link>
+              <div className="flex justify-center">
+                <Link
+                  href={"/"}
+                  className=" flex items-center gap-x-2 text-xl text-light_blue font-bold hover:text-dark_blue duration-150 transition-colors"
+                >
+                  Read more
+                  <FaLongArrowAltRight size={22} />
+                </Link>
+              </div>
             </div>
           </header>
 
-          <div className="w-[70%] mx-auto grid grid-cols-4 items-center mt-[6rem]">
+          <div className="w-[70%] mx-auto grid lg:grid-cols-4 gap-y-8 items-center mt-[6rem]">
             {HIWData.map((d: any) => {
               return (
                 <HIWCard

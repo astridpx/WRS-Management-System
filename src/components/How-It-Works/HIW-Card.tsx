@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function HIWCard({ dosis, id, title, title2, img }: any) {
   return (
     <>
-      <div className="text-center space-y-8">
+      <div className="text-center lg:space-y-8 space-y-4">
         <div className="relative  flex items-center justify-center">
           <figure className="relative z-10 h-max w-max bg-white p-8 border rounded-full tech-shadow">
             <Image
@@ -17,16 +17,17 @@ export default function HIWCard({ dosis, id, title, title2, img }: any) {
               width={66}
             />
           </figure>
-          <Image
-            src={DashLine}
-            alt="Dashline"
-            unoptimized
-            height={40}
-            width={256}
-            className={`${
-              id >= 4 && "hidden"
-            } absolute  scale-110 -right-[50%]`}
-          />
+
+          {id < 4 && (
+            <Image
+              src={DashLine}
+              alt="Dashline"
+              unoptimized
+              height={40}
+              width={256}
+              className={`  hidden lg:block  absolute  scale-110 -right-[50%]`}
+            />
+          )}
         </div>
 
         <div
