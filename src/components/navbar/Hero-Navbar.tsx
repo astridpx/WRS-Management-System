@@ -24,7 +24,7 @@ export default function HeroNavbar() {
           <Link href={"/"}>Service</Link>
           <Link href={"/"}>Product</Link>
           <Link href={"/"}>FAQ</Link>
-          <Link href={"/"}>Contact</Link>
+          <Link href={"/Contact-Us"}>Contact</Link>
         </div>
 
         <Link
