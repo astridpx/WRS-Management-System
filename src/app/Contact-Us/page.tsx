@@ -8,12 +8,16 @@ import ContactForm from "./_components/form";
 
 const nunito = Nunito({
   subsets: ["latin"],
+  display: "swap",
+  adjustFontFallback: false,
   // weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-nunito",
 });
 
 const dosis = Dosis({
   subsets: ["latin"],
+  display: "swap",
+  adjustFontFallback: false,
   // weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-dosis",
 });

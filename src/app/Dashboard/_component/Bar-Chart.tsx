@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Select,
@@ -37,6 +39,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { format, getDaysInMonth, getWeeksInMonth, parse } from "date-fns";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 ChartJS.register(
   CategoryScale,
@@ -98,7 +102,11 @@ const BarChart = ({
   setYear,
   setMonth,
   allYears,
+  monthlySE,
+  dailySE,
+  yearlySE,
 }: any) => {
+  const doc = new jsPDF(); //pdf print
   const [selected, setSelected] = useState("Monthly");
   const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
   const [YSelected, setYSelected] = useState(format(new Date(), "yyyy"));
@@ -149,12 +157,79 @@ const BarChart = ({
     setYear(YSelected);
   }, [MSelected, YSelected, day, setDay, setMonth, setYear]);
 
+  const HandlePrint = async () => {
+    const DailyPrint = DaysOfMonth.map((d: any, index: string | number) => {
+      return [
+        `${monthNumber.getMonth() + 1}-${d}-${YSelected}`,
+        dailySE[index]?.sales,
+        dailySE[index]?.expenses,
+        daily[index],
+      ];
+    });
+
+    const MonthlyPrint = labels.map((d: any, index: string | number) => {
+      return [
+        `${d} ${YSelected}`,
+        monthlySE[index]?.sales,
+        monthlySE[index]?.expenses,
+        monthly[index],
+      ];
+    });
+
+    const YearlyPrint = allYears.map((d: any, index: string | number) => {
+      return [
+        d,
+        yearlySE[index]?.sales,
+        yearlySE[index]?.expenses,
+        yearly[index],
+      ];
+    });
+
+    const Body =
+      selected === "Monthly"
+        ? MonthlyPrint
+        : selected === "Daily"
+        ? DailyPrint
+        : selected === "Yearly"
+        ? YearlyPrint
+        : false;
+
+    const y = 10;
+    const title = `${selected} Profit Report`;
+
+    doc.setLineWidth(2);
+    doc.text(title, 15, y);
+
+    // GENERATE PDF
+    await autoTable(doc, {
+      head: [["Date", "Sales", "Expenses", "Profit"]],
+      body: Body,
+      startY: y + 10,
+      theme: "grid",
+    });
+
+    const filename =
+      selected === "Monthly"
+        ? `${selected}_${YSelected}`
+        : selected === "Daily"
+        ? `${selected}_${MSelected}_${YSelected}`
+        : selected === "Yearly"
+        ? `${selected}_${YSelected}`
+        : false;
+
+    await doc.save(`${filename}_Profit_Report.pdf`);
+  };
+
   return (
     <>
       <div className="relative">
         <div className="p-2 rounded-lg w-full absolute z-[2] flex gap-x-2 justify-end items-center">
           {/* <CiFilter size={20} className="text-slate-500 cursor-pointer" /> */}
-          <BsPrinter size={18} className="text-slate-400 cursor-pointer" />
+          <BsPrinter
+            size={18}
+            className="text-slate-400 cursor-pointer"
+            onClick={HandlePrint}
+          />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
