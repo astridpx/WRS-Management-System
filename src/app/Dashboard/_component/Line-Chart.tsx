@@ -29,6 +29,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { format, getDaysInMonth, getWeeksInMonth, parse } from "date-fns";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 ChartJS.register(
   CategoryScale,
@@ -88,6 +90,7 @@ export default function ReLineChart({
   setMonth,
   allYears,
 }: any) {
+  const doc = new jsPDF(); //pdf print
   const [selected, setSelected] = useState("Monthly");
   const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
   const [YSelected, setYSelected] = useState<any>(format(new Date(), "y"));
@@ -159,6 +162,62 @@ export default function ReLineChart({
     setYear(YSelected);
   }, [MSelected, YSelected, day, setDay, setMonth, setYear]);
 
+  const HandlePrint = async () => {
+    const DailyPrint = DaysOfMonth.map((d: any, index: string | number) => {
+      return [
+        `${monthNumber.getMonth() + 1}-${d}-${YSelected}`,
+        daily[index]?.sales,
+        daily[index]?.expenses,
+      ];
+    });
+
+    const MonthlyPrint = labels.map((d: any, index: string | number) => {
+      return [
+        `${d} ${YSelected}`,
+        monthly[index]?.sales,
+        monthly[index]?.expenses,
+      ];
+    });
+
+    const YearlyPrint = allYears.map((d: any, index: string | number) => {
+      return [d, yearly[index]?.sales, yearly[index]?.expenses];
+    });
+
+    const Body =
+      selected === "Monthly"
+        ? MonthlyPrint
+        : selected === "Daily"
+        ? DailyPrint
+        : selected === "Yearly"
+        ? YearlyPrint
+        : false;
+
+    const y = 10;
+    const title = `${selected} Sales & Expenses Report`;
+
+    doc.setLineWidth(2);
+    doc.text(title, 15, y);
+
+    // GENERATE PDF
+    await autoTable(doc, {
+      head: [["Date", "Sales", "Expenses"]],
+      body: Body,
+      startY: y + 10,
+      theme: "grid",
+    });
+
+    const filename =
+      selected === "Monthly"
+        ? `${selected}_${YSelected}`
+        : selected === "Daily"
+        ? `${selected}_${MSelected}_${YSelected}`
+        : selected === "Yearly"
+        ? `${selected}_${YSelected}`
+        : false;
+
+    await doc.save(`${filename}_Sales_Expenses_Report.pdf`);
+  };
+
   return (
     <>
       <div className="relative">
@@ -167,7 +226,7 @@ export default function ReLineChart({
           <BsPrinter
             size={18}
             className="text-slate-400 cursor-pointer"
-            onClick={() => alert(getDaysInMonth(new Date(2023, 10)))}
+            onClick={HandlePrint}
           />
 
           <DropdownMenu>

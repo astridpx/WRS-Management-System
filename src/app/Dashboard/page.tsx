@@ -192,6 +192,9 @@ export default function DashboardPage() {
                   setDay={setDay}
                   setYear={setYear}
                   setMonth={setMonth}
+                  dailySE={daily.map((d: any) => d.Line)}
+                  monthlySE={monthly.map((d: any) => d.Line)}
+                  yearlySE={yearly.map((d: any) => d.Line)}
                 />
               </div>
               <div className="relative w-full h-[25rem]  ">
