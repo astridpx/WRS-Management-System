@@ -21,6 +21,7 @@ import HowWorkWave from "@/assets/landingPage/how-it-work.svg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import HIWCard from "@/components/How-It-Works/HIW-Card";
 import { HIWData } from "@/components/How-It-Works/HIW-Data";
+import Footer from "@/components/Footer/Footer";
 
 // body font
 const nunito = Nunito({
@@ -239,7 +240,7 @@ export default function HomePage() {
             </div>
           </header>
 
-          <div className="w-[70%] mx-auto grid lg:grid-cols-4 gap-y-8 items-center mt-[6rem]">
+          <div className="w-[70%] mx-auto grid lg:grid-cols-4 gap-y-8 items-center mt-[6rem] pb-16">
             {HIWData.map((d: any) => {
               return (
                 <HIWCard
@@ -253,6 +254,14 @@ export default function HomePage() {
               );
             })}
           </div>
+
+          {/* FOOTER */}
+          <footer
+            style={nunito.style}
+            className="h-max w-full bg-dark_blue  text-slate-100 pt-[6rem] "
+          >
+            <Footer />
+          </footer>
         </section>
       </main>
     </>
