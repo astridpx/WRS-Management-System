@@ -7,6 +7,17 @@ import { Button } from "@/components/ui/button";
 import addCustomerModalStore from "@/lib/zustand/CustomerPage-store/AddNew-Modal-store";
 import { addNewUser } from "@/app/Customer/services/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Cabuyao } from "@/utils/Brgy-Lists/Cabuyao-brgy";
 import axios from "axios";
 import {
   SuccessToast,
@@ -40,12 +51,12 @@ export default function AddNewCustomer() {
     last_name: "",
     mobile1: "",
     mobile2: "",
-    blk: 0,
-    lot: 0,
-    phase: 0,
+    street: "",
+    brgy: "",
+    city: "",
     comment: "",
     address: "",
-    isVillage: true,
+    isMain: true,
     item,
   });
   const userMutation = useMutation({
@@ -63,12 +74,12 @@ export default function AddNewCustomer() {
         last_name: "",
         mobile1: "",
         mobile2: "",
-        blk: 0,
-        lot: 0,
-        phase: 0,
+        street: "",
+        brgy: "",
+        city: "",
         comment: "",
         address: "",
-        isVillage: true,
+        isMain: true,
         item,
       });
       console.log("success bro!");
@@ -85,11 +96,11 @@ export default function AddNewCustomer() {
       first_name,
       last_name,
       mobile1,
-      isVillage,
+      isMain,
       address,
-      blk,
-      lot,
-      phase,
+      street,
+      brgy,
+      city,
     } = userData;
 
     if (
@@ -100,8 +111,8 @@ export default function AddNewCustomer() {
       return ErrorToast("This first name & last name & mobile1 is required");
     }
 
-    if (isVillage) {
-      if (blk <= 0 || lot <= 0 || phase <= 0) {
+    if (isMain) {
+      if (!street.length || !brgy.length || !city.length) {
         return ErrorToast("The field blk & lot & phase is required");
       }
     } else {
@@ -156,7 +167,7 @@ export default function AddNewCustomer() {
               onValueChange={(e) =>
                 setUserData({
                   ...userData,
-                  ["isVillage"]: e === "subd",
+                  ["isMain"]: e === "subd",
                 })
               }
             >
@@ -282,24 +293,22 @@ export default function AddNewCustomer() {
 
                     <div className="sm:col-span-2 sm:col-start-1">
                       <label
-                        htmlFor="blk"
+                        htmlFor="street"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        BLK
+                        Street
                       </label>
                       <div className="mt-2">
                         <Input
-                          type="number"
-                          name="blk"
+                          type="text"
+                          name="street"
                           required
-                          placeholder="Enter blk"
-                          value={userData.blk}
-                          min={0}
-                          defaultValue={0}
+                          placeholder="Enter street"
+                          value={userData.street}
                           onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: parseFloat(e.target.value),
+                              [e.target.name]: e.target.value,
                             });
                           }}
                         />
@@ -308,50 +317,73 @@ export default function AddNewCustomer() {
 
                     <div className="sm:col-span-2">
                       <label
-                        htmlFor="lot"
+                        htmlFor="brgy"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Lot
+                        BRGY
                       </label>
                       <div className="mt-2">
-                        <Input
-                          type="number"
-                          name="lot"
+                        {/* <Input
+                          type="text"
+                          name="brgy"
                           required
-                          placeholder="Enter lot"
-                          value={userData.lot}
-                          min={0}
-                          defaultValue={0}
+                          placeholder="Enter brgy"
+                          value={userData.brgy}
                           onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: parseFloat(e.target.value),
+                              [e.target.name]: e.target.value,
                             });
                           }}
-                        />
+                        /> */}
+                        <Select
+                          onValueChange={(e: any) =>
+                            setUserData({
+                              ...userData,
+                              brgy: e,
+                            })
+                          }
+                        >
+                          <SelectTrigger className="">
+                            <SelectValue placeholder="Select brgy" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <ScrollArea className="h-72">
+                                <SelectLabel>BRGY Cabuyao Lists</SelectLabel>
+                                {Cabuyao.map((d: string, index: number) => {
+                                  return (
+                                    <SelectItem key={index} value={d}>
+                                      {d}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </ScrollArea>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 
                     <div className="sm:col-span-2 ">
                       <label
-                        htmlFor="phase"
+                        htmlFor="city"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Phase
+                        City
                       </label>
                       <div className="mt-2">
                         <Input
-                          type="number"
-                          name="phase"
+                          type="text"
+                          name="city"
                           required
-                          placeholder="Enter phase"
-                          value={userData.phase}
-                          min={0}
-                          defaultValue={0}
+                          defaultValue={"Cabuyao"}
+                          placeholder="Enter city"
+                          value={userData.city}
                           onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: parseFloat(e.target.value),
+                              [e.target.name]: e.target.value,
                             });
                           }}
                         />

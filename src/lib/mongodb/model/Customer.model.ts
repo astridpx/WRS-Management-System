@@ -25,11 +25,11 @@ const CustomerSchema = new mongoose.Schema(
     mobile2: {
       type: String,
     },
-    isVillage: Boolean,
+    isMain: Boolean,
     address: String, //? this is for customer not live on howard subd
-    blk: String,
-    lot: String,
-    phase: String,
+    street: String,
+    brgy: String,
+    city: String,
     comment: String,
     borrowed_gal: [
       {

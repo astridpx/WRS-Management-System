@@ -20,14 +20,28 @@ export function DataTableAddressColumn<TData>({
     <>
       <div className=" w-max">
         <div className="flex gap-x-2 gap-y-2  pr-2 truncate max-w-sm">
-          {row?.original?.isVillage ? (
+          {row?.original?.isMain ? (
             <>
-              <MdLocationPin size={18} className="text-gray-600 " />
-              <p className="flex gap-x-1 text-sm items-center">
-                <span>P-{row?.original?.phase}</span>
-                <span>BLK-{row?.original?.blk}</span>
-                <span>L-{row?.original?.lot}</span>
-              </p>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipContent>
+                    <p className="">
+                      <span>{row?.original?.street}</span>
+                      <span> {row?.original?.brgy}</span>
+                      <span> {row?.original?.city}</span>
+                    </p>
+                  </TooltipContent>
+
+                  <MdLocationPin size={18} className="text-gray-600 " />
+                  <TooltipTrigger className="max-w-xs w-max h-max inline-block text-sm items-center">
+                    <p className="">
+                      <span>{row?.original?.street},</span>
+                      <span> {row?.original?.brgy},</span>
+                      <span> {row?.original?.city}</span>
+                    </p>
+                  </TooltipTrigger>
+                </Tooltip>
+              </TooltipProvider>
             </>
           ) : (
             // ADDRESS

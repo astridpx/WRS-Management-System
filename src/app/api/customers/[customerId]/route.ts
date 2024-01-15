@@ -12,12 +12,12 @@ export async function PUT(req: Request, { params }: any) {
     mobile1,
     mobile2,
     address,
-    blk,
-    lot,
-    phase,
+    street,
+    brgy,
+    city,
     comment,
     item,
-    isVillage,
+    isMain,
   } = await req.json();
   const id = customerId.trim();
 
@@ -27,11 +27,11 @@ export async function PUT(req: Request, { params }: any) {
     mobile1,
     mobile2,
     address,
-    blk,
-    lot,
-    phase,
+    street,
+    brgy,
+    city,
     comment,
-    isVillage,
+    isMain,
     borrowed_gal: item,
   };
 

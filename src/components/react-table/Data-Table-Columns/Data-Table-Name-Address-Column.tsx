@@ -12,22 +12,22 @@ import {
 
 export interface ITNameAddress {
   name: string;
-  isVillage: Boolean;
+  isMain: Boolean;
   addr?: string;
   comment?: string;
-  phase?: number;
-  blk?: number;
-  lot?: number;
+  street?: string;
+  brgy?: string;
+  city?: string;
 }
 
 export function DataTableNameColumn<TData>({
   name,
   addr,
   comment,
-  isVillage,
-  phase,
-  blk,
-  lot,
+  isMain,
+  street,
+  brgy,
+  city,
 }: ITNameAddress) {
   return (
     <>
@@ -37,13 +37,13 @@ export function DataTableNameColumn<TData>({
           {name}
         </h1>
         <div className="flex gap-x-2 gap-y-2  pr-2 truncate max-w-sm">
-          {isVillage ? (
+          {isMain ? (
             <>
               <MdLocationPin size={18} className="text-gray-600 " />
               <p className="flex gap-x-1 text-sm items-center">
-                <span>P-{phase}</span>
-                <span>BLK-{blk}</span>
-                <span>L-{lot}</span>
+                <span>{street},</span>
+                <span>{brgy},</span>
+                <span>{city},</span>
               </p>
             </>
           ) : (
