@@ -11,7 +11,7 @@ export default function Footer() {
     <>
       <section className="w-[90%] lg:w-[70%]  mx-auto grid lg:grid-cols-3 gap-y-12  border-b border-slate-500 pb-10">
         <div className="space-y-4 grid">
-          <h5 className=" font-bold ">
+          <h5 className=" font-bold text-lg">
             <span className="text-light_blue font-[900] mr-2">
               <strong>|</strong>
             </span>
@@ -38,9 +38,9 @@ export default function Footer() {
           </Link>
         </div>
 
-        <div className="space-y-10">
-          <article className="space-y-4">
-            <h5 className="font-bold ">
+        <div className="space-y-9">
+          <article className="space-y-3">
+            <h5 className="font-bold text-lg">
               <span className="text-light_blue font-[900] mr-2">
                 <strong>|</strong>
               </span>
@@ -55,7 +55,7 @@ export default function Footer() {
             </div>
           </article>
 
-          <article className="space-y-4">
+          <article className="space-y-3">
             <h5 className="font-bold ">
               <span className="text-light_blue font-[900] mr-2">
                 <strong>|</strong>
@@ -78,14 +78,18 @@ export default function Footer() {
         </div>
 
         <div className="space-y-4">
-          <h5 className="font-bold ">
+          <h5 className="font-bold text-lg">
             <span className="text-light_blue font-[900] mr-2">
               <strong>|</strong>
             </span>
             Subscribed
           </h5>
 
-          <Input type="email" placeholder="Your email address" />
+          <Input
+            type="email"
+            placeholder="Your email address"
+            className="max-w-xs"
+          />
           <Button className="self-end">Subscribe</Button>
         </div>
       </section>
