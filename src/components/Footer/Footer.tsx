@@ -38,7 +38,7 @@ export default function Footer() {
           </Link>
         </div>
 
-        <div className="space-y-9">
+        <div className="space-y-9 ">
           <article className="space-y-3">
             <h5 className="font-bold text-lg">
               <span className="text-light_blue font-[900] mr-2">

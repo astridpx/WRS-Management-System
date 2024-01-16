@@ -6,8 +6,8 @@ export const getAllCustomers = async () => {
   const newCustomer = data?.data?.map((user: any) => {
     const User = {
       fullname: `${user.first_name} ${user.last_name}`,
-      new_address: user.isVillage
-        ? `P-${user.phase} BLK-${user.blk} L-${user.lot}`
+      new_address: user.isMain
+        ? `${user.street} ${user.brgy} L-${user.city}`
         : user.address,
       ...user,
     };

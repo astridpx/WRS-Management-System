@@ -18,10 +18,10 @@ export const monitoringHistoryColumns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <DataTableNameColumn
         name={row?.original?.fullname ? row?.original?.fullname : ""}
-        isVillage={row?.original?.customer?.isVillage}
-        phase={row?.original?.customer?.phase}
-        blk={row?.original?.customer?.blk}
-        lot={row?.original?.customer?.lot}
+        isMain={row?.original?.customer?.isMain}
+        street={row?.original?.customer?.street}
+        brgy={row?.original?.customer?.brgy}
+        city={row?.original?.customer?.city}
         addr={row?.original?.customer?.address}
         comment={row?.original?.customer?.comment}
       />

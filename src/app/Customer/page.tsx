@@ -32,7 +32,7 @@ export default function UsersPage() {
         console.log(user);
         const User = {
           fullname: `${user.first_name} ${user.last_name}`,
-          new_address: user.isVillage
+          new_address: user.Main
             ? `P-${user.phase} BLK-${user.blk} L-${user.lot}`
             : user.address,
           ...user,

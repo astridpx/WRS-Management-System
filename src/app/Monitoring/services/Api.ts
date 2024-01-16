@@ -24,9 +24,7 @@ export const getLastReturn = async () => {
   }
 
   const Data = await LastReturnGallon[0].map((d: IUser) => {
-    const addr = d.isVillage
-      ? ` P-${d.phase} BLK-${d.blk} L-${d.lot}`
-      : ` ${d.address}`;
+    const addr = d.isMain ? `${d.street} ${d.brgy} ${d.city}` : ` ${d.address}`;
 
     const date = d.borrowed_gal?.[0]?.last_return;
     const newData = {
@@ -47,8 +45,8 @@ export const getAllCredits = async () => {
   const { data } = await axios.get("/api/monitoring/credit");
 
   const Data = await data.data.map((d: any) => {
-    const addr = d.customer.isVillage
-      ? ` P-${d.customer.phase} BLK-${d.customer.blk} L-${d.customer.lot}`
+    const addr = d.customer.isMain
+      ? ` ${d.customer.street} ${d.customer.brgy} ${d.customer.city}`
       : ` ${d.customer.address}`;
 
     const newData = {
