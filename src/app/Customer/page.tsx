@@ -33,7 +33,7 @@ export default function UsersPage() {
         const User = {
           fullname: `${user.first_name} ${user.last_name}`,
           new_address: user.Main
-            ? `P-${user.phase} BLK-${user.blk} L-${user.lot}`
+            ? `${user.street} ${user.brgy} L-${user.city}`
             : user.address,
           ...user,
         };

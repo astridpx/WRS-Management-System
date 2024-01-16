@@ -7,7 +7,7 @@ export const getTransactions = async () => {
 
   const Data = await data.data.map((d: any) => {
     const addr = d.isMain
-      ? ` P-${d.customer.street} BLK-${d.customer.brgy} L-${d.customer.city}`
+      ? ` ${d.customer.street} ${d.customer.brgy} ${d.customer.city}`
       : ` ${d.customer.address}`;
 
     const newData = {
