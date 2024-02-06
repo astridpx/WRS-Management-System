@@ -45,7 +45,7 @@ export default function Sidebar() {
               !isExpand && "hidden"
             }`}
           >
-            Morning Breeze
+            GerChie Station
             <br />
             <span className="text-xs font-medium">Water Management System</span>
           </h1>

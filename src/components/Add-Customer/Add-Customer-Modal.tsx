@@ -337,7 +337,7 @@ export default function AddNewCustomer() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <ScrollArea className="h-max max-h-72">
+                              <ScrollArea className=" h-64">
                                 <SelectLabel>Lists of Cities</SelectLabel>
                                 {BarangaysOfCities.map((d) => {
                                   return (
@@ -375,7 +375,7 @@ export default function AddNewCustomer() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <ScrollArea className="h-max max-h-72">
+                              <ScrollArea className="h-64">
                                 <SelectLabel>
                                   Lists of Brgy&apos;s in{" "}
                                   {userData.city.length ? userData.city : ""}
