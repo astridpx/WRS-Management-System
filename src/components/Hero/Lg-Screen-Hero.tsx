@@ -16,21 +16,20 @@ export default function LgScreenHero({ dosis }: any) {
               style={dosis.style}
               className="text-6xl font-bold text-[#081F46]"
             >
-              PURE WATER
+              READY TO
             </h2>
             <h2
               style={dosis.style}
               className="text-6xl font-bold text-[#379EFF] "
             >
-              DELIVERY SERVICE
+              GET HYDRATED?
             </h2>
             <p className="w-[30rem] py-2 ">
               <span className="text-light_blue font-[900] mr-3">
                 <strong>|</strong>
               </span>
-              We now deliver different types of bottled water. To drink the best
-              water please come to us and give us an order and take safe and
-              sound water for you.
+              Quench your thirst with a splash of purest delights of water at
+              our station, where every drop is a refreshing adventure!.
             </p>
 
             <div className="flex items-center gap-x-8">
