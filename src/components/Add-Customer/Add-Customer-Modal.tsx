@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Cabuyao } from "@/utils/Brgy-Lists/Cabuyao-brgy";
+import { BarangaysOfCities } from "@/utils/Brgy-Lists/Barangays";
 import axios from "axios";
 import {
   SuccessToast,
@@ -163,20 +163,20 @@ export default function AddNewCustomer() {
 
             {/* FORM TAB */}
             <Tabs
-              defaultValue="subd"
+              defaultValue="main"
               onValueChange={(e) =>
                 setUserData({
                   ...userData,
-                  ["isMain"]: e === "subd",
+                  ["isMain"]: e === "main",
                 })
               }
             >
               <TabsList className="w-[20rem] mx-auto my-5 grid  grid-cols-2">
-                <TabsTrigger value="subd">Subdivision</TabsTrigger>
+                <TabsTrigger value="main">Main</TabsTrigger>
                 <TabsTrigger value="other">Other</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="subd">
+              <TabsContent value="main">
                 <form action="" onSubmit={(e) => HandleSubmit(e)}>
                   <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
@@ -315,6 +315,45 @@ export default function AddNewCustomer() {
                       </div>
                     </div>
 
+                    {/* CITIES */}
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="city"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        City
+                      </label>
+                      <div className="mt-2">
+                        <Select
+                          onValueChange={(e: any) =>
+                            setUserData({
+                              ...userData,
+                              city: e,
+                            })
+                          }
+                        >
+                          <SelectTrigger className="">
+                            <SelectValue placeholder="Select city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <ScrollArea className="h-max max-h-72">
+                                <SelectLabel>Lists of Cities</SelectLabel>
+                                {BarangaysOfCities.map((d) => {
+                                  return (
+                                    <SelectItem key={d.id} value={d.city}>
+                                      {d.city}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </ScrollArea>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* BARANGAYS */}
                     <div className="sm:col-span-2">
                       <label
                         htmlFor="brgy"
@@ -323,19 +362,6 @@ export default function AddNewCustomer() {
                         BRGY
                       </label>
                       <div className="mt-2">
-                        {/* <Input
-                          type="text"
-                          name="brgy"
-                          required
-                          placeholder="Enter brgy"
-                          value={userData.brgy}
-                          onChange={(e) => {
-                            setUserData({
-                              ...userData,
-                              [e.target.name]: e.target.value,
-                            });
-                          }}
-                        /> */}
                         <Select
                           onValueChange={(e: any) =>
                             setUserData({
@@ -349,44 +375,29 @@ export default function AddNewCustomer() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <ScrollArea className="h-72">
-                                <SelectLabel>BRGY Cabuyao Lists</SelectLabel>
-                                {Cabuyao.map((d: string, index: number) => {
-                                  return (
-                                    <SelectItem key={index} value={d}>
-                                      {d}
-                                    </SelectItem>
+                              <ScrollArea className="h-max max-h-72">
+                                <SelectLabel>
+                                  Lists of Brgy&apos;s in{" "}
+                                  {userData.city.length ? userData.city : ""}
+                                </SelectLabel>
+                                {BarangaysOfCities.map((d, index: number) => {
+                                  const brgy = BarangaysOfCities.find(
+                                    (cityData) =>
+                                      cityData.city === userData.city
                                   );
+
+                                  return brgy?.barangays.map((d) => {
+                                    return (
+                                      <SelectItem key={index} value={d}>
+                                        {d}
+                                      </SelectItem>
+                                    );
+                                  });
                                 })}
                               </ScrollArea>
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                      </div>
-                    </div>
-
-                    <div className="sm:col-span-2 ">
-                      <label
-                        htmlFor="city"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        City
-                      </label>
-                      <div className="mt-2">
-                        <Input
-                          type="text"
-                          name="city"
-                          required
-                          defaultValue={"Cabuyao"}
-                          placeholder="Enter city"
-                          value={userData.city}
-                          onChange={(e) => {
-                            setUserData({
-                              ...userData,
-                              [e.target.name]: e.target.value,
-                            });
-                          }}
-                        />
                       </div>
                     </div>
 
