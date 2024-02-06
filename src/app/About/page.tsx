@@ -35,7 +35,7 @@ export default function AboutPage() {
             <header className="text-center py-16">
               <h2
                 style={dosis.style}
-                className="font-bold text-5xl text-dark_blue"
+                className="text-4xl md:text-5xl font-bold  text-dark_blue"
               >
                 ABOUT US
               </h2>
@@ -55,8 +55,8 @@ export default function AboutPage() {
               </g>
             </svg>
             <div className="pb-24 bg-white">
-              <div className="w-[80%] mx-auto gap-x-4 grid grid-cols-2 items-center">
-                <article className="h-max px-6">
+              <div className="lg:w-[80%] px-8 md:px-0 mx-auto gap-x-4 gap-y-8 grid md:grid-cols-2 items-center">
+                <article className="text-center md:text-start h-max px-6">
                   <h4
                     style={dosis.style}
                     className=" font-bold text-4xl text-dark_blue mb-4"
@@ -87,7 +87,7 @@ export default function AboutPage() {
                     height={150}
                     width={150}
                     unoptimized
-                    className="aspect-video w-full rounded-xl"
+                    className="aspect-video w-full rounded-xl max-w-lg mx-auto"
                   />
                 </figure>
               </div>
