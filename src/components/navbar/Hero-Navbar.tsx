@@ -20,7 +20,7 @@ export default function HeroNavbar() {
 
         <div className="hidden md:flex items-center gap-x-6 text-sm font-medium text-[#081f46]">
           <Link href={"/"}>Home</Link>
-          <Link href={"/"}>About</Link>
+          <Link href={"/About"}>About</Link>
           <Link href={"/"}>Service</Link>
           <Link href={"/"}>Product</Link>
           <Link href={"/"}>FAQ</Link>
