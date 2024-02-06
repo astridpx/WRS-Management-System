@@ -48,9 +48,9 @@ export default function Footer() {
             </h5>
 
             <div className="text-sm space-y-2">
-              <p>Howard Village , Santa Rosa, Laguna</p>
+              <p>Purok 3, 914 Mamatid Cabuyao, Laguna</p>
               <p>
-                Call Us: <span className="font-bold">212.262.3200</span>
+                Call Us: <span className="font-bold">0956-354-1333</span>
               </p>
             </div>
           </article>
@@ -95,9 +95,7 @@ export default function Footer() {
       </section>
 
       <div className="flex justify-center py-4">
-        <p className="text-sm">
-          &copy; 2024 MorningBreeze. All rights reserved.
-        </p>
+        <p className="text-sm">&copy; 2024 GerChie. All rights reserved.</p>
       </div>
     </>
   );
