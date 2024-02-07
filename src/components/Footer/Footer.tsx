@@ -21,19 +21,19 @@ export default function Footer() {
           <Link href={"/"} className="text-sm">
             Home
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/About"} className="text-sm">
             About
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/Services"} className="text-sm">
             Services
           </Link>
-          <Link href={"/"} className="text-sm">
-            Product
+          <Link href={"/Products"} className="text-sm">
+            Products
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/Contact-Us"} className="text-sm">
             Contact Us
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/FAQ"} className="text-sm">
             FAQ
           </Link>
         </div>

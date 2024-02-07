@@ -78,6 +78,7 @@ export default function HomePage() {
                   <FigureArticle
                     key={data.id}
                     dosis={dosis}
+                    url={data.url}
                     img={data.img}
                     title={data.title}
                     titleSpan={data.titleSpan}
@@ -109,7 +110,7 @@ export default function HomePage() {
           style={nunito.style}
           className="h-max w-full bg-gradient-to-r from-[#F9FCFF] to-[#FAFAFF] pt-4"
         >
-          <article className="max-auto text-center space-y-5 mb-16">
+          <article className="max-auto text-center px-3 space-y-5 mb-16">
             <h3
               style={dosis.style}
               className="text-5xl font-bold text-light_blue "
@@ -124,10 +125,10 @@ export default function HomePage() {
               unoptimized
               className="mx-auto"
             />
-            <p className="w-[28rem] mx-auto">
-              Our company was founded in 2008. Water Brand bottle is great for
-              drinking, cooking, activities, and even for children. The product
-              is certified in 50 countries.
+            <p className="max-w-[28rem] mx-auto">
+              In GerChie&apos;s sanctuary, water becomes a liquid masterpiece,
+              rooted in sustainability, inviting a poetic journey in our
+              innovation.
             </p>
           </article>
 
@@ -224,8 +225,10 @@ export default function HomePage() {
 
             <div className="space-y-3 w-[90%] text-center">
               <p>
-                Our refreshing purified bottled water can now be delivered
-                directly to your door with our water delivery service.
+                {/* Our refreshing purified bottled water can now be delivered
+                directly to your door with our water delivery service. */}
+                Delight in doorstep refreshment! Our pure bottled water,
+                delivered to you. Elevate your hydration effortlessly.
               </p>
 
               <div className="flex justify-center">

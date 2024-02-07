@@ -47,7 +47,7 @@ export default function LgScreenHero({ dosis }: any) {
                 Order Now
               </Link>
               <Link
-                href={"/"}
+                href={"/About"}
                 className="text-xl font-semibold rounded-full py-3 px-8 bg-white shadow-lg shadow-blue-400 hover:text-blue-400 hover:shadow-xl hover:shadow-blue-400 duration-500 transition-all"
               >
                 Read More
