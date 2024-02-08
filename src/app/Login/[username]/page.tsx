@@ -396,6 +396,13 @@ export default function ForgotPasswordPage() {
             </TabsContent>
           </Tabs>
         </section>
+
+        <Link
+          href={"/"}
+          className="absolute bottom-4 mx-auto text-blue-500 underline"
+        >
+          Back to Home
+        </Link>
       </main>
     </>
   );
