@@ -74,9 +74,11 @@ export default function AboutPage() {
                     <span className="text-light_blue font-[900] mr-3">
                       <strong>|</strong>
                     </span>
-                    Our company was founded in 2008. Water Brand bottle is great
-                    for drinking, cooking, activities, and even for children.
-                    The product is certified in 50 countries.
+                    GerChie Water Refilling Station is established on July 21,
+                    2021, it is dedicated to providing clean and safe purified
+                    water. Each drop reflects our commitment to care and trust.
+                    At GerChie Water Refilling Station, every sip comes with
+                    love and assurance.
                   </p>
                 </article>
 
