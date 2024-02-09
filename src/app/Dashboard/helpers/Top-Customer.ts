@@ -46,8 +46,8 @@ export const TopCustomer = async (salesData: any) => {
   // Sort the array by totalAmount in descending order
   TopList.sort((a: any, b: any) => b.totalAmount - a.totalAmount);
 
-  // Limit the array to the first 9 elements
-  const top9Persons = TopList.slice(0, 9);
+  // Limit the array to the first 8 elements
+  const top9Persons = TopList.slice(0, 8);
 
   return top9Persons;
 };
