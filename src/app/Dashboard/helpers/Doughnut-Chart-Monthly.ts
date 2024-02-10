@@ -7,27 +7,23 @@ export const MonthlyDoughNutChart = async (
   month: any
 ) => {
   const getLabels = await dataHistory.map((d: any) => {
-    return d.customer.phase;
+    return d.customer.brgy;
   });
 
   const removeUndefined = getLabels.filter(
     (element: any) => element !== undefined
   );
 
-  const PhaseLabel = Array.from(new Set(removeUndefined));
+  const BrgyLabel = Array.from(new Set(removeUndefined));
 
-  PhaseLabel.sort((a: any, b: any) => {
-    return a - b;
-  });
-
-  const SaleOfVillage = PhaseLabel.map((p: any) => {
+  const Data_Sales = BrgyLabel.map((p: any) => {
     const filtered = dataHistory.filter((filDate: any) => {
       const filMonth = format(new Date(filDate.date), "MMM");
       const filYear = format(new Date(filDate.date), "yyyy");
 
       return (
-        filDate.customer.phase === p &&
-        filDate.customer.isVillage === true &&
+        filDate.customer.brgy === p &&
+        filDate.customer.isMain === true &&
         filMonth === month &&
         filYear === year
       );
@@ -38,12 +34,13 @@ export const MonthlyDoughNutChart = async (
       0
     );
 
-    const VillageSale = {
+    const BRGY_Sale = {
       label: p,
+      // label_index: ,
       sale: totalSale,
     };
 
-    return VillageSale;
+    return BRGY_Sale;
   });
 
   //   get total amount from not village
@@ -54,7 +51,7 @@ export const MonthlyDoughNutChart = async (
     return (
       filMonth === month &&
       filYear === year &&
-      filDate.customer.isVillage === false
+      filDate.customer.isMain === false
     );
   });
 
@@ -68,7 +65,10 @@ export const MonthlyDoughNutChart = async (
     sale: totalSaleOfOther,
   };
 
-  SaleOfVillage.push(SaleOfOther);
+  Data_Sales.push(SaleOfOther);
 
-  return SaleOfVillage;
+  // remove the data where sale is equal to 0
+  const FilterData = Data_Sales.filter((item) => item.sale !== 0);
+
+  return FilterData;
 };

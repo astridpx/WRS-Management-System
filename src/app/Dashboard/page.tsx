@@ -182,8 +182,8 @@ export default function DashboardPage() {
 
           {/* CHARTS */}
           <div className="flex w-full gap-x-4 h-max ">
-            <section className="w-[69%] relative space-y-2">
-              <div className="h-[25rem]  w-full ">
+            <section className="w-[69%] relative space-y-4">
+              <div className="h-[25rem]x  w-full ">
                 <BarChart
                   allYears={allYears}
                   daily={daily.map((d: any) => d.Bar)}
@@ -197,7 +197,7 @@ export default function DashboardPage() {
                   yearlySE={yearly.map((d: any) => d.Line)}
                 />
               </div>
-              <div className="relative w-full h-[25rem]  ">
+              <div className="relative w-full h-[25rem]x  ">
                 <ReLineChart
                   allYears={allYears}
                   daily={dailyLine.map((d: any) => d.Line)}
@@ -210,7 +210,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            <section className="h-[27.5rem] w-[29%]  relative space-y-2">
+            <section className="h-[27.5rem]x w-[29%]  relative space-y-2">
               <div className=" p-2 pb-4  bg-white space-y-2 rounded-lg">
                 <DoughNutChart
                   allYears={allYears}
@@ -222,9 +222,9 @@ export default function DashboardPage() {
               </div>
 
               {/* TOP Customer */}
-              <div className="h-full w-full p-4  bg-white space-y-2 rounded-lg">
+              <div className="w-full p-4  bg-white space-y-2 rounded-lg">
                 <h1 className="font-semibold text-lg text-gray-600">
-                  Your Top 9 Customer
+                  Your Top Customer
                 </h1>
                 <p className="text-sm text-slate-500  ">
                   Sales performance based by order
