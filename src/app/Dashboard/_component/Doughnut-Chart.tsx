@@ -23,6 +23,8 @@ import { BsPrinter } from "react-icons/bs";
 import { format } from "date-fns";
 import { months as labels } from "@/utils/Dashboard/Months-data";
 import { RxMixerHorizontal } from "react-icons/rx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -35,6 +37,7 @@ const DoughNutChart = ({
   setYear,
   setMonth,
 }: any) => {
+  const doc = new jsPDF();
   const [selected, setSelected] = useState("Monthly");
   const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
   const [YSelected, setYSelected] = useState(format(new Date(), "yyyy"));
@@ -114,6 +117,48 @@ const DoughNutChart = ({
     setYear(YSelected);
   }, [MSelected, YSelected, setMonth, setYear]);
 
+  const HandlePrint = async () => {
+    const MonthlyPrint = monthlyDoughnut.map((d: any) => {
+      return [d.label, d.sale];
+    });
+
+    const YearlyPrint = yearlyDoughnut.map((d: any) => {
+      return [d.label, d.sale];
+    });
+
+    const Body =
+      selected === "Monthly"
+        ? MonthlyPrint
+        : selected === "Yearly"
+        ? YearlyPrint
+        : false;
+
+    const y = 10;
+    const title = `${
+      selected === "Monthly" ? `${MSelected}, ${YSelected}` : YSelected
+    }  ${selected} Profit Report`;
+
+    doc.setLineWidth(2);
+    doc.text(title, 15, y);
+
+    // GENERATE PDF
+    await autoTable(doc, {
+      head: [["Date", "Sales"]],
+      body: Body,
+      startY: y + 10,
+      theme: "grid",
+    });
+
+    const filename =
+      selected === "Monthly"
+        ? `${selected}_${MSelected}_${YSelected}`
+        : selected === "Yearly"
+        ? `${selected}_${YSelected}`
+        : false;
+
+    await doc.save(`${filename}_Profit_Report.pdf`);
+  };
+
   return (
     <>
       <div className="w-full  flex gap-x-2 justify-between items-center ">
@@ -160,7 +205,11 @@ const DoughNutChart = ({
         </div>
 
         <div className="flex gap-x-2  items-center">
-          <BsPrinter size={18} className="text-slate-400 cursor-pointer" />
+          <BsPrinter
+            size={18}
+            onClick={HandlePrint}
+            className="text-slate-400 cursor-pointer"
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
