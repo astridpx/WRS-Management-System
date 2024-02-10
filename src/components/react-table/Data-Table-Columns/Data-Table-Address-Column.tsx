@@ -6,8 +6,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-import { MdLocationPin, MdContactEmergency } from "react-icons/md";
+import {
+  MdLocationPin,
+  MdContactEmergency,
+  MdAddLocationAlt,
+} from "react-icons/md";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & any>;
@@ -32,7 +35,11 @@ export function DataTableAddressColumn<TData>({
                     </p>
                   </TooltipContent>
 
-                  <MdLocationPin size={18} className="text-gray-600 " />
+                  {row?.original?.isMain === true ? (
+                    <MdLocationPin size={18} className="text-gray-600 " />
+                  ) : (
+                    <MdAddLocationAlt size={18} className="text-yellow-500 " />
+                  )}
                   <TooltipTrigger className="max-w-xs w-max h-max inline-block text-sm items-center">
                     <p className="">
                       <span>{row?.original?.street},</span>
@@ -51,7 +58,11 @@ export function DataTableAddressColumn<TData>({
                   <p> {row?.original?.address}</p>
                 </TooltipContent>
 
-                <MdLocationPin size={18} className="text-gray-600 " />
+                {row?.original?.isMain === true ? (
+                  <MdLocationPin size={18} className="text-gray-600 " />
+                ) : (
+                  <MdAddLocationAlt size={18} className="text-yellow-500 " />
+                )}
                 <TooltipTrigger className="max-w-xs w-max h-max inline-block text-sm items-center">
                   <p>
                     <span className="truncate text-ellipsis block">
