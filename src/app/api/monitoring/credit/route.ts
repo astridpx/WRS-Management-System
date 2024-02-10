@@ -11,6 +11,7 @@ export async function GET() {
       select: "img name",
       model: Items,
     })
+    .sort({ date: -1 })
     .lean()
     .exec();
 
