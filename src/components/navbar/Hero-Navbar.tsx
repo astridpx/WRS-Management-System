@@ -1,14 +1,42 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Logo from "@/assets/logo2.png";
-import { Button } from "../ui/button";
+import { Nunito, Dosis } from "next/font/google";
 import Link from "next/link";
-import { RiMenu5Fill } from "react-icons/ri";
+import { MdOutlineClose } from "react-icons/md";
+import { CiSearch, CiMenuFries } from "react-icons/ci";
+import { Separator } from "../ui/separator";
+import { Input } from "../ui/input";
+import { motion, AnimatePresence } from "framer-motion";
+
+// body font
+const nunito = Nunito({
+  subsets: ["latin"],
+  display: "swap",
+  adjustFontFallback: false,
+  variable: "--font-nunito",
+});
+
+const dosis = Dosis({
+  subsets: ["latin"],
+  display: "swap",
+  adjustFontFallback: false,
+  variable: "--font-dosis",
+});
 
 export default function HeroNavbar() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <>
-      <nav className="container mx-auto flex items-center justify-between md:px-8 px-2 ">
+      {/* NAVBAR  */}
+      <nav
+        className={`${
+          isOpen && "animate-menu-bg "
+        }  container md:animate-none md:bg-transparent py-1 mx-auto flex items-center justify-between md:px-8 px-2 `}
+      >
         <Image
           src={Logo}
           alt="Logo"
@@ -34,8 +62,95 @@ export default function HeroNavbar() {
           Sign In
         </Link>
 
-        <RiMenu5Fill size={25} className="md:hidden " />
+        {!isOpen ? (
+          <CiMenuFries
+            size={24}
+            className="md:hidden cursor-pointer text-dark_blue"
+            onClick={() => setIsOpen(true)}
+          />
+        ) : (
+          <MdOutlineClose
+            size={24}
+            className="md:hidden cursor-pointer text-dark_blue"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
       </nav>
+
+      {/* Mobile navbar menu */}
+      <div
+        className={`${
+          isOpen ? "block w-full" : "hidden w-0 "
+        } animate-menu-bg  md:hidden p-4 space-y-8 h-screen`}
+      >
+        <div className="relative">
+          <CiSearch
+            size={20}
+            className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground "
+          />
+          <Input
+            placeholder="Search here..."
+            className="pl-8 rounded-2xl bg-[#f5f5f7]  "
+          />
+        </div>
+
+        <nav className=" h-full flex flex-col space-y-3s items-start p-2">
+          <Separator />
+          <Link
+            className="hover:bg-light_blue/20 hover:text-blue-500 rounded-xl w-full p-4 font-medium"
+            style={nunito.style}
+            href={"/"}
+          >
+            Home
+          </Link>
+          <Separator />
+
+          <Link
+            className="hover:bg-light_blue/20 hover:text-blue-500 rounded-xl w-full p-4 font-medium"
+            style={nunito.style}
+            href={"/About"}
+          >
+            About
+          </Link>
+          <Separator />
+
+          <Link
+            className="hover:bg-light_blue/20 hover:text-blue-500 rounded-xl w-full p-4 font-medium"
+            style={nunito.style}
+            href={"/Services"}
+          >
+            Service
+          </Link>
+          <Separator />
+
+          <Link
+            className="hover:bg-light_blue/20 hover:text-blue-500 rounded-xl w-full p-4 font-medium"
+            style={nunito.style}
+            href={"/Products"}
+          >
+            Products
+          </Link>
+          <Separator />
+
+          <Link
+            className="hover:bg-light_blue/20 hover:text-blue-500 rounded-xl w-full p-4 font-medium"
+            style={nunito.style}
+            href={"/FAQ"}
+          >
+            FAQ
+            <Separator />
+          </Link>
+
+          <Link
+            className="hover:bg-light_blue/20 hover:text-blue-500 rounded-xl w-full p-4 font-medium"
+            style={nunito.style}
+            href={"/Contact-Us"}
+          >
+            Contact
+          </Link>
+          <Separator />
+        </nav>
+      </div>
     </>
   );
 }
