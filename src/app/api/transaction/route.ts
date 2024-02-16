@@ -121,7 +121,7 @@ export async function POST(req: Request) {
 
     // EMAIL THE ORDER ON CUSTOMER iF IT'S A PICKUP
     if (service === "PickUp" && trans?.customer?.email) {
-      OrderMailer(order_detail);
+      await OrderMailer(order_detail);
     }
 
     // @desc Update the last_return of borrowed gallon
