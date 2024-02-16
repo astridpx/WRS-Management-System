@@ -13,6 +13,7 @@ export async function GET() {
       select: "img name",
       model: Items,
     })
+    .sort({ "borrowed_gal.last_return": -1 })
     .lean()
     .exec();
 

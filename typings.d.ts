@@ -44,11 +44,11 @@ export interface IUser {
   email?: string;
   mobile1: string;
   mobile2?: string;
-  isVillage: boolean;
+  isMain: boolean;
   address?: string;
-  blk?: number;
-  lot?: number;
-  phase?: number;
+  street?: string;
+  brgy?: string;
+  city?: string;
   comment?: string;
   borrowed_gal?: [
     {

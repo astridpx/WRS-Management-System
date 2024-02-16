@@ -7,6 +7,17 @@ import { Button } from "@/components/ui/button";
 import editUserStore from "@/lib/zustand/CustomerPage-store/Edit-User-Data-Store";
 import { UpdateCustomer } from "./services/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Cabuyao } from "@/utils/Brgy-Lists/Cabuyao-brgy";
 import axios from "axios";
 import {
   SuccessToast,
@@ -25,6 +36,7 @@ export default function EditUserModal() {
   const queryClient = useQueryClient();
   const { userEditData, showEditUserModal, setShowEditModal, editUserId } =
     editUserStore();
+
   const { isLoading, data, error, isSuccess } = useQuery({
     queryKey: ["gallon"],
     queryFn: async () => {
@@ -37,14 +49,15 @@ export default function EditUserModal() {
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
+    email: "",
     mobile1: "",
     mobile2: "",
-    blk: 0,
-    lot: 0,
-    phase: 0,
+    street: "",
+    brgy: "",
+    city: "",
     comment: "",
     address: "",
-    isVillage: userEditData.isVillage,
+    isMain: userEditData.isMain,
     item,
   });
 
@@ -90,14 +103,15 @@ export default function EditUserModal() {
       setUserData({
         first_name: "",
         last_name: "",
+        email: "",
         mobile1: "",
         mobile2: "",
-        blk: 0,
-        lot: 0,
-        phase: 0,
+        street: "",
+        brgy: "",
+        city: "",
         comment: "",
         address: "",
-        isVillage: userEditData.isVillage,
+        isMain: userEditData.isMain,
         item,
       });
 
@@ -113,6 +127,15 @@ export default function EditUserModal() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isValidEmail = emailRegex.test(userData?.email);
+
+    if (!isValidEmail) {
+      return ErrorToast("Pls provide a valid email addess");
+    }
 
     updateUserMutation.mutate();
   };
@@ -197,20 +220,20 @@ export default function EditUserModal() {
             {/* FORM TAB */}
 
             <Tabs
-              value={userData.isVillage ? "subd" : "other"}
+              value={userData.isMain ? "main" : "other"}
               onValueChange={(e) => {
                 setUserData({
                   ...userData,
-                  isVillage: e === "subd" ? true : false,
+                  isMain: e === "main" ? true : false,
                 });
               }}
             >
               <TabsList className="w-[20rem] mx-auto my-5 grid  grid-cols-2">
-                <TabsTrigger value="subd">Subdivision</TabsTrigger>
+                <TabsTrigger value="main">Main</TabsTrigger>
                 <TabsTrigger value="other">Other</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="subd">
+              <TabsContent value="main">
                 <form action="" onSubmit={(e) => handleSubmit(e)}>
                   <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
@@ -272,9 +295,15 @@ export default function EditUserModal() {
                         <Input
                           type="email"
                           name="email"
-                          // required
-                          disabled
+                          required
                           placeholder="Enter  email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
@@ -328,24 +357,22 @@ export default function EditUserModal() {
 
                     <div className="sm:col-span-2 sm:col-start-1">
                       <label
-                        htmlFor="blk"
+                        htmlFor="street"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        BLK
+                        Street
                       </label>
                       <div className="mt-2">
                         <Input
-                          type="number"
-                          name="blk"
+                          type="text"
+                          name="street"
                           required
-                          placeholder="Enter blk"
-                          value={userData.blk}
-                          min={0}
-                          defaultValue={0}
+                          placeholder="Enter street"
+                          value={userData.street}
                           onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: parseFloat(e.target.value),
+                              [e.target.name]: e.target.value,
                             });
                           }}
                         />
@@ -354,50 +381,74 @@ export default function EditUserModal() {
 
                     <div className="sm:col-span-2">
                       <label
-                        htmlFor="lot"
+                        htmlFor="brgy"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Lot
+                        BRGY
                       </label>
                       <div className="mt-2">
-                        <Input
-                          type="number"
-                          name="lot"
+                        {/* <Input
+                          type="text"
+                          name="brgy"
                           required
-                          placeholder="Enter lot"
-                          value={userData.lot}
-                          min={0}
-                          defaultValue={0}
+                          placeholder="Enter brgy"
+                          value={userData.brgy}
                           onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: parseFloat(e.target.value),
+                              [e.target.name]: e.target.value,
                             });
                           }}
-                        />
+                        /> */}
+
+                        <Select
+                          value={userData.brgy}
+                          onValueChange={(e: any) =>
+                            setUserData({
+                              ...userData,
+                              brgy: e,
+                            })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select brgy" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <ScrollArea className="h-72">
+                                <SelectLabel>BRGY Cabuyao Lists</SelectLabel>
+                                {Cabuyao.map((d: string, index: number) => {
+                                  return (
+                                    <SelectItem key={index} value={d}>
+                                      {d}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </ScrollArea>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 
                     <div className="sm:col-span-2 ">
                       <label
-                        htmlFor="phase"
+                        htmlFor="city"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Phase
+                        City
                       </label>
                       <div className="mt-2">
                         <Input
-                          type="number"
-                          name="phase"
+                          type="text"
+                          name="city"
                           required
-                          placeholder="Enter phase"
-                          value={userData.phase}
-                          min={0}
-                          defaultValue={0}
+                          placeholder="Enter city"
+                          value={userData.city}
                           onChange={(e) => {
                             setUserData({
                               ...userData,
-                              [e.target.name]: parseFloat(e.target.value),
+                              [e.target.name]: e.target.value,
                             });
                           }}
                         />
@@ -555,9 +606,15 @@ export default function EditUserModal() {
                         <Input
                           type="email"
                           name="email"
-                          // required
-                          disabled
+                          required
                           placeholder="Enter  email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>

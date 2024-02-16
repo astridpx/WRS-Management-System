@@ -43,15 +43,21 @@ export default function MobileHero({ dosis }: any) {
           </p>
 
           <div className="flex flex-col  gap-y-4">
-            <Button
+            {/* <Button
               type="button"
               onClick={() => alert("hello")}
               className="text-xl font-semibold rounded-full py-6 px-10 btn-gradient shadow-lg shadow-blue-400 hover:shadow-xl hover:shadow-blue-400 duration-500 transition-shadow"
             >
               Order Now
-            </Button>
+            </Button> */}
             <Link
-              href={"/"}
+              href={"/Contact-Us"}
+              className="text-xl font-semibold rounded-full py-3 px-8 text-white btn-gradient shadow-lg shadow-blue-400 hover:shadow-xl hover:shadow-blue-400 duration-500 transition-shadow"
+            >
+              Order Now
+            </Link>
+            <Link
+              href={"/About"}
               className="text-xl font-semibold rounded-full py-3 px-8 bg-white shadow-lg shadow-blue-400 hover:text-blue-400 hover:shadow-xl hover:shadow-blue-400 duration-500 transition-all"
             >
               Read More

@@ -5,6 +5,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 export default function Article({
   dosis,
+  url,
   img,
   title,
   titleSpan,
@@ -37,7 +38,7 @@ export default function Article({
 
           <p className="text-lg">{body}</p>
           <Link
-            href={"/"}
+            href={url}
             className="flex items-center gap-x-2 text-xl text-light_blue font-bold hover:text-dark_blue duration-150 transition-colors"
           >
             Read more

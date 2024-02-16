@@ -6,8 +6,8 @@ export const getTransactions = async () => {
   const { data } = await axios.get("/api/transaction");
 
   const Data = await data.data.map((d: any) => {
-    const addr = d.isVillage
-      ? ` P-${d.customer.phase} BLK-${d.customer.blk} L-${d.customer.lot}`
+    const addr = d.isMain
+      ? ` ${d.customer.street} ${d.customer.brgy} ${d.customer.city}`
       : ` ${d.customer.address}`;
 
     const newData = {

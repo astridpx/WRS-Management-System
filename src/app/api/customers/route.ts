@@ -22,15 +22,16 @@ export async function POST(req: Request) {
   const {
     first_name,
     last_name,
+    email,
     mobile1,
     mobile2,
     address,
-    blk,
-    lot,
-    phase,
+    street,
+    brgy,
+    city,
     comment,
     item,
-    isVillage,
+    isMain,
   } = await req.json();
 
   // const borrow ={
@@ -41,14 +42,15 @@ export async function POST(req: Request) {
   const newCustomer = {
     first_name,
     last_name,
+    email,
     mobile1,
     mobile2,
     address,
-    blk,
-    lot,
-    phase,
+    street,
+    brgy,
+    city,
     comment,
-    isVillage,
+    isMain,
     borrowed_gal: item,
   };
 

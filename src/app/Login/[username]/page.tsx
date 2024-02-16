@@ -15,8 +15,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BsFileEarmarkLock2, BsCheck2All } from "react-icons/bs";
 import { HiOutlineMail } from "react-icons/hi";
-import { IoCheckmarkDoneCircle } from "react-icons/io5";
-import { AiOutlineLock } from "react-icons/ai";
 import { Stepper } from "./_components/Stepper";
 import { StepsData } from "./Stepper-data";
 import Link from "next/link";
@@ -34,7 +32,6 @@ import { SendEmailCode, VerifyCode, ChangePassword } from "./services/api";
 export default function ForgotPasswordPage() {
   const queryClient = useQueryClient();
   const [tab, setTab] = useState("email");
-  const [step, setStep] = useState(1);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -59,14 +56,16 @@ export default function ForgotPasswordPage() {
     window.addEventListener("beforeunload", HandleBeforeUnload, {
       capture: true,
     });
+    router.push("/Login/forgotpassword");
 
     return () => {
       window.removeEventListener("beforeunload", HandleBeforeUnload, {
         capture: true,
       });
     };
-  }, []);
+  }, [router]);
 
+  // setting email params
   const HandleEmailParams = (email: any) => {
     // now you got a read/write object
     const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -79,9 +78,9 @@ export default function ForgotPasswordPage() {
     router.push(`${pathname}${query}`);
   };
 
+  // Increase form highlight and tabs
   const HandleStepClick = (steps: any) => {
     setTab(steps);
-    setStep(step + 1);
   };
 
   // SEND CODE ON EMAIL API REQUEST
@@ -113,7 +112,7 @@ export default function ForgotPasswordPage() {
     onMutate: () => {
       LoadingToast("Verifying code...");
     },
-    onSuccess: (ndata: any) => {
+    onSuccess: async (ndata: any) => {
       DissmissToast();
       InfoToast(ndata?.message);
       HandleStepClick("password");
@@ -187,7 +186,7 @@ export default function ForgotPasswordPage() {
                           icon={data.icon}
                           title={data.title}
                           id={data.id}
-                          step={step}
+                          tab={tab}
                         />
                       </>
                     );
@@ -252,7 +251,7 @@ export default function ForgotPasswordPage() {
                     <div className="flex justify-center gap-4 my-4">
                       <Input
                         className="w-12 h-12 text-center border rounded-md shadow-sm "
-                        type="text"
+                        // type="text"
                         maxLength={1}
                         pattern="[0-9]"
                         inputMode="numeric"
@@ -264,7 +263,7 @@ export default function ForgotPasswordPage() {
                       />
                       <Input
                         className="w-12 h-12 text-center border rounded-md shadow-sm "
-                        type="text"
+                        // type="text"
                         maxLength={1}
                         pattern="[0-9]"
                         inputMode="numeric"
@@ -276,7 +275,7 @@ export default function ForgotPasswordPage() {
                       />
                       <Input
                         className="w-12 h-12 text-center border rounded-md shadow-sm "
-                        type="text"
+                        // type="text"
                         maxLength={1}
                         pattern="[0-9]"
                         inputMode="numeric"
@@ -288,7 +287,7 @@ export default function ForgotPasswordPage() {
                       />
                       <Input
                         className="w-12 h-12 text-center border rounded-md shadow-sm "
-                        type="text"
+                        // type="text"
                         maxLength={1}
                         pattern="[0-9]"
                         inputMode="numeric"
@@ -396,6 +395,13 @@ export default function ForgotPasswordPage() {
             </TabsContent>
           </Tabs>
         </section>
+
+        <Link
+          href={"/"}
+          className="absolute bottom-4 mx-auto text-blue-500 underline"
+        >
+          Back to Home
+        </Link>
       </main>
     </>
   );

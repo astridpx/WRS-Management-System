@@ -250,7 +250,6 @@ export function AccountDataTableRowActions({
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
-          -
         </AlertDialog>
       </div>
     </>

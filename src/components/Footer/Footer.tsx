@@ -11,7 +11,7 @@ export default function Footer() {
     <>
       <section className="w-[90%] lg:w-[70%]  mx-auto grid lg:grid-cols-3 gap-y-12  border-b border-slate-500 pb-10">
         <div className="space-y-4 grid">
-          <h5 className=" font-bold ">
+          <h5 className=" font-bold text-lg">
             <span className="text-light_blue font-[900] mr-2">
               <strong>|</strong>
             </span>
@@ -21,26 +21,26 @@ export default function Footer() {
           <Link href={"/"} className="text-sm">
             Home
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/About"} className="text-sm">
             About
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/Services"} className="text-sm">
             Services
           </Link>
-          <Link href={"/"} className="text-sm">
-            Product
+          <Link href={"/Products"} className="text-sm">
+            Products
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/Contact-Us"} className="text-sm">
             Contact Us
           </Link>
-          <Link href={"/"} className="text-sm">
+          <Link href={"/FAQ"} className="text-sm">
             FAQ
           </Link>
         </div>
 
-        <div className="space-y-10">
-          <article className="space-y-4">
-            <h5 className="font-bold ">
+        <div className="space-y-9 ">
+          <article className="space-y-3">
+            <h5 className="font-bold text-lg">
               <span className="text-light_blue font-[900] mr-2">
                 <strong>|</strong>
               </span>
@@ -48,14 +48,14 @@ export default function Footer() {
             </h5>
 
             <div className="text-sm space-y-2">
-              <p>Howard Village , Santa Rosa, Laguna</p>
+              <p>Purok 3, 914 Mamatid Cabuyao, Laguna</p>
               <p>
-                Call Us: <span className="font-bold">212.262.3200</span>
+                Call Us: <span className="font-bold">0956-354-1333</span>
               </p>
             </div>
           </article>
 
-          <article className="space-y-4">
+          <article className="space-y-3">
             <h5 className="font-bold ">
               <span className="text-light_blue font-[900] mr-2">
                 <strong>|</strong>
@@ -78,22 +78,24 @@ export default function Footer() {
         </div>
 
         <div className="space-y-4">
-          <h5 className="font-bold ">
+          <h5 className="font-bold text-lg">
             <span className="text-light_blue font-[900] mr-2">
               <strong>|</strong>
             </span>
             Subscribed
           </h5>
 
-          <Input type="email" placeholder="Your email address" />
+          <Input
+            type="email"
+            placeholder="Your email address"
+            className="max-w-xs"
+          />
           <Button className="self-end">Subscribe</Button>
         </div>
       </section>
 
       <div className="flex justify-center py-4">
-        <p className="text-sm">
-          &copy; 2024 MorningBreeze. All rights reserved.
-        </p>
+        <p className="text-sm">&copy; 2024 GerChie. All rights reserved.</p>
       </div>
     </>
   );

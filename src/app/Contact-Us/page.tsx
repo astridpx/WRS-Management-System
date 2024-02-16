@@ -28,11 +28,11 @@ export default function ContactPage() {
       <main className="h-max w-full bg-white ">
         <section
           style={nunito.style}
-          className="relative w-full h-max bg-gradient-to-t from-sky-50 via-sky-100 to-sky-200"
+          className="relative w-full h-max bg-gradient-to-t from-sky-50 via-sky-100 to-sky-200 pb-12"
         >
           <Navbar />
 
-          <div className="container mx-auto relative py-8">
+          <div className="space-y-16 mt-12 md:p-0 md:container mx-auto relative border ">
             <h3
               style={dosis.style}
               className="text-4xl md:text-5xl  font-bold text-light_blue text-center"
@@ -42,7 +42,7 @@ export default function ContactPage() {
 
             <div
               style={nunito.style}
-              className="md:w-[80%] w-full mx-auto flex flex-col lg:grid lg:grid-cols-3 gap-4 mt-8 "
+              className="md:w-[80%]  w-full mx-auto flex flex-col lg:grid lg:grid-cols-3 gap-4  "
             >
               {/* upper left box */}
               <div className="order-1 lg:order-none w-full bg-white p-8 space-y-6 rounded-md shadow-light_blue/40 shadow-xl">
@@ -60,9 +60,9 @@ export default function ContactPage() {
                     <AiOutlineMail size={20} />
                   </div>
                   <article className="space-y-6 text-slate-600 text-sm ">
-                    <p>25 W 51st St, New York, NY 10019</p>
-                    <p>+63 991 330 7281</p>
-                    <p>breezewater@water.com</p>
+                    <p>Purok 3, 914 Mamatid Cabuyao</p>
+                    <p>+63 956 354 1333</p>
+                    <p>gerchie@water.com</p>
                   </article>
                 </div>
               </div>

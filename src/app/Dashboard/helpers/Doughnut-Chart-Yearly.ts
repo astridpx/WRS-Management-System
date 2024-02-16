@@ -3,26 +3,22 @@ import { format } from "date-fns";
 // DOIGHNUT CHART DATA
 export const YearlyDoughNutChart = async (dataHistory: any, year: any) => {
   const getLabels = await dataHistory.map((d: any) => {
-    return d.customer.phase;
+    return d.customer.brgy;
   });
 
   const removeUndefined = getLabels.filter(
     (element: any) => element !== undefined
   );
 
-  const PhaseLabel = Array.from(new Set(removeUndefined));
+  const Brgy_Label = Array.from(new Set(removeUndefined));
 
-  PhaseLabel.sort((a: any, b: any) => {
-    return a - b;
-  });
-
-  const SaleOfVillage = PhaseLabel.map((p: any) => {
+  const Data_Sales = Brgy_Label.map((p: any) => {
     const filtered = dataHistory.filter((filDate: any) => {
       const filYear = format(new Date(filDate.date), "yyyy");
 
       return (
-        filDate.customer.phase === p &&
-        filDate.customer.isVillage === true &&
+        filDate.customer.brgy === p &&
+        filDate.customer.isMain === true &&
         filYear === year
       );
     });
@@ -32,12 +28,12 @@ export const YearlyDoughNutChart = async (dataHistory: any, year: any) => {
       0
     );
 
-    const VillageSale = {
+    const Brgy_Sale = {
       label: p,
       sale: totalSale,
     };
 
-    return VillageSale;
+    return Brgy_Sale;
   });
 
   //   get total amount from not village
@@ -45,7 +41,7 @@ export const YearlyDoughNutChart = async (dataHistory: any, year: any) => {
     const filMonth = format(new Date(filDate.date), "MMM");
     const filYear = format(new Date(filDate.date), "yyyy");
 
-    return filYear === year && filDate.customer.isVillage === false;
+    return filYear === year && filDate.customer.isMain === false;
   });
 
   const totalSaleOfOther = filteredOther.reduce(
@@ -58,7 +54,10 @@ export const YearlyDoughNutChart = async (dataHistory: any, year: any) => {
     sale: totalSaleOfOther,
   };
 
-  SaleOfVillage.push(SaleOfOther);
+  Data_Sales.push(SaleOfOther);
 
-  return SaleOfVillage;
+  // remove the data where sale is equal to 0
+  const FilterData = Data_Sales.filter((item) => item.sale !== 0);
+
+  return FilterData;
 };
