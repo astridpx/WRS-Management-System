@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { Trans } from "@/lib/mongodb/model/Transaction.model";
 import { Customer } from "@/lib/mongodb/model/Customer.model";
 import { Items } from "@/lib/mongodb/model/Items.model";
+import { OrderMailer } from "./delivered/order-email";
+import { format } from "date-fns";
 
 //  @desc GET All TRANSACTION
 export async function GET() {
@@ -88,7 +90,39 @@ export async function POST(req: Request) {
     }
 
     // SAVE THE NEW TRANSACTION
-    await Trans.create(newTrans);
+    const transaction = await Trans.create(newTrans);
+    const trans = await Trans.findById(transaction._id)
+      .populate({
+        path: "orders.item",
+        select: "name price buy_price",
+        model: Items,
+      })
+      .populate({
+        path: "customer",
+        select: "first_name last_name email isMain address street brgy city",
+        model: Customer,
+      })
+      .exec();
+
+    const order_detail = {
+      trn: transaction._id,
+      customer_name: `${trans.customer.first_name} ${trans.customer.last_name}`,
+      email: trans.customer.email,
+      amount: trans.amount,
+      orders: trans.orders,
+      balance: trans.balance,
+      discount: trans.discount,
+      isBuy: trans.isBuy,
+      deliver_date: format(new Date(), "MMMM dd, y"),
+      addr: trans.customer.isMain
+        ? trans.customer.address
+        : `${trans.customer.street} ${trans.customer.brgy} ${trans.customer.city}`,
+    };
+
+    // EMAIL THE ORDER ON CUSTOMER iF IT'S A PICKUP
+    if (service === "PickUp" && trans?.customer?.email) {
+      OrderMailer(order_detail);
+    }
 
     // @desc Update the last_return of borrowed gallon
     if (isBorrowed) {

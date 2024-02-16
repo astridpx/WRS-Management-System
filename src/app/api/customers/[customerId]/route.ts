@@ -9,6 +9,7 @@ export async function PUT(req: Request, { params }: any) {
   const {
     first_name,
     last_name,
+    email,
     mobile1,
     mobile2,
     address,
@@ -24,6 +25,7 @@ export async function PUT(req: Request, { params }: any) {
   const updateCustomer = {
     first_name,
     last_name,
+    email,
     mobile1,
     mobile2,
     address,

@@ -17,6 +17,10 @@ const CustomerSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Last name is required"],
     },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+    },
 
     mobile1: {
       type: String,

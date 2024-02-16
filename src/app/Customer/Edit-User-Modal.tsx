@@ -49,6 +49,7 @@ export default function EditUserModal() {
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
+    email: "",
     mobile1: "",
     mobile2: "",
     street: "",
@@ -102,6 +103,7 @@ export default function EditUserModal() {
       setUserData({
         first_name: "",
         last_name: "",
+        email: "",
         mobile1: "",
         mobile2: "",
         street: "",
@@ -125,6 +127,15 @@ export default function EditUserModal() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isValidEmail = emailRegex.test(userData?.email);
+
+    if (!isValidEmail) {
+      return ErrorToast("Pls provide a valid email addess");
+    }
 
     updateUserMutation.mutate();
   };
@@ -209,20 +220,20 @@ export default function EditUserModal() {
             {/* FORM TAB */}
 
             <Tabs
-              value={userData.isMain ? "subd" : "other"}
+              value={userData.isMain ? "main" : "other"}
               onValueChange={(e) => {
                 setUserData({
                   ...userData,
-                  isMain: e === "subd" ? true : false,
+                  isMain: e === "main" ? true : false,
                 });
               }}
             >
               <TabsList className="w-[20rem] mx-auto my-5 grid  grid-cols-2">
-                <TabsTrigger value="subd">Subdivision</TabsTrigger>
+                <TabsTrigger value="main">Main</TabsTrigger>
                 <TabsTrigger value="other">Other</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="subd">
+              <TabsContent value="main">
                 <form action="" onSubmit={(e) => handleSubmit(e)}>
                   <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
@@ -284,9 +295,15 @@ export default function EditUserModal() {
                         <Input
                           type="email"
                           name="email"
-                          // required
-                          disabled
+                          required
                           placeholder="Enter  email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
@@ -589,9 +606,15 @@ export default function EditUserModal() {
                         <Input
                           type="email"
                           name="email"
-                          // required
-                          disabled
+                          required
                           placeholder="Enter  email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>

@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   const {
     first_name,
     last_name,
+    email,
     mobile1,
     mobile2,
     address,
@@ -41,6 +42,7 @@ export async function POST(req: Request) {
   const newCustomer = {
     first_name,
     last_name,
+    email,
     mobile1,
     mobile2,
     address,

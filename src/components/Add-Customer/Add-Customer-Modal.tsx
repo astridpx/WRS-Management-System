@@ -49,6 +49,7 @@ export default function AddNewCustomer() {
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
+    email: "",
     mobile1: "",
     mobile2: "",
     street: "",
@@ -72,6 +73,7 @@ export default function AddNewCustomer() {
       setUserData({
         first_name: "",
         last_name: "",
+        email: "",
         mobile1: "",
         mobile2: "",
         street: "",
@@ -95,6 +97,7 @@ export default function AddNewCustomer() {
     const {
       first_name,
       last_name,
+      email,
       mobile1,
       isMain,
       address,
@@ -111,9 +114,18 @@ export default function AddNewCustomer() {
       return ErrorToast("This first name & last name & mobile1 is required");
     }
 
+    // validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isValidEmail = emailRegex.test(email);
+
+    if (!isValidEmail) {
+      return ErrorToast("Pls provide a valid email addess");
+    }
+
     if (isMain) {
       if (!street.length || !brgy.length || !city.length) {
-        return ErrorToast("The field blk & lot & phase is required");
+        return ErrorToast("The field street, brgy & city  is required");
       }
     } else {
       if (address.trim() === "") {
@@ -238,8 +250,15 @@ export default function AddNewCustomer() {
                         <Input
                           type="email"
                           name="email"
-                          disabled
+                          required
                           placeholder="Enter  email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
@@ -570,9 +589,15 @@ export default function AddNewCustomer() {
                         <Input
                           type="email"
                           name="email"
-                          // required
-                          disabled
+                          required
                           placeholder="Enter  email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              [e.target.name]: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
