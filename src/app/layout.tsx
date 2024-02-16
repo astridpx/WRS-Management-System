@@ -18,7 +18,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "GerChie Water Station",
   description:
-    "Welcome to Morning Breeze Water Refilling Station in Santa Rosa, Laguna. Enjoy pure, clean, and safe drinking water with our state-of-the-art filtration systems. Our commitment to water quality, sustainability, and convenience sets us apart. Explore our services today!",
+    "Discover pure and safe drinking water at Gerchie Water Refilling Station in Purok 3, 914 Mamatid Cabuyao, Laguna. Our cutting-edge filtration systems ensure the highest quality water, emphasizing sustainability and convenience. Experience excellence in water service. Explore our services today!",
   icons: {
     icon: "/src/assets/logo2.png",
   },
