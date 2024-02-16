@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       user: sanitizedUser,
     });
   } catch (error) {
-    console.log(error);
+    console.log("Login ERROR:", error);
 
     return NextResponse.json(
       { message: "Internal server error!" },
