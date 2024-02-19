@@ -58,6 +58,7 @@ const AccountSchema = new mongoose.Schema(
     },
     pass_reset_code: String,
     pass_reset_token: String,
+    otp_cd_expiresAt: Date,
     login_history: [
       {
         isDesktop: Boolean,
