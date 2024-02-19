@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { MessageMailer } from "./Mailer";
 import { v4 as uuidv4 } from "uuid";
+import { add, formatDistanceToNowStrict, isPast } from "date-fns";
 
 // GENERATE RANDOM CODE
 function generateRandomCode() {
@@ -24,12 +25,30 @@ export async function POST(req: Request) {
   const { email } = await req.json();
 
   try {
+    const otpCD = add(new Date(), {
+      minutes: 3,
+    });
     const code = await generateRandomCode();
-    const user = await Acc.findOne({ email }).lean().exec();
+    const user = await Acc.findOne({ email }).exec();
 
     if (!user)
       return NextResponse.json(
         { message: "Email not exist." },
+        { status: 404 }
+      );
+
+    const isCD_done = isPast(new Date(user?.otp_cd_expiresAt));
+    const remaining = formatDistanceToNowStrict(
+      new Date(user?.otp_cd_expiresAt)
+    );
+
+    if (!isCD_done)
+      return NextResponse.json(
+        {
+          // time: remaining,
+          // time: user?.otp_cd_expiresAt,
+          message: `You're in ${remaining} cooldown. `,
+        },
         { status: 404 }
       );
 
@@ -54,6 +73,7 @@ export async function POST(req: Request) {
       {
         pass_reset_code: code,
         pass_reset_token: passResetToken,
+        otp_cd_expiresAt: otpCD,
       }
     );
 
