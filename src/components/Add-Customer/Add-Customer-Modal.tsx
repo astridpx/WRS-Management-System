@@ -43,7 +43,7 @@ export default function AddNewCustomer() {
     },
   });
   const [item, setItem] = useState<Item[]>([]);
-
+  const [brgy, setBrgy] = useState<any>();
   const { toggleShowCustomerForm, showAddCustomerForm } =
     addCustomerModalStore();
   const [userData, setUserData] = useState({
@@ -159,6 +159,14 @@ export default function AddNewCustomer() {
       item: item,
     }));
   }, [item]);
+
+  useEffect(() => {
+    const brgy = BarangaysOfCities.find(
+      (cityData) => cityData.city === userData.city
+    );
+
+    setBrgy(brgy);
+  }, [userData.city]);
 
   return (
     <>
@@ -399,20 +407,15 @@ export default function AddNewCustomer() {
                                   Lists of Brgy&apos;s in{" "}
                                   {userData.city.length ? userData.city : ""}
                                 </SelectLabel>
-                                {BarangaysOfCities.map((d, index: number) => {
-                                  const brgy = BarangaysOfCities.find(
-                                    (cityData) =>
-                                      cityData.city === userData.city
-                                  );
-
-                                  return brgy?.barangays.map((d) => {
+                                {brgy?.barangays.map(
+                                  (d: any, index: number) => {
                                     return (
                                       <SelectItem key={index} value={d}>
                                         {d}
                                       </SelectItem>
                                     );
-                                  });
-                                })}
+                                  }
+                                )}
                               </ScrollArea>
                             </SelectGroup>
                           </SelectContent>
