@@ -108,7 +108,7 @@ export const PaymentModal = () => {
       setResetOrder(!resetorder);
       setDiscount(0);
       setCash(0);
-      setIsBuy(false);
+      // setIsBuy(false);
       setService("Deliver");
       setIsBorrowed(false);
     },

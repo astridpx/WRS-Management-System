@@ -26,7 +26,7 @@ export interface PosItemProps {
 }
 
 export default function POS_Page() {
-  const { clearOrder } = POSPaymentModal();
+  const { clearOrder, setIsBuy } = POSPaymentModal();
 
   const {
     isLoading,
@@ -70,7 +70,14 @@ export default function POS_Page() {
                 <Tabs
                   defaultValue="gallon"
                   className="pt-2 "
-                  onValueChange={() => clearOrder()}
+                  onValueChange={(v) => {
+                    if (v === "bottle") {
+                      setIsBuy(true);
+                    } else {
+                      setIsBuy(false);
+                    }
+                    clearOrder();
+                  }}
                 >
                   <TabsList className="flex justify-start">
                     <TabsTrigger value="gallon">Gallon</TabsTrigger>
