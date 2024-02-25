@@ -58,6 +58,8 @@ export default function DashboardPage() {
   const [yearDoughNut, setYearDoughNut] = useState<any>(
     format(new Date(), "yyyy")
   );
+  const [option, setOption] = useState("brgy");
+  const [city, setCity] = useState<Number>(2);
 
   const historyData = results[0]?.data;
   const historyIsSuccess = results[0].isSuccess;
@@ -129,13 +131,17 @@ export default function DashboardPage() {
           const DoughnutData = await MonthlyDoughNutChart(
             historyData,
             yearDoughNut,
-            monthDoughNut
+            monthDoughNut,
+            option,
+            city
           );
           setMonthlyDoughnut(DoughnutData);
 
           const YearlyDoughnutData = await YearlyDoughNutChart(
             historyData,
-            yearDoughNut
+            yearDoughNut,
+            option,
+            city
           );
           setYearlyDoughnut(YearlyDoughnutData);
         }
@@ -146,6 +152,7 @@ export default function DashboardPage() {
 
     fetchData();
   }, [
+    city,
     day,
     dayLine,
     expenseData,
@@ -155,6 +162,7 @@ export default function DashboardPage() {
     month,
     monthDoughNut,
     monthLine,
+    option,
     year,
     yearDoughNut,
     yearLine,
@@ -218,6 +226,10 @@ export default function DashboardPage() {
                   setMonth={setMonthDoughNut}
                   monthlyDoughnut={monthlyDoughnut}
                   yearlyDoughnut={yearlyDoughnut}
+                  option={option}
+                  setOption={setOption}
+                  city={city}
+                  setCity={setCity}
                 />
               </div>
 
