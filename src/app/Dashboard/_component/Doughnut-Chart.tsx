@@ -25,10 +25,12 @@ import { months as labels } from "@/utils/Dashboard/Months-data";
 import { RxMixerHorizontal } from "react-icons/rx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { BarangaysOfCities } from "@/utils/Brgy-Lists/Barangays";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const viewOption = ["Monthly", "Yearly"];
+const viewOption2 = ["brgy", "city"];
 
 const DoughNutChart = ({
   monthlyDoughnut,
@@ -36,9 +38,16 @@ const DoughNutChart = ({
   allYears,
   setYear,
   setMonth,
+  option,
+  setOption,
+  city,
+  setCity,
 }: any) => {
   const doc = new jsPDF();
   const [selected, setSelected] = useState("Monthly");
+  // const [option, setOption] = useState("brgy");
+  // const [city, setCity] = useState("Cabuyao");
+  const [showCity, setShowCity] = useState(false);
   const [MSelected, setMSelected] = useState(format(new Date(), "MMM"));
   const [YSelected, setYSelected] = useState(format(new Date(), "yyyy"));
 
@@ -58,12 +67,12 @@ const DoughNutChart = ({
           (d: any) => d.sale
         ),
         backgroundColor: [
-          "red",
-          "orange",
-          "#86A789",
-          "yellow",
           "blue",
+          "orange",
           "#7743DB",
+          "yellow",
+          "#86A789",
+          "red",
           "gray",
           "green",
           "#FFEECC",
@@ -210,7 +219,7 @@ const DoughNutChart = ({
             onClick={HandlePrint}
             className="text-slate-400 cursor-pointer"
           />
-          <DropdownMenu>
+          <DropdownMenu onOpenChange={() => setShowCity(false)}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -301,6 +310,65 @@ const DoughNutChart = ({
                         </>
                       );
                     })}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+
+              {/* VIEW OPTION BRGY OR CITY */}
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Option</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup
+                    value={option}
+                    onValueChange={(e) => setOption(e)}
+                    defaultValue={"city"}
+                  >
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioItem value="city">
+                      City
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuSeparator />
+                    <DropdownMenuSub open={showCity}>
+                      <DropdownMenuSubTrigger
+                        onMouseEnter={() => setShowCity(true)}
+                        className="p-0"
+                      >
+                        <DropdownMenuRadioItem value="brgy">
+                          Brgy
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuSubTrigger>
+
+                      <DropdownMenuSubContent>
+                        <DropdownMenuRadioGroup
+                          defaultValue={"2"}
+                          value={city.toString()}
+                          onValueChange={(e) => {
+                            setOption("brgy");
+                            setCity(parseInt(e));
+                          }}
+                        >
+                          {BarangaysOfCities.map((d) => {
+                            return (
+                              <>
+                                <DropdownMenuRadioItem
+                                  key={d.id}
+                                  value={d.id.toString()}
+                                >
+                                  {d.city}
+                                </DropdownMenuRadioItem>
+                              </>
+                            );
+                          })}
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+
+                    {/*  */}
+                    <DropdownMenuSeparator />
                   </DropdownMenuRadioGroup>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
