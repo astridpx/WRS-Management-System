@@ -6,12 +6,17 @@ import { IGallons, IUser } from "../../../../typings";
 
 export function DataTableGallonColumn({
   borrowed_gal,
+  trn,
 }: {
+  trn?: string;
   borrowed_gal: IUser["borrowed_gal"];
 }) {
   return (
     <>
       <div className="min-w-[20rem]">
+        <p className="">
+          <span className="font-semibold">Trans no:</span> {trn}
+        </p>
         <header className="grid grid-cols-3 font-semibold text-center bg-gray-200">
           <h4 className="col-span-2 ">Item</h4>
           <h4>WRS</h4>

@@ -9,7 +9,7 @@ import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Colum
 export const monitoringHistoryColumns: ColumnDef<any>[] = [
   {
     header: "No",
-    accessorKey: "id",
+    accessorKey: "_id",
     cell: ({ row }) => row.index + 1,
   },
   {
@@ -31,7 +31,10 @@ export const monitoringHistoryColumns: ColumnDef<any>[] = [
     header: "Order",
     accessorKey: "Alias",
     cell: ({ row }) => (
-      <DataTableGallonColumn borrowed_gal={row.original.new_order} />
+      <DataTableGallonColumn
+        trn={row?.original._id}
+        borrowed_gal={row.original.new_order}
+      />
     ),
   },
 
