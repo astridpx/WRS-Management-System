@@ -35,6 +35,10 @@ const CustomerSchema = new mongoose.Schema(
     brgy: String,
     city: String,
     comment: String,
+    role: {
+      type: String,
+      default: "guest",
+    },
     borrowed_gal: [
       {
         item: {
