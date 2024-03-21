@@ -141,8 +141,8 @@ export default function POS_Client_Receipt() {
       .map((order) => ({ item: order.id, ...order }));
 
     const Data = {
-      customer: "65d3ef5b4582ea48a5e1594a",
-      //   customer: user._id,
+      // customer: "65d3ef5b4582ea48a5e1594a",
+      customer: user._id,
       service,
       date: newDate,
       time,
@@ -201,10 +201,11 @@ export default function POS_Client_Receipt() {
             <DatePicker
               calendar_width={"w-max"}
               variant={"ghost"}
-              setDate={(nDate) => {
-                setDefDate(nDate);
-                setNewDate(nDate);
-              }}
+              // setDate={(nDate) => {
+              //   setDefDate(nDate);
+              //   setNewDate(nDate);
+              // }}
+
               date={date}
             />
           </div>

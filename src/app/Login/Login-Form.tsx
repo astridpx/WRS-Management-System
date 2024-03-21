@@ -19,6 +19,7 @@ import axios from "axios";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { useSession } from "next-auth/react";
 import { UserStore } from "@/lib/zustand/User/user.store";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LoginForm() {
   const { clearUser, setUser } = UserStore();
@@ -29,6 +30,7 @@ export default function LoginForm() {
   const [data, setData] = useState<any>({
     username: "",
     password: "",
+    role: "guest",
   });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,15 +39,16 @@ export default function LoginForm() {
   useEffect(() => {
     if (session && loading === false) {
       const User = session.user;
+
       setUser({ ...User });
       setLoading(false);
       DissmissToast();
       InfoToast("Data Successfully Initialized.");
-      router.push("/Dashboard");
+      router.push(User?.role === "guest" ? "/Client" : "/Dashboard");
     }
   }, [loading, router, session, setUser]);
 
-  // LOGIN SUBMIT
+  // LOGIN SUBMIT oF ADMIN & STAFF
   const HandleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -120,12 +123,36 @@ export default function LoginForm() {
 
         setLoading(false);
         DissmissToast();
-        await SuccessToast("Login Success");
-        InfoToast("Data Successfully Initialized.");
+        SuccessToast("Login Success");
         // router.push("/Dashboard");
       } catch (error) {
         console.log("IPGEOLOCATION ERROR: ", error);
       }
+    }
+
+    if (res?.error) {
+      DissmissToast();
+      setLoading(false);
+      ErrorToast(res?.error);
+    }
+  };
+
+  // HANDLE CUSTOMER LOGIN
+  const HandleLoginCustomer = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    await LoadingToast("Verifying account...");
+
+    const res = await signIn("credentials", {
+      ...data,
+      redirect: false,
+    });
+
+    if (!res?.error) {
+      await DissmissToast();
+      DissmissToast();
+      SuccessToast("Login Success");
+      // router.push("/Dashboard");
     }
 
     if (res?.error) {
@@ -140,11 +167,26 @@ export default function LoginForm() {
       <form
         action=""
         className="mx-auto md:mx-0 max-w-[25.1rem] md:max-w-none  space-y-4 "
-        onSubmit={(e) => HandleLogin(e)}
+        onSubmit={(e) =>
+          data.role === "guest" ? HandleLoginCustomer(e) : HandleLogin(e)
+        }
       >
+        <Tabs
+          value={data.role}
+          onValueChange={(e) => setData({ ...data, role: e })}
+          defaultValue="guest"
+          className=" w-full h-max"
+        >
+          <TabsList className="grid w-full grid-cols-2 ">
+            <TabsTrigger value="guest">Customer</TabsTrigger>
+            <TabsTrigger value="management">Management</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
         <div className=" w-full h-max ">
           <Input
-            placeholder="Username"
+            type={data.role === "guest" ? "email" : "text"}
+            placeholder={data.role === "guest" ? "Email" : "Username"}
             required
             name="username"
             onChange={(e) =>

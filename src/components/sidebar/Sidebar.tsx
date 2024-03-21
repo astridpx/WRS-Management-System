@@ -22,6 +22,7 @@ export default function Sidebar() {
     "/Stocks&Expenses",
     "/Accounts",
   ];
+  const guestAllowPath = ["/Client", "/MyOrders", "/Purchase-History"];
 
   return (
     <>
@@ -61,7 +62,7 @@ export default function Sidebar() {
                   <h1
                     key={items.key}
                     className={`text-base text-blue-500 ml-3 my-2  ${
-                      !isExpand && "hidden"
+                      !isExpand ? "hidden" : ""
                     }`}
                   >
                     {items.title}
@@ -69,10 +70,14 @@ export default function Sidebar() {
 
                   {/* Items */}
                   {items.items
-                    .filter((url: any) =>
-                      user && user.role !== "admin"
-                        ? !forbiddenPath.includes(url.path)
-                        : url
+                    .filter(
+                      (url: any) =>
+                        user &&
+                        (user.role === "staff"
+                          ? !forbiddenPath.includes(url.path)
+                          : user.role === "guest"
+                          ? guestAllowPath.includes(url.path)
+                          : !guestAllowPath.includes(url.path))
                     )
                     .map((list) => {
                       return (

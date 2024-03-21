@@ -8,6 +8,7 @@ import { HiMinus } from "react-icons/hi2";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { POSPaymentModal } from "@/lib/zustand/POSPage-store/Payment-Modal";
+import { Input } from "@/components/ui/input";
 
 interface PosItemProps {
   id?: string;
@@ -134,7 +135,9 @@ export default function Item_POS_Card({
         </div>
 
         <div className="flex flex-col w-full space-y-2">
-          <div className={`${tab ? "grid" : "hidden"}  grid-cols-4 w-full`}>
+          <div
+            className={`${tab ? "grid" : "hidden"}  grid-cols-4 gap-x-1 w-full`}
+          >
             <p className="text-xs font-semibold">OWN :</p>
 
             <Button
@@ -146,9 +149,27 @@ export default function Item_POS_Card({
                 <HiMinus />
               </span>
             </Button>
-            <h6 className="text-center">
+
+            <input
+              className="w-full h-6 rounded-md outline-none border text-center "
+              value={clientGal.toString().padStart(2, "0")}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                // Regex to match only numeric characters
+                const numericRegex = /^[0-9]*$/;
+
+                if (inputValue === "") return setClientGal(0);
+
+                // Check if the input value matches the numeric regex
+                if (numericRegex.test(inputValue)) {
+                  const value = parseInt(inputValue);
+                  setClientGal(value > 100 ? 100 : value);
+                }
+              }}
+            />
+            {/* <h6 className="text-center">
               {clientGal.toString().padStart(2, "0")}
-            </h6>
+            </h6> */}
             <Button
               variant="outline"
               className="h-6 w-full"
@@ -160,7 +181,7 @@ export default function Item_POS_Card({
             </Button>
           </div>
 
-          <div className="grid grid-cols-4 w-full ">
+          <div className="grid grid-cols-4 w-full gap-x-1 ">
             <p className="text-xs font-semibold">WRS :</p>
 
             <Button
@@ -172,9 +193,26 @@ export default function Item_POS_Card({
                 <HiMinus />
               </span>
             </Button>
-            <h6 className="text-center">
+            <input
+              className="w-full h-6 rounded-md outline-none border text-center "
+              value={WRSGal.toString().padStart(2, "0")}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                // Regex to match only numeric characters
+                const numericRegex = /^[0-9]*$/;
+
+                if (inputValue === "") return setClientGal(0);
+
+                // Check if the input value matches the numeric regex
+                if (numericRegex.test(inputValue)) {
+                  const value = parseInt(inputValue);
+                  setWRSGal(value > 100 ? 100 : value);
+                }
+              }}
+            />
+            {/* <h6 className="text-center">
               {WRSGal.toString().padStart(2, "0")}
-            </h6>
+            </h6> */}
             <Button
               variant="outline"
               className="h-6 w-full"

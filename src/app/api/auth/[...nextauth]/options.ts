@@ -30,6 +30,7 @@ export const options: NextAuthOptions = {
         const {
           username,
           password,
+          role,
           isDesktop,
           deviceName,
           time,
@@ -48,6 +49,7 @@ export const options: NextAuthOptions = {
           body: JSON.stringify({
             username,
             password,
+            role,
             isDesktop,
             deviceName,
             time,

@@ -39,6 +39,10 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
       default: "guest",
     },
+    hash_password: {
+      type: String,
+      required: true,
+    },
     borrowed_gal: [
       {
         item: {
@@ -57,3 +61,23 @@ const CustomerSchema = new mongoose.Schema(
 
 export const Customer =
   mongoose.models.Customers || mongoose.model("Customers", CustomerSchema);
+
+// async function updateAllCustomersRole() {
+//   try {
+//     const result = await Customer.updateMany(
+//       {},
+//       {
+//         $set: {
+//           hash_password:
+//             "$2b$10$PHWV6W57AkLpFHbeCi3qjOpALTe3EBySFQSzzMt/fWRNjA7NON1OS",
+//         },
+//       }
+//     );
+//     console.log(`documents updated.`);
+//   } catch (error) {
+//     console.error("Error updating documents:", error);
+//   }
+// }
+
+// // Call the function to update all documents
+// updateAllCustomersRole();

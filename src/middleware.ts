@@ -7,32 +7,50 @@ import { NextResponse } from "next/server";
 export default withAuth(
   async function middleware(req: NextRequestWithAuth) {
     const adminPage = [
+      "/Dashboard",
+      "/POS",
+      "/Delivery",
       "/Report",
       "/Customer",
       "/Items",
+      "/Monitoring",
       "/Stocks&Expenses",
       "/Accounts",
+      "/Settings",
+      "/Notifications",
     ];
+
+    const staffPage = [
+      "/Dashboard",
+      "/POS",
+      "/Delivery",
+      "/Monitoring",
+      "/Settings",
+      "/Notifications",
+    ];
+    const customerPage = ["/Client", "/MyOrders", "/Purchase-History"];
 
     // if (req.nextUrl.pathname.startsWith("/Login") && req.nextauth.token) {
     //   return NextResponse.redirect(new URL("/Dashboard", req.url));
     // }
 
-    // ? THIS WILL DENIED ACCESS IF THE ROLE IS NOT ADMIN
-    if (
-      adminPage.some((path) => req.nextUrl.pathname.startsWith(path)) &&
-      req.nextauth.token?.role !== "admin"
-    ) {
+    const pageRoles: any = {
+      guest: customerPage,
+      admin: adminPage,
+      staff: staffPage,
+    };
+
+    // Check if the user's role allows access to the current page
+    const role = req.nextauth.token?.role;
+    const allowedPages = role ? pageRoles[role] : [];
+    const isAllowed =
+      allowedPages &&
+      allowedPages.some((path: any) => req.nextUrl.pathname.startsWith(path));
+
+    // Rewrite the URL if access is denied
+    if (!isAllowed) {
       return NextResponse.rewrite(new URL("/Denied", req.url));
     }
-
-    // // ? @desc THIS Will allowed the employee only
-    // if (
-    //   req.nextUrl.pathname.startsWith("/Products") &&
-    //   req.nextauth.token?.role !== "employee"
-    // ) {
-    //   return NextResponse.rewrite(new URL("/Denied", req.url));
-    // }
   },
   {
     callbacks: {
@@ -57,5 +75,8 @@ export const config = {
     "/Settings/:path*",
     "/Notifications/:path*",
     "/Page-Template/:path*",
+    "/Client/:path*",
+    "/MyOrders/:path*",
+    "/Purchase-History/:path*",
   ],
 };

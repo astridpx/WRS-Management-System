@@ -1,19 +1,30 @@
 import { Acc } from "@/lib/mongodb/model/Accounts.model";
+import { Customer } from "@/lib/mongodb/model/Customer.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import axios from "axios";
 
 export async function POST(req: Request) {
-  const { username, password } = await req.json();
+  const { username, password, role } = await req.json();
 
   try {
-    const user = await Acc.findOne({ username })
-      .select("-login_history")
-      .exec();
+    let user = null;
+    let isUser = false;
 
-    if (!user)
+    if (role === "guest") {
+      user = await Customer.findOne({ email: username })
+        .select("-borrowed_gal")
+        .exec();
+
+      isUser = user ? true : false;
+    } else {
+      user = await Acc.findOne({ username }).select("-login_history").exec();
+
+      isUser = user ? true : false;
+    }
+
+    if (!isUser)
       return NextResponse.json(
-        { message: "Username not found" },
+        { message: "Username or Email is invalid." },
         { status: 404 }
       );
 
@@ -26,7 +37,7 @@ export async function POST(req: Request) {
       );
 
     // Check if acc is deactivated
-    if (!user.active)
+    if (role !== "guest" && !user.active)
       return NextResponse.json(
         { message: "Sorry, this account is deactivated." },
         { status: 404 }

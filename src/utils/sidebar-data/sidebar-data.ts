@@ -8,6 +8,10 @@ import { ISidebar } from "../../../typings";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
 import { HiOutlineDocumentReport } from "react-icons/hi";
+import { BsCart2 } from "react-icons/bs";
+import { IoBagCheckOutline } from "react-icons/io5";
+import { MdOutlineSell } from "react-icons/md";
+import { TbReport } from "react-icons/tb";
 
 export const sidebarItems: ISidebar[] = [
   {
@@ -28,15 +32,27 @@ export const sidebarItems: ISidebar[] = [
       },
       {
         id: 103,
+        icon: MdOutlineSell,
+        name: "Buy",
+        path: "/Client",
+      },
+      {
+        id: 104,
         icon: FiTruck,
         name: "Delivery",
         path: "/Delivery",
       },
       {
-        id: 104,
-        icon: HiOutlineDocumentReport,
-        name: "Report",
-        path: "/Report",
+        id: 105,
+        icon: BsCart2,
+        name: "Orders",
+        path: "/Orders",
+      },
+      {
+        id: 105,
+        icon: IoBagCheckOutline,
+        name: "MyOrders",
+        path: "/MyOrders",
       },
     ],
   },
@@ -69,6 +85,18 @@ export const sidebarItems: ISidebar[] = [
         icon: BiBarChart,
         name: "Stocks / Expenses",
         path: "/Stocks&Expenses",
+      },
+      {
+        id: 115,
+        icon: HiOutlineDocumentReport,
+        name: "Report",
+        path: "/Report",
+      },
+      {
+        id: 116,
+        icon: TbReport,
+        name: "Purchase History",
+        path: "/Purchase-History",
       },
     ],
   },
