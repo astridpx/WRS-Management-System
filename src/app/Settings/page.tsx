@@ -471,7 +471,8 @@ export default function SettingsPage() {
                                 </div>
                                 <p>{data.ip}</p>
                                 <p className="col-span-">
-                                  {format(new Date(data.date), "dd MMM, yyyy")}
+                                  {data.date &&
+                                    format(new Date(data.date), "dd MMM, yyyy")}
                                 </p>
                                 <p className="col-span-">{data.time}</p>
                                 <p className="col-span-2">{data.address}</p>
