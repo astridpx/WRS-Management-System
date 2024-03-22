@@ -28,6 +28,7 @@ export default withAuth(
       "/Monitoring",
       "/Settings",
       "/Notifications",
+      "/Orders",
     ];
     const customerPage = ["/Client", "/MyOrders", "/Purchase-History"];
 
