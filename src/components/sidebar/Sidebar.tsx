@@ -15,12 +15,13 @@ export default function Sidebar() {
   const { isExpand } = useSidebarStore();
   const currentRoute = usePathname();
   const { clearUser, setUser, user } = UserStore();
-  const forbiddenPath = [
-    "/Report",
-    "/Customer",
-    "/Items",
-    "/Stocks&Expenses",
-    "/Accounts",
+  const staffAllowPath = [
+    "/Dashboard",
+    "/POS",
+    "/Delivery",
+    "/Orders",
+    "/Monitoring",
+    "/Settings",
   ];
   const guestAllowPath = ["/Client", "/MyOrders", "/Purchase-History"];
 
@@ -74,7 +75,7 @@ export default function Sidebar() {
                       (url: any) =>
                         user &&
                         (user.role === "staff"
-                          ? !forbiddenPath.includes(url.path)
+                          ? staffAllowPath.includes(url.path)
                           : user.role === "guest"
                           ? guestAllowPath.includes(url.path)
                           : !guestAllowPath.includes(url.path))

@@ -18,6 +18,7 @@ export default withAuth(
       "/Accounts",
       "/Settings",
       "/Notifications",
+      "/Orders",
     ];
 
     const staffPage = [
