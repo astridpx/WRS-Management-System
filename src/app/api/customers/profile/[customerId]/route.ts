@@ -20,13 +20,20 @@ export async function PUT(req: Request, { params }: any) {
   };
 
   try {
-    // check if ID is exist
+    // check if ID is exist AND EMAIL
     const isExist = await Customer.findById(id).lean();
+    const isEmail = await Customer.findOne({ email }).exec();
 
     if (!isExist)
       return NextResponse.json(
         { message: "Unique ID not found." },
         { status: 500 }
+      );
+
+    if (isEmail && isEmail?._id?.toString() !== id)
+      return NextResponse.json(
+        { message: "Email is already exist." },
+        { status: 404 }
       );
 
     const newCustomer: any = await Customer.findByIdAndUpdate(
