@@ -41,6 +41,7 @@ const CustomerSchema = new mongoose.Schema(
     },
     hash_password: {
       type: String,
+      default: "$2b$10$PHWV6W57AkLpFHbeCi3qjOpALTe3EBySFQSzzMt/fWRNjA7NON1OS",
       required: true,
     },
     borrowed_gal: [
@@ -85,8 +86,11 @@ export const Customer =
 //       {},
 //       {
 //         $set: {
-//           hash_password:
-//             "$2b$10$PHWV6W57AkLpFHbeCi3qjOpALTe3EBySFQSzzMt/fWRNjA7NON1OS",
+//           // hash_password:
+//           //   "$2b$10$PHWV6W57AkLpFHbeCi3qjOpALTe3EBySFQSzzMt/fWRNjA7NON1OS",
+
+//           "login_freeze.attempt": 0,
+//           "login_freeze.cooldown": new Date(),
 //         },
 //       }
 //     );
