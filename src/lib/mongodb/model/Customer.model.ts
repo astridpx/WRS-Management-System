@@ -53,6 +53,23 @@ const CustomerSchema = new mongoose.Schema(
         last_return: { type: Date, default: new Date() },
       },
     ],
+    login_freeze: {
+      attempt: {
+        type: Number,
+        default: 0,
+      },
+      cooldown: {
+        type: Date,
+        default: new Date(),
+      },
+    },
+    pass_reset_code: String,
+    pass_reset_token: String,
+    otp_cd_expiresAt: Date,
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

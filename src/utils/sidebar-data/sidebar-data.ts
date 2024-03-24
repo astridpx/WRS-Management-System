@@ -12,6 +12,7 @@ import { BsCart2 } from "react-icons/bs";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { MdOutlineSell } from "react-icons/md";
 import { TbReport } from "react-icons/tb";
+import { CgProfile } from "react-icons/cg";
 
 export const sidebarItems: ISidebar[] = [
   {
@@ -116,6 +117,12 @@ export const sidebarItems: ISidebar[] = [
         icon: AiOutlineSetting,
         name: "Settings",
         path: "/Settings",
+      },
+      {
+        id: 122,
+        icon: CgProfile,
+        name: "Profile",
+        path: "/MyProfile",
       },
     ],
   },

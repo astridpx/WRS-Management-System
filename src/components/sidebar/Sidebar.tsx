@@ -23,7 +23,12 @@ export default function Sidebar() {
     "/Monitoring",
     "/Settings",
   ];
-  const guestAllowPath = ["/Client", "/MyOrders", "/Purchase-History"];
+  const guestAllowPath = [
+    "/Client",
+    "/MyOrders",
+    "/Purchase-History",
+    "/MyProfile",
+  ];
 
   return (
     <>

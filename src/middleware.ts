@@ -30,7 +30,12 @@ export default withAuth(
       "/Notifications",
       "/Orders",
     ];
-    const customerPage = ["/Client", "/MyOrders", "/Purchase-History"];
+    const customerPage = [
+      "/Client",
+      "/MyOrders",
+      "/Purchase-History",
+      "/MyProfile",
+    ];
 
     // if (req.nextUrl.pathname.startsWith("/Login") && req.nextauth.token) {
     //   return NextResponse.redirect(new URL("/Dashboard", req.url));
@@ -79,6 +84,7 @@ export const config = {
     "/Page-Template/:path*",
     "/Client/:path*",
     "/MyOrders/:path*",
+    "/MyProfile/:path*",
     "/Purchase-History/:path*",
   ],
 };
