@@ -122,6 +122,7 @@ export async function POST(req: Request, { params }: any) {
 
     await Customer.findByIdAndUpdate(id, {
       hash_password,
+      is_default_password_change: true,
     });
 
     return NextResponse.json({ message: "Password successfully changed." });

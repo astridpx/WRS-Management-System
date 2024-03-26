@@ -67,6 +67,10 @@ const CustomerSchema = new mongoose.Schema(
     pass_reset_code: String,
     pass_reset_token: String,
     otp_cd_expiresAt: Date,
+    is_default_password_change: {
+      type: Boolean,
+      default: false,
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,

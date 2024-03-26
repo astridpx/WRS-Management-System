@@ -3,6 +3,7 @@ import { IPOSBtnStore } from "../../../../typings";
 import { devtools, persist } from "zustand/middleware";
 
 interface IAccount {
+  is_default_password_change: boolean;
   email: string;
   _id: string;
   first_name: string;
@@ -30,6 +31,7 @@ export const UserStore = create<IAccStore>()(
         username: "",
         role: "",
         img: "",
+        is_default_password_change: false,
       },
 
       // setUser: (state) => set({ user: state }),
@@ -45,6 +47,7 @@ export const UserStore = create<IAccStore>()(
             username: "",
             role: "",
             img: "",
+            is_default_password_change: false,
           },
         }),
     }),

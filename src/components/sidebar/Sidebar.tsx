@@ -10,6 +10,7 @@ import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { UserStore } from "@/lib/zustand/User/user.store";
+import { ForceChangePasswordModal } from "../Force-Change-Password/Force-Change-Password-Modal";
 
 export default function Sidebar() {
   const { isExpand } = useSidebarStore();
@@ -32,6 +33,8 @@ export default function Sidebar() {
 
   return (
     <>
+      <ForceChangePasswordModal />
+
       <aside
         className={`h-screen bg-white ${
           isExpand ? "w-[21rem]" : "w-[5rem]"
@@ -42,6 +45,7 @@ export default function Sidebar() {
             src={WaterDrop}
             alt="Logo Image"
             unoptimized
+            onClick={() => setUser({ is_default_password_change: false })}
             className={`${
               isExpand ? "h-14 w-max" : "h-10 w-max"
             } ml-2 cursor-pointer`}
