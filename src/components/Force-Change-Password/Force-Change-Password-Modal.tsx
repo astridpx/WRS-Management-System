@@ -70,7 +70,10 @@ export function ForceChangePasswordModal() {
 
   return (
     <>
-      <Dialog open={!user?.is_default_password_change} defaultOpen={false}>
+      <Dialog
+        open={user?.role === "guest" && !user?.is_default_password_change}
+        defaultOpen={false}
+      >
         {/* <DialogTrigger asChild>
         <Button variant="outline">Edit Profile</Button>
         {children}
@@ -78,9 +81,7 @@ export function ForceChangePasswordModal() {
         <DialogContent className="sm:max-w-[425px]">
           <form action="" onSubmit={(e) => handlePasswordSubmit(e)}>
             <DialogHeader>
-              <DialogTitle onClick={() => console.log(user)}>
-                Update Password
-              </DialogTitle>
+              <DialogTitle>Update Password</DialogTitle>
               <DialogDescription>
                 For security, please change your default password now. Click
                 save when you&apos;re done.
