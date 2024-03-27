@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Profile from "@/assets/avatar/1.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { BarangaysOfCities } from "@/utils/Brgy-Lists/Barangays";
 import {
   Select,
@@ -31,13 +32,21 @@ import {
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Button } from "@/components/ui/button";
 import { BsPatchCheckFill } from "react-icons/bs";
+import { IoIosAlert } from "react-icons/io";
 import {
   CustomerProfile,
   CustomerChangePassword,
   UpdateDetails,
+  VerifyEmail,
 } from "./services/api";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import { UserStore } from "@/lib/zustand/User/user.store";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function MyProfilePage() {
   const { user, setUser } = UserStore();
@@ -45,14 +54,16 @@ export default function MyProfilePage() {
   const formatNumber = useNumberFormatter();
   const [tab, setTab] = useState("overview");
   const [data, setData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    mobile: "",
-    street: "",
-    city: "",
-    brgy: "",
+    first_name: user.first_name,
+    last_name: user.last_name,
+    email: user.email,
+    mobile1: user.mobile1,
+    street: user.street,
+    city: user.city,
+    brgy: user.brgy,
   });
+  const [changeEmail, setChangeEmail] = useState(false);
+
   const [password, setPassword] = useState({
     accId: user._id,
     currentPass: "",
@@ -70,6 +81,14 @@ export default function MyProfilePage() {
     queryFn: () => CustomerProfile({ customerId: user._id }),
   });
 
+  // UPDATE THE EMAIL VERIFICATION STATUS IF THE EMAIL IS VERIFIED
+  useEffect(() => {
+    isLoading
+      ? null
+      : setUser({ emailVerified: customerProfile[0]?.customer?.verifiedEmail });
+  }, [customerProfile, isLoading, setUser]);
+
+  // HADNLE DROPDOWN BRGY AND CITY SELECT
   useEffect(() => {
     const brgy = BarangaysOfCities.find(
       (cityData) => cityData.city === data.city
@@ -89,15 +108,8 @@ export default function MyProfilePage() {
       DissmissToast();
       SuccessToast(data?.message);
       setUser(data?.updated_data);
-      setData({
-        first_name: "",
-        last_name: "",
-        email: "",
-        mobile: "",
-        street: "",
-        city: "",
-        brgy: "",
-      });
+      setData(data?.updated_data);
+      setChangeEmail(false);
     },
     onError: (error: any) => {
       DissmissToast();
@@ -137,10 +149,30 @@ export default function MyProfilePage() {
   const handlePasswordSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(password);
     await PasswordChangeSubmit.mutateAsync();
   };
 
+  // HANDLE VERIFY EMAIL
+  const VerifyEmailSubmit = useMutation({
+    mutationFn: async () => await VerifyEmail(user.email),
+    onMutate: () => {
+      LoadingToast("Verifying email...");
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      DissmissToast();
+      SuccessToast(data?.message);
+      setChangeEmail(false);
+    },
+    onError: (error: any) => {
+      DissmissToast();
+      ErrorToast(error?.response?.data?.message);
+    },
+  });
+
+  const HandleEmailVerify = async () => {
+    await VerifyEmailSubmit.mutateAsync();
+  };
   return (
     <>
       <PageWrapper>
@@ -153,9 +185,9 @@ export default function MyProfilePage() {
 
             <div className="space-y-2">
               <h5 className="font-bold text-xl text-slate-800 ">
-                {isLoading
+                {!user.first_name && !user.last_name
                   ? "Loading..."
-                  : `${customerProfile[0]?.customer?.first_name} ${customerProfile[0]?.customer?.last_name}`}
+                  : `${user?.first_name} ${user?.last_name}`}
               </h5>
 
               <div className="flex space-x-4 text-slate-400 text-sm font-medium ">
@@ -165,9 +197,9 @@ export default function MyProfilePage() {
                 <p className="flex space-x-1 items-center">
                   <MdLocationOn size={18} />{" "}
                   <span>
-                    {isLoading
+                    {!user.brgy && !user.city && !user.street
                       ? "Loading..."
-                      : `${customerProfile[0]?.customer?.brgy}, ${customerProfile[0]?.customer?.city} Laguna`}
+                      : `${user?.brgy}, ${user?.city} Laguna`}
                   </span>
                 </p>
               </div>
@@ -251,27 +283,36 @@ export default function MyProfilePage() {
                 </div>
                 <div className="space-y-4 text-slate-800">
                   <p className="">
-                    {isLoading
-                      ? "Loading..."
-                      : `${customerProfile[0]?.customer?.first_name} ${customerProfile[0]?.customer?.last_name}`}
+                    {!user.first_name && !user.last_name
+                      ? "Unknown"
+                      : `${user?.first_name} ${user?.last_name}`}
                   </p>
-                  <p className="flex items-center gap-x-2">
-                    {isLoading
-                      ? "Loading..."
-                      : customerProfile[0]?.customer?.email}
-                    <span className="">
+                  <div className="flex items-center gap-x-2">
+                    <p>{!user.email ? "Unknown" : user?.email}</p>
+                    {user?.emailVerified === user?.email ? (
                       <BsPatchCheckFill size={18} className="text-blue-500" />
-                    </span>
+                    ) : (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="p-1 cursor-pointer">
+                              <IoIosAlert size={18} className="text-red-500" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Email is not verfied</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                  </div>
+                  <p className="">
+                    {!user.mobile1 ? "Unknown" : user?.mobile1}
                   </p>
                   <p className="">
-                    {isLoading
-                      ? "Loading..."
-                      : customerProfile[0]?.customer?.mobile1}
-                  </p>
-                  <p className="">
-                    {isLoading
-                      ? "Loading..."
-                      : `${customerProfile[0]?.customer?.street} ${customerProfile[0]?.customer?.brgy}, ${customerProfile[0]?.customer?.city}, Laguna`}
+                    {!user.brgy && !user.city && !user.street
+                      ? "Unknown"
+                      : `${user?.street} ${user?.brgy}, ${user?.city}, Laguna`}
                   </p>
                   <p className="">Guest</p>
                 </div>
@@ -316,33 +357,67 @@ export default function MyProfilePage() {
                       }
                     />
                   </div>
+
                   <div className="col-span-3 relative">
                     <Label htmlFor="email">Email</Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={data.email}
-                      placeholder="Email"
-                      required
-                      onChange={(e) =>
-                        setData({
-                          ...data,
-                          [e.target.name]: e.target.value,
-                        })
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={data.email}
+                            placeholder="Email"
+                            className={`${
+                              user?.emailVerified !== user?.email &&
+                              "border-red-600"
+                            }`}
+                            required
+                            disabled={
+                              user?.emailVerified === user?.email &&
+                              !changeEmail
+                            }
+                            readOnly={
+                              user?.emailVerified === user?.email &&
+                              !changeEmail
+                            }
+                            onChange={(e) =>
+                              setData({
+                                ...data,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          className={`${
+                            user?.emailVerified === user?.email && "hidden"
+                          }`}
+                        >
+                          <p className="text-red-600">Email is not verified</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <Button
+                      type="button"
+                      onClick={HandleEmailVerify}
+                      disabled={
+                        user?.emailVerified === user?.email && !changeEmail
                       }
-                    />
-                    <span className="absolute bottom-0 right-0 font-medium text-white cursor-pointer bg-blue-500 h-[2.5rem] rounded-e-md px-4 grid place-content-center items-center">
+                      className="absolute bottom-0 right-0 font-medium text-white cursor-pointer bg-blue-500 h-[2.5rem] rounded-e-md px-4 grid place-content-center items-center"
+                    >
                       Verify
-                    </span>
+                    </Button>
                   </div>
+
                   <div className="col-span-3">
                     <Label htmlFor="mobile">Mobile</Label>
                     <Input
                       type="text"
                       id="mobile"
-                      name="mobile"
-                      value={data.mobile}
+                      name="mobile1"
+                      value={data.mobile1}
                       placeholder="Mobile"
                       required
                       onChange={(e) =>
@@ -352,6 +427,22 @@ export default function MyProfilePage() {
                         })
                       }
                     />
+                  </div>
+                  <div className="col-span-full px-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="changeEmail"
+                        checked={changeEmail}
+                        className=" data-[state=checked]:bg-slate-800 border-slate-800"
+                        onCheckedChange={(e) => setChangeEmail(e as boolean)}
+                      />
+                      <Label
+                        htmlFor="changeEmail"
+                        className="font-normal text-sm text-slate-700"
+                      >
+                        Change email
+                      </Label>
+                    </div>
                   </div>
                   <div className="col-span-2">
                     <Label htmlFor="street">Street</Label>

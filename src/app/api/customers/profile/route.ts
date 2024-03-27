@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       .populate({
         path: "customer",
         select:
-          "first_name last_name email mobile1 street brgy city borrowed_gal",
+          "first_name last_name email mobile1 street brgy city borrowed_gal verifiedEmail ",
         model: Customer,
       })
       .exec();

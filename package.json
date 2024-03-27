@@ -50,6 +50,7 @@
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.1",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.259.0",
     "mongoose": "^7.3.4",
     "next": "13.4.9",

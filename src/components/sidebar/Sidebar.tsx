@@ -45,7 +45,6 @@ export default function Sidebar() {
             src={WaterDrop}
             alt="Logo Image"
             unoptimized
-            onClick={() => setUser({ is_default_password_change: false })}
             className={`${
               isExpand ? "h-14 w-max" : "h-10 w-max"
             } ml-2 cursor-pointer`}

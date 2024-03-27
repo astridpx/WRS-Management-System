@@ -71,10 +71,10 @@ const CustomerSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
+    verifiedEmail: {
+      type: String,
     },
+    email_verify_cooldown: Date,
   },
   {
     timestamps: true,
@@ -83,6 +83,23 @@ const CustomerSchema = new mongoose.Schema(
 
 export const Customer =
   mongoose.models.Customers || mongoose.model("Customers", CustomerSchema);
+
+// async function removeIsEmailVerifiedField() {
+//   try {
+//     // Update all documents in the collection to remove the isEmailVerified field
+//     const result = await Customer.updateMany(
+//       {},
+//       { $unset: { isEmailVerified: "" } }
+//     );
+
+//     console.log(`$ document(s) updated successfully.`);
+//   } catch (error) {
+//     console.error("Error occurred while updating documents:", error);
+//   }
+// }
+
+// // Call the function to remove the field
+// removeIsEmailVerifiedField();
 
 // async function updateAllCustomersRole() {
 //   try {

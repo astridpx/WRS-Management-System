@@ -23,3 +23,11 @@ export const CustomerChangePassword = async (Data: any, id: any) => {
 
   return data;
 };
+
+export const VerifyEmail = async (email: any) => {
+  const { data } = await axios.put(
+    `/api/customers/email-verification/${email}`
+  );
+
+  return data;
+};
