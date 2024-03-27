@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { Customer } from "@/lib/mongodb/model/Customer.model";
 import { SignUpMessageMailer } from "./send-verify-email";
+import { add, formatDistanceToNowStrict, isPast } from "date-fns";
 
 // EMAIL VERIFICATION
 export async function PUT(req: Request, { params }: any) {
@@ -24,6 +25,20 @@ export async function PUT(req: Request, { params }: any) {
         message: "This email is already verified.",
       });
 
+    // CHECK IF EMAIL IS IN COOLDOWN
+    const remaining = formatDistanceToNowStrict(
+      new Date(isEmail?.email_verify_cooldown)
+    );
+    if (!isPast(isEmail?.email_verify_cooldown))
+      return NextResponse.json(
+        {
+          // time: remaining,
+          // time: user?.otp_cd_expiresAt,
+          message: `You're in ${remaining} cooldown. `,
+        },
+        { status: 404 }
+      );
+
     // SEND EMAIL
     const link = `${process.env.NEXTAUTH_URL}/Verification/${emailVerifyToken}`;
     const mailer = await SignUpMessageMailer(email, link);
@@ -32,6 +47,17 @@ export async function PUT(req: Request, { params }: any) {
         { message: "Nodemailer error" },
         { status: 500 }
       );
+
+    await Customer.findOneAndUpdate(
+      {
+        email,
+      },
+      {
+        email_verify_cooldown: add(new Date(), {
+          minutes: 5,
+        }),
+      }
+    ).exec();
 
     return NextResponse.json({
       token: emailVerifyToken,

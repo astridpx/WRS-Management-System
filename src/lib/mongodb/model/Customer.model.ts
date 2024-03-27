@@ -74,7 +74,10 @@ const CustomerSchema = new mongoose.Schema(
     verifiedEmail: {
       type: String,
     },
-    email_verify_cooldown: Date,
+    email_verify_cooldown: {
+      type: Date,
+      default: new Date(),
+    },
   },
   {
     timestamps: true,
