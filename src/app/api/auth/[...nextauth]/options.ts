@@ -85,7 +85,7 @@ export const options: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/Login",
+    signIn: "/Customer-Login",
   },
 
   callbacks: {
