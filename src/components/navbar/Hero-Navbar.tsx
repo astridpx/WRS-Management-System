@@ -56,7 +56,7 @@ export default function HeroNavbar() {
         </div>
 
         <Link
-          href={"/Login"}
+          href={"/Customer-Login"}
           className="hidden md:block text-white font-semibold rounded-full py-2 px-8 btn-gradient shadow-lg shadow-blue-400 hover:shadow-xl hover:shadow-blue-400 duration-500 transition-all"
         >
           Sign In
