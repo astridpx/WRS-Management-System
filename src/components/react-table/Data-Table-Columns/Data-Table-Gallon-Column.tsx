@@ -14,9 +14,11 @@ export function DataTableGallonColumn({
   return (
     <>
       <div className="min-w-[20rem]">
-        <p className="">
-          <span className="font-semibold">Trans no:</span> {trn}
-        </p>
+        {trn && (
+          <p className="">
+            <span className="font-semibold">Trans no:</span> {trn}
+          </p>
+        )}
         <header className="grid grid-cols-3 font-semibold text-center bg-gray-200">
           <h4 className="col-span-2 ">Item</h4>
           <h4>WRS</h4>

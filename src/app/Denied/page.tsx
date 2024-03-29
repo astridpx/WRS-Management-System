@@ -1,9 +1,13 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import P403 from "@/assets/403.svg";
+import { useRouter } from "next/navigation";
 
 export default function DeniedPage() {
+  const router = useRouter();
   return (
     <>
       <main className="h-screen w-full bg-white relative">
@@ -29,7 +33,8 @@ export default function DeniedPage() {
 
           <div className="mx-auto pt-4">
             <Link
-              href={"/"}
+              href={"/#"}
+              onClick={() => router.back()}
               className="py-2 px-6 bg-[#407BFF] text-white shadow-lg rounded-full"
             >
               Go Back

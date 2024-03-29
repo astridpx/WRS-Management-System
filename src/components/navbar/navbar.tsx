@@ -27,6 +27,7 @@ import { useMutation, useQueryClient, useQueries } from "react-query";
 import axios from "axios";
 import Notification from "./Notification";
 import Link from "next/link";
+import Anonymous from "@/assets/avatar/1.png";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
@@ -132,7 +133,9 @@ export default function Navbar() {
               <DropdownMenuTrigger className="focus:outline-0 focus:outline-none">
                 <Badge
                   // variant="secondary"
-                  className="rounded-3xl relative"
+                  className={`${
+                    user && user.role === "guest" && "hidden"
+                  } rounded-3xl relative`}
                 >
                   <IoMdNotificationsOutline
                     size={23}
@@ -215,18 +218,30 @@ export default function Navbar() {
               <div className="h-[10vh] flex items-center px-2 space-x-4 focus:outline-0 focus:outline-none border-none cursor-pointer">
                 <div className="flex flex-col justify-end text-right leading-6 ">
                   <h1 className="capitalize text-gray-700 dark:text-gray-300">
-                    {profileIsLoading
+                    {user && user.role === "guest"
+                      ? `${user.first_name} ${user.last_name}`
+                      : profileIsLoading
                       ? `${profile?.first_name} ${profile?.last_name}`
-                      : "unknwon"}
+                      : "unknown"}
                   </h1>
                   <p className="capitalize text-xs text-gray-600 dark:text-gray-400">
-                    {profileIsLoading ? profile?.role : "unknwon"}
+                    {user && user.role === "guest"
+                      ? user.role
+                      : profileIsLoading
+                      ? profile?.role
+                      : "unknown"}
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-4">
                   <Avatar>
-                    <AvatarImage src={profileIsLoading && profile?.img} />
+                    <AvatarImage
+                      src={
+                        user && user.role === "guest"
+                          ? Anonymous.src
+                          : profileIsLoading && profile?.img
+                      }
+                    />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <IoIosArrowDown size={21} className="text-gray-400" />
@@ -239,10 +254,18 @@ export default function Navbar() {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    {profileIsLoading ? profile?.username : "unknown"}
+                    {user && user.role === "guest"
+                      ? user.first_name
+                      : profileIsLoading
+                      ? profile?.username
+                      : "unknown"}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {profileIsLoading ? profile?.email : "unknown"}
+                    {user && user.role === "guest"
+                      ? user.email
+                      : profileIsLoading
+                      ? profile?.email
+                      : "unknown"}
                   </p>
                 </div>
               </DropdownMenuLabel>

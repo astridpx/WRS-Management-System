@@ -45,8 +45,14 @@ const AccountSchema = new mongoose.Schema(
       default: "staff",
     },
     login_freeze: {
-      type: Number,
-      default: 0,
+      attempt: {
+        type: Number,
+        default: 0,
+      },
+      cooldown: {
+        type: Date,
+        default: new Date(),
+      },
     },
     active: {
       type: Boolean,
@@ -77,3 +83,23 @@ const AccountSchema = new mongoose.Schema(
 
 export const Acc =
   mongoose.models.Accounts || mongoose.model("Accounts", AccountSchema);
+
+// async function updateAllCustomersRole() {
+//   try {
+//     const result = await Acc.updateMany(
+//       {},
+//       {
+//         $set: {
+//           "login_freeze.attempt": 0,
+//           "login_freeze.cooldown": new Date(),
+//         },
+//       }
+//     );
+//     console.log(`documents updated.`);
+//   } catch (error) {
+//     console.error("Error updating documents:", error);
+//   }
+// }
+
+// // Call the function to update all documents
+// updateAllCustomersRole();

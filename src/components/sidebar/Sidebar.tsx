@@ -10,21 +10,31 @@ import useSidebarStore from "@/lib/zustand/sidebar-store/sidebar-store";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { UserStore } from "@/lib/zustand/User/user.store";
+import { ForceChangePasswordModal } from "../Force-Change-Password/Force-Change-Password-Modal";
 
 export default function Sidebar() {
   const { isExpand } = useSidebarStore();
   const currentRoute = usePathname();
   const { clearUser, setUser, user } = UserStore();
-  const forbiddenPath = [
-    "/Report",
-    "/Customer",
-    "/Items",
-    "/Stocks&Expenses",
-    "/Accounts",
+  const staffAllowPath = [
+    "/Dashboard",
+    "/POS",
+    "/Delivery",
+    "/Orders",
+    "/Monitoring",
+    "/Settings",
+  ];
+  const guestAllowPath = [
+    "/Client",
+    "/MyOrders",
+    "/Purchase-History",
+    "/MyProfile",
   ];
 
   return (
     <>
+      <ForceChangePasswordModal />
+
       <aside
         className={`h-screen bg-white ${
           isExpand ? "w-[21rem]" : "w-[5rem]"
@@ -61,7 +71,7 @@ export default function Sidebar() {
                   <h1
                     key={items.key}
                     className={`text-base text-blue-500 ml-3 my-2  ${
-                      !isExpand && "hidden"
+                      !isExpand ? "hidden" : ""
                     }`}
                   >
                     {items.title}
@@ -69,10 +79,14 @@ export default function Sidebar() {
 
                   {/* Items */}
                   {items.items
-                    .filter((url: any) =>
-                      user && user.role !== "admin"
-                        ? !forbiddenPath.includes(url.path)
-                        : url
+                    .filter(
+                      (url: any) =>
+                        user &&
+                        (user.role === "staff"
+                          ? staffAllowPath.includes(url.path)
+                          : user.role === "guest"
+                          ? guestAllowPath.includes(url.path)
+                          : !guestAllowPath.includes(url.path))
                     )
                     .map((list) => {
                       return (

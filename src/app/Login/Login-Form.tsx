@@ -121,7 +121,7 @@ export default function LoginForm() {
         setLoading(false);
         DissmissToast();
         await SuccessToast("Login Success");
-        InfoToast("Data Successfully Initialized.");
+        // InfoToast("Data Successfully Initialized.");
         // router.push("/Dashboard");
       } catch (error) {
         console.log("IPGEOLOCATION ERROR: ", error);
