@@ -84,6 +84,7 @@ export const config = {
     "/Page-Template/:path*",
     "/Client/:path*",
     "/MyOrders/:path*",
+    "/Orders/:path*",
     "/MyProfile/:path*",
     "/Purchase-History/:path*",
   ],
