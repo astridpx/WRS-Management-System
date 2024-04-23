@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
+import { CancelledColumns } from "./Cancelled-Column";
 
 // remove duplicates in zustand store array
 function removeDuplicates(arr: any) {
@@ -84,6 +85,13 @@ const Deliverypage = () => {
       format(new Date(item?.date), "MMM dd yyyy") ===
         format(new Date(), "MMM dd yyyy")
   );
+  const Cancelled = data?.filter(
+    (item: any) =>
+      item.service === "Deliver" &&
+      item.status === "Cancelled" &&
+      format(new Date(item?.date), "MMM dd yyyy") ===
+        format(new Date(), "MMM dd yyyy")
+  );
 
   // THIS FILL MARK THE ORDER AS INTRANSIT
   const setOrderIntransit = async () => {
@@ -118,10 +126,11 @@ const Deliverypage = () => {
             value={tab}
             onValueChange={(e) => setTab(e)}
           >
-            <TabsList className="grid  grid-cols-3 w-[30rem]">
+            <TabsList className="grid  grid-cols-4 w-[40rem]">
               <TabsTrigger value="toShip">To Ship</TabsTrigger>
               <TabsTrigger value="inTransit">In Transit</TabsTrigger>
               <TabsTrigger value="delivered">Delivered</TabsTrigger>
+              <TabsTrigger value="cancel">Cancelled</TabsTrigger>
             </TabsList>
 
             {/* Ready to deliver */}
@@ -192,6 +201,16 @@ const Deliverypage = () => {
                 </div>
               ) : (
                 <DataTable columns={DeliveredColumns} data={Delivered} />
+              )}
+            </TabsContent>
+            <TabsContent value="cancel">
+              {!isSuccess ? (
+                <div className="relative w-full h-[78vh] flex items-center justify-center flex-col space-y-2">
+                  <Loader />
+                  <p className="text-gray-400 ">Loading...</p>
+                </div>
+              ) : (
+                <DataTable columns={CancelledColumns} data={Cancelled} />
               )}
             </TabsContent>
           </Tabs>

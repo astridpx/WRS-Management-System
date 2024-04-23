@@ -1,14 +1,16 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-// import { DataTableRowActions } from "../Users/data-table-row-action";
 import { DataTableAddressColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Address-Column";
 import { DataTableGallonColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Gallon-Column";
 import { DataTableNameColumn } from "@/components/react-table/Data-Table-Columns/Data-Table-Name-Address-Column";
-import { format } from "date-fns";
-import CancelBTN from "./_components/Cancel-BTN";
+// import { Undoaction } from "./Undo-action";
 
-export const PendingOrderColumns: ColumnDef<any>[] = [
+export const CancelledColumns: ColumnDef<any>[] = [
+  // {
+  //   id: "undo",
+  //   cell: ({ row }) => <Undoaction row={row} />,
+  // },
   {
     header: "No",
     accessorKey: "_id",
@@ -39,7 +41,6 @@ export const PendingOrderColumns: ColumnDef<any>[] = [
       />
     ),
   },
-
   {
     header: "Amount",
     accessorKey: "amount",
@@ -49,33 +50,19 @@ export const PendingOrderColumns: ColumnDef<any>[] = [
     accessorKey: "discount",
   },
   {
-    header: "Unpaid",
+    header: "Balance",
     accessorKey: "balance",
   },
   {
-    header: "Status",
+    header: "Time",
+    accessorKey: "Alias",
+  },
+  {
+    header: "Carrier",
+    accessorKey: "deliverBy",
+  },
+  {
+    header: "status",
     accessorKey: "status",
-    cell: ({ row }) => <p className="min-w-[5rem]">{row.original.status}</p>,
-  },
-  {
-    header: "Service",
-    accessorKey: "service",
-  },
-  {
-    header: "Date",
-    accessorKey: "Alias",
-    cell: ({ row }) => (
-      <p className="min-w-[6rem]">
-        {format(new Date(row.original?.date), "LLL dd, y")}
-      </p>
-    ),
-  },
-  {
-    header: "Action",
-    accessorKey: "Alias",
-    cell: ({ row }) => (
-      <CancelBTN status={row?.original?.status} id={row?.original._id} />
-    ),
-    // cell: ({ row }) => console.log(row),
   },
 ];

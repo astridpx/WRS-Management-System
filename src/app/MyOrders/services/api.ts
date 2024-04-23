@@ -35,3 +35,11 @@ export const setToShip = async (Data: any) => {
 
   return data;
 };
+
+export const setCancel = async (Data: any) => {
+  const { data } = await axios.post("/api/transaction/Cancel", {
+    ...Data,
+  });
+
+  return data;
+};
